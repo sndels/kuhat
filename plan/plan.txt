@@ -1,0 +1,46 @@
+Ebin rojekti ":D"
+
+Scoping
+	Worms-clone
+		core features
+			characters move, jump and shoot
+			multiplayer
+				1 character per player
+			destructible terrain
+			three weapons
+			randomly generated maps
+		possible extra features
+			team of characters per player
+			audio
+			more weapons
+			mutators
+				low grav
+				high wind
+				low health
+			health and weapon drops
+			different terrain types
+			map editor (drawing maps)
+
+SFML used as main library and code should be portable to different platforms. Ubuntu is used as main development platform. Documentation and tests are written at the same time as the actual game code. Even small new features should be tested straight away with GTest. All new features are branched and completed before merging with master. 
+
+Basic framework for the code
+
+Classes
+	Game (holds pointers to active states, calls active GS)
+		GameState (different state-classes inherit from this: game logic, updates, drawing)
+	Player (weapons, characters)
+		Character (sprite, movement, health)
+		Weapon (holds sprite and ammo)
+			Ammo (spawned when shot, handles collision detection)
+	Map (terrain, wind condition)
+
+Main loop calls Game while there is an active state
+
+Schedule
+	Mid meeting
+		Characters work (move, jump, shoot on level terrain)
+		Bazooka works (gravity)
+		Basic sprites made
+	Final crunch
+		terrain generator
+		extra weapons
