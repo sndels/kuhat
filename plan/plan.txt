@@ -1,42 +1,64 @@
-Ebin rojekti ":D"
+C++ Programming project - Group 1 / Artillery
+Assigned assistant: Joel Huttunen
 
-Scoping
-	Worms-clone
-		core features
-			characters move, jump and shoot
-			multiplayer
-				1 character per player
-			destructible terrain
-			three weapons
-			randomly generated maps
-		possible extra features
-			team of characters per player
-			audio
-			more weapons
-			mutators
-				low grav
-				high wind
-				low health
-			health and weapon drops
-			different terrain types
-			map editor (drawing maps)
 
-SFML used as main library and code should be portable to different platforms. Ubuntu is used as main development platform. Documentation and tests are written at the same time as the actual game code. Even small new features should be tested straight away with GTest. All new features are branched and completed before merging with master. 
+Scope of the project
 
-Basic framework for the code
+The project is a generic Worms-clone; A multiplayer game where characters of opposing players try to shoot each other with different weapons. The characters are able to move and jump around. The randomly generated terrain is destructible but doesn't collapse on itself, creating a Worms-style Swiss cheese end result.
+
+We also have several possible extra features in mind, which we will add to the game if schedule allows.
+
+Worms-clone
+	Core features:
+		Characters move, jump and shoot
+		Multiplayer
+			1 character per player
+		Destructible terrain
+		Three weapons
+		Randomly generated maps
+	Possible extra features
+		Team of characters per player
+		Audio
+		More weapons
+		Mutators
+			Low grav
+			High wind
+			Low health
+		Health and weapon drops
+		Different terrain types
+		Map editor (drawing maps)
+
+SFML is used as the main graphics library. We aim to write portable code so that the game should work on any platform SFML supports. Ubuntu is used as main development platform. Documentation and tests are written concurrently the actual game code. We'll try to follow TDD style and write separate tests for everything. GTest will be used as the unit testing framework. Branches are created for all new features and only finished code will be merged to master. Master branch should always contain a working prototype.
+
+
+Basic overview of the code
 
 Classes
-	Game (holds pointers to active states, calls active GS)
+	Game (holds pointers to active states, calls active GameState)
 		GameState (different state-classes inherit from this: game logic, updates, drawing)
-	Player (weapons, characters)
+			Intro?
+			Main menu
+			Play view
+			Pause menu
+			Game over
+			Outro?
+	Player (available weapons & characters)
 		Character (sprite, movement, health)
 		Weapon (holds sprite and ammo)
-			Ammo (spawned when shot, handles collision detection)
+			Ammo (spawned when shot, handles collision detection, trajectory, etc.)
 	Map (terrain, wind condition)
 
-Main loop calls Game while there is an active state
+Main function initializes the game and loads the first game state. A loop then calls the update functions in Game while there is an active state. If no state is active anymore, the game has finished and the main function will handle the cleanup and exit. 
+
+
 
 Schedule
+
+By mid-meeting we plan to have ready a prototype game with two characters, one weapon and a flat terrain. Moving, jumping and shooting should all work. We should have basic sprites done for all these components.
+
+After the prototype is done, we will concentrate on the random terrain generation and adding possible extra features; More weapons, team of characters for each player, etc.
+
+// REMOVE NOTES FROM FINAL?
 	Mid meeting
 		Characters work (move, jump, shoot on level terrain)
 		Bazooka works (gravity)
@@ -44,3 +66,4 @@ Schedule
 	Final crunch
 		terrain generator
 		extra weapons
+//
