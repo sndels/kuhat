@@ -10,10 +10,10 @@
  * @return: none
  */
 Option::Option(std::string texture, int position) {
-	_texture.loadFromFile(texture);
-	_sprite.setTexture(_texture);
-	_sprite.setTextureRect(sf::IntRect(0, 0, OPTWIDTH, OPTHEIGHT));
-	_sprite.setPosition(220,150 + (position * 100));
+    _texture.loadFromFile(texture);
+    _sprite.setTexture(_texture);
+    _sprite.setTextureRect(sf::IntRect(0, 0, OPTWIDTH, OPTHEIGHT));
+    _sprite.setPosition(220,150 + (position * 100));
 }
 
 
@@ -23,7 +23,7 @@ Option::Option(std::string texture, int position) {
  * @return: none
  */
 void Option::setSelected() {
-	_sprite.setTextureRect(sf::IntRect(OPTWIDTH, 0, OPTWIDTH * 2, OPTHEIGHT));
+    _sprite.setTextureRect(sf::IntRect(OPTWIDTH, 0, OPTWIDTH * 2, OPTHEIGHT));
 }
 
 /*
@@ -32,7 +32,7 @@ void Option::setSelected() {
  * @return: none
  */
 void Option::setUnselected() {
-	_sprite.setTextureRect(sf::IntRect(0, 0, OPTWIDTH, OPTHEIGHT));
+    _sprite.setTextureRect(sf::IntRect(0, 0, OPTWIDTH, OPTHEIGHT));
 }
 
 /*
@@ -41,5 +41,5 @@ void Option::setUnselected() {
  * @return: sprite
  */
 sf::Sprite Option::getSprite() {
-	return _sprite;
+    return _sprite;
 }

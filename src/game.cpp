@@ -7,9 +7,9 @@
  * @return: none
  */
 Game::Game(sf::RenderWindow &window) : _window(window) {
-	_running = true;
-	MainMenu *mainMenu = new MainMenu();
-	this->pushState(mainMenu);
+    _running = true;
+    MainMenu *mainMenu = new MainMenu();
+    this->pushState(mainMenu);
 }
 
 /*
@@ -18,8 +18,8 @@ Game::Game(sf::RenderWindow &window) : _window(window) {
  * @return: none
  */
 Game::~Game() {
-	for (auto i : _states)
-		delete i;
+    for (auto i : _states)
+        delete i;
 }
 
 /*
@@ -28,8 +28,8 @@ Game::~Game() {
  * @return: none
  */
 void Game::changeState(GState *state) {
-	this->popState();
-	this->pushState(state);
+    this->popState();
+    this->pushState(state);
 }
 
 /*
@@ -38,7 +38,7 @@ void Game::changeState(GState *state) {
  * @return: none
  */
 void Game::pushState(GState *state) {
-	_states.insert(_states.begin(),state);
+    _states.insert(_states.begin(),state);
 }
 
 /*
@@ -47,8 +47,8 @@ void Game::pushState(GState *state) {
  * @return: none
  */
 void Game::popState() {
-	delete _states[0];
-	_states.erase(_states.begin());
+    delete _states[0];
+    _states.erase(_states.begin());
 }
 
 /*
@@ -57,16 +57,16 @@ void Game::popState() {
  * @return: none
  */
 void Game::handleEvents() {
-	sf::Event event;
-	while (_window.pollEvent(event))
-	{
-		// Request for closing the _window
-		if (event.type == sf::Event::Closed)
-			_running = false;
-			return;
-	}
-	for (auto i : _states)
-		i->handleEvents(this);
+    sf::Event event;
+    while (_window.pollEvent(event))
+    {
+        // Request for closing the _window
+        if (event.type == sf::Event::Closed)
+            _running = false;
+            return;
+    }
+    for (auto i : _states)
+        i->handleEvents(this);
 }
 
 /*
@@ -75,11 +75,11 @@ void Game::handleEvents() {
  * @return: none
  */
 void Game::draw() {
-	_window.setActive();
-	_window.clear(sf::Color::Black);
-	for (auto i : _states)
-		i->draw(this->_window);
-	_window.display();
+    _window.setActive();
+    _window.clear(sf::Color::Black);
+    for (auto i : _states)
+        i->draw(this->_window);
+    _window.display();
 }
 
 /*
@@ -88,7 +88,7 @@ void Game::draw() {
  * @return: true if game is running, false if not
  */
 bool Game::isRunning() const {
-	return _running;
+    return _running;
 }
 
 /*
@@ -97,5 +97,5 @@ bool Game::isRunning() const {
  * @return: none
  */
 void Game::quit() {
-	_running = false;
+    _running = false;
 }

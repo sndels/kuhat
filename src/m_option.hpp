@@ -10,13 +10,13 @@
 
 class Option {
 public:
-	Option(std::string texture, int position);
-	void setSelected();
-	void setUnselected();
-	sf::Sprite getSprite();
+    Option(std::string texture, int position);
+    void setSelected();
+    void setUnselected();
+    sf::Sprite getSprite();
 private:
-	sf::Texture _texture;
-	sf::Sprite _sprite;
+    sf::Texture _texture;
+    sf::Sprite _sprite;
 };
 
 

@@ -8,16 +8,16 @@ class Game;
 class GState
 {
 public:
-	GState() { };
-	virtual ~GState() { };
+    GState() { };
+    virtual ~GState() { };
 
-	virtual void handleEvents(Game* game) = 0;
-	virtual void draw(sf::RenderWindow &window) = 0;
+    virtual void handleEvents(Game* game) = 0;
+    virtual void draw(sf::RenderWindow &window) = 0;
 
-	bool isRunning() const {return _running;}
-	void quit() {_running = false;}
+    bool isRunning() const {return _running;}
+    void quit() {_running = false;}
 protected:
-	bool _running;
+    bool _running;
 };
 
 #endif

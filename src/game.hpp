@@ -13,22 +13,22 @@ class GState;
 class Game
 {
 public:
-	Game(sf::RenderWindow &window);
-	~Game();
+    Game(sf::RenderWindow &window);
+    ~Game();
 
-	void changeState(GState *state);
-	void pushState(GState *state);
-	void popState();
+    void changeState(GState *state);
+    void pushState(GState *state);
+    void popState();
 
-	void handleEvents();
-	void draw();
+    void handleEvents();
+    void draw();
 
-	bool isRunning() const;
-	void quit();
+    bool isRunning() const;
+    void quit();
 private:
-	sf::RenderWindow &_window;
-	bool _running;
-	std::vector<GState*> _states;
+    sf::RenderWindow &_window;
+    bool _running;
+    std::vector<GState*> _states;
 };
 
 #endif

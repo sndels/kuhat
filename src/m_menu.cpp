@@ -8,13 +8,13 @@
  * @return: none
  */
 MainMenu::MainMenu() {
-	_running = true;
-	Option *newOption = new Option("sprites/NewGame.png", 0);
-	_options.push_back(newOption);
-	_selected = 0;
-	_options[0]->setSelected();
-	newOption = new Option("sprites/Options.png", 1);
-	_options.push_back(newOption);
+    _running = true;
+    Option *newOption = new Option("sprites/NewGame.png", 0);
+    _options.push_back(newOption);
+    _selected = 0;
+    _options[0]->setSelected();
+    newOption = new Option("sprites/Options.png", 1);
+    _options.push_back(newOption);
 }
 
 /*
@@ -23,8 +23,8 @@ MainMenu::MainMenu() {
  * @return: none
  */
 MainMenu::~MainMenu() {
-	for (auto i : _options)
-		delete i;
+    for (auto i : _options)
+        delete i;
 }
 
 
@@ -34,20 +34,20 @@ MainMenu::~MainMenu() {
  * @return: none
  */
 void MainMenu::handleEvents(Game *game) {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {//Moves selection up
-		_options[_selected]->setUnselected();
-		++_selected;
-		if (_selected == OPTNUM)//Wraps if moved up from first
-			_selected = 0;
-		_options[_selected]->setSelected();
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {//Moves selection down
-		_options[_selected]->setUnselected();
-		--_selected;
-		if (_selected >= OPTNUM)//Wraps if moved down from last
-			_selected = OPTNUM - 1;
-		_options[_selected]->setSelected();
-	}
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {//Moves selection up
+        _options[_selected]->setUnselected();
+        ++_selected;
+        if (_selected == OPTNUM)//Wraps if moved up from first
+            _selected = 0;
+        _options[_selected]->setSelected();
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {//Moves selection down
+        _options[_selected]->setUnselected();
+        --_selected;
+        if (_selected >= OPTNUM)//Wraps if moved down from last
+            _selected = OPTNUM - 1;
+        _options[_selected]->setSelected();
+    }
 }
 
 /*
@@ -57,6 +57,6 @@ void MainMenu::handleEvents(Game *game) {
  */
 void MainMenu::draw(sf::RenderWindow &window)
 {
-		for (auto i : _options)
-			window.draw(i->getSprite());
+        for (auto i : _options)
+            window.draw(i->getSprite());
 }

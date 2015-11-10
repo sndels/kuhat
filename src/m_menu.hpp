@@ -8,15 +8,15 @@
 class MainMenu : public GState
 {
 public:
-	MainMenu();
-	~MainMenu();
+    MainMenu();
+    ~MainMenu();
 
-	virtual void handleEvents(Game *game);
-	virtual void draw(sf::RenderWindow &window);
+    virtual void handleEvents(Game *game);
+    virtual void draw(sf::RenderWindow &window);
 private:
-	std::vector<Option*> _options;
-	unsigned int _selected;
-	bool _running;
+    std::vector<Option*> _options;
+    unsigned int _selected;
+    bool _running;
 };
 
 #endif
