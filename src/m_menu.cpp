@@ -9,11 +9,11 @@
  */
 MainMenu::MainMenu() {
     _running = true;
-    Option *newOption = new Option("sprites/NewGame.png", 0);
+    Option *newOption = new Option("resource/sprites/NewGame.png", 0);
     _options.push_back(newOption);
     _selected = 0;
     _options[0]->setSelected();
-    newOption = new Option("sprites/Options.png", 1);
+    newOption = new Option("resource/sprites/Options.png", 1);
     _options.push_back(newOption);
 }
 
