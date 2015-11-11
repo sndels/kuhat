@@ -10,7 +10,7 @@ class MainMenu : public GState
 public:
     MainMenu();
 
-    virtual void handleEvents(Game *game);
+    virtual void handleEvents(sf::Event &event);
     virtual void draw(sf::RenderWindow &window);
 private:
     std::vector<std::shared_ptr<Option>> _options;

@@ -55,7 +55,7 @@ void Game::handleEvents() {
             return;
     }
     for (auto i : _states)
-        i->handleEvents(this);
+        i->handleEvents(event);
 }
 
 /*

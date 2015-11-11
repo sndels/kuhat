@@ -11,7 +11,7 @@ public:
     GState() { };
     virtual ~GState() { };
 
-    virtual void handleEvents(Game* game) = 0;
+    virtual void handleEvents(sf::Event &event) = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
 
     bool isRunning() const {return _running;}

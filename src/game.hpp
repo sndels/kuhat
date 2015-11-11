@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <memory>
 
 #include <iostream>
 
@@ -16,7 +17,6 @@ class Game
 {
 public:
     Game(sf::RenderWindow &window);
-    ~Game() {};
 
     void changeState(std::shared_ptr<GState> state);
     void pushState(std::shared_ptr<GState> state);

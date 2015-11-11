@@ -19,10 +19,10 @@ MainMenu::MainMenu() {
 
 /*
  * Selects the active item according to user input
- * @params: pointer to game
+ * @params: reference to sf::Event
  * @return: none
  */
-void MainMenu::handleEvents(Game *game) {
+void MainMenu::handleEvents(sf::Event &event) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {//Moves selection up
         _options[_selected]->setUnselected();
         ++_selected;
