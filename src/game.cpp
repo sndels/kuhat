@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "m_menu.hpp"
+#include "playstate.hpp"
 
 /*
  * Inits the MainMenu instance and pushes it to the GState-vector
@@ -10,6 +11,10 @@ Game::Game(sf::RenderWindow &window) : _window(window) {
     _running = true;
     std::shared_ptr<GState> mainMenu = std::make_shared<MainMenu>();
     this->pushState(mainMenu);
+    //  Comment the two lines above and uncomment the ones before to enter playstate on run
+    //    std::shared_ptr<GState> playState = std::make_shared<PlayState>();
+    //    this->pushState(playState);
+
 }
 
 /*

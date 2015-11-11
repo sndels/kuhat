@@ -8,6 +8,7 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML window");
     window.setVerticalSyncEnabled(true);
+    window.setKeyRepeatEnabled(false);
     Game game(window);
     while (game.isRunning()) {
         game.handleEvents();
