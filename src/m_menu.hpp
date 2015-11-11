@@ -12,6 +12,8 @@ public:
 
     virtual void handleEvents(sf::Event &event);
     virtual void draw(sf::RenderWindow &window);
+
+    bool newSelected();
 private:
     std::vector<std::shared_ptr<Option>> _options;
     unsigned int _selected;

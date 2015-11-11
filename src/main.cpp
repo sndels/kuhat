@@ -1,5 +1,6 @@
 #include "game.hpp"
-/*
+
+/**
  * Main loop
  * Initializes the game and intro screen and calls game to handle logic and
  * drawing
