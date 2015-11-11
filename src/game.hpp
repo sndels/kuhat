@@ -4,6 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
+#include <iostream>
+
 class GState;
 
 /* Game class
@@ -14,10 +16,10 @@ class Game
 {
 public:
     Game(sf::RenderWindow &window);
-    ~Game();
+    ~Game() {};
 
-    void changeState(GState *state);
-    void pushState(GState *state);
+    void changeState(std::shared_ptr<GState> state);
+    void pushState(std::shared_ptr<GState> state);
     void popState();
 
     void handleEvents();
@@ -28,7 +30,7 @@ public:
 private:
     sf::RenderWindow &_window;
     bool _running;
-    std::vector<GState*> _states;
+    std::vector<std::shared_ptr<GState>> _states;
 };
 
 #endif

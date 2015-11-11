@@ -9,24 +9,13 @@
  */
 MainMenu::MainMenu() {
     _running = true;
-    Option *newOption = new Option("resource/sprites/NewGame.png", 0);
+    std::shared_ptr<Option> newOption = std::make_shared<Option>("resource/sprites/NewGame.png", 0);
     _options.push_back(newOption);
     _selected = 0;
     _options[0]->setSelected();
-    newOption = new Option("resource/sprites/Options.png", 1);
+    newOption = std::make_shared<Option>("resource/sprites/Options.png", 1);
     _options.push_back(newOption);
 }
-
-/*
- * Deletes all menu items from memory
- * @params: none
- * @return: none
- */
-MainMenu::~MainMenu() {
-    for (auto i : _options)
-        delete i;
-}
-
 
 /*
  * Selects the active item according to user input

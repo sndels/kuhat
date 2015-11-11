@@ -9,12 +9,11 @@ class MainMenu : public GState
 {
 public:
     MainMenu();
-    ~MainMenu();
 
     virtual void handleEvents(Game *game);
     virtual void draw(sf::RenderWindow &window);
 private:
-    std::vector<Option*> _options;
+    std::vector<std::shared_ptr<Option>> _options;
     unsigned int _selected;
     bool _running;
 };

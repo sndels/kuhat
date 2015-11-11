@@ -8,18 +8,8 @@
  */
 Game::Game(sf::RenderWindow &window) : _window(window) {
     _running = true;
-    MainMenu *mainMenu = new MainMenu();
+    std::shared_ptr<GState> mainMenu = std::make_shared<MainMenu>();
     this->pushState(mainMenu);
-}
-
-/*
- * Removes all active GStates from memory
- * @params: none
- * @return: none
- */
-Game::~Game() {
-    for (auto i : _states)
-        delete i;
 }
 
 /*
@@ -27,7 +17,7 @@ Game::~Game() {
  * @params: GState to be added
  * @return: none
  */
-void Game::changeState(GState *state) {
+void Game::changeState(std::shared_ptr<GState> state) {
     this->popState();
     this->pushState(state);
 }
@@ -37,7 +27,7 @@ void Game::changeState(GState *state) {
  * @params: GState to be added
  * @return: none
  */
-void Game::pushState(GState *state) {
+void Game::pushState(std::shared_ptr<GState> state) {
     _states.insert(_states.begin(),state);
 }
 
@@ -47,7 +37,6 @@ void Game::pushState(GState *state) {
  * @return: none
  */
 void Game::popState() {
-    delete _states[0];
     _states.erase(_states.begin());
 }
 
