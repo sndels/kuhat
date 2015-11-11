@@ -9,7 +9,7 @@
 
 class GState;
 
-/* Game class
+/**
  * Class which is used to hold and access the active game states. Only one instance
  * of this will exist.
  */

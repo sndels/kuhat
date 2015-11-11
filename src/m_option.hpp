@@ -3,7 +3,7 @@
 
 #include "game.hpp"
 
-/*
+/**
  * Generic menu option. This will probably be a virtual class from which functional
  * menu items inherit from.
  */
