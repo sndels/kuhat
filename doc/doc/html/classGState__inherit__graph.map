@@ -1,0 +1,4 @@
+<map id="GState" name="GState">
+<area shape="rect" id="node2" href="$classMainMenu.html" title="MainMenu" alt="" coords="5,80,88,107"/>
+<area shape="rect" id="node3" href="$classPlayState.html" title="PlayState" alt="" coords="113,80,191,107"/>
+</map>
