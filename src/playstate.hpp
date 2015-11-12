@@ -4,6 +4,7 @@
 #include "gstate.hpp"
 #include "logo.hpp"
 #include "character.hpp"
+#include "weapon.hpp"
 
 class PlayState : public GState
 {
@@ -16,6 +17,7 @@ private:
 	bool _running;
     Character _kuha;
 	sf::Clock _clock;
+    Weapon _bazooka;
 };
 
 #endif
