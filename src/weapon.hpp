@@ -4,42 +4,23 @@
 #include <SFML/Graphics.hpp>
 #include "character.hpp"
 
-class Character;
-
-/*
-    TODO: Character needs to update the weapon it's holding
- */
-
 /**
  * A Virtual weapon class for different weapons to inherit from.
  */
 class Weapon
 {
 public:
-    /**
-     * Weapon constructor.
-     *
-     * Initializes the weapon sprite. Sets smoothing, origin, location and scaling.
-     * @param filename     Filename for Texture.
-     * @param weaponHolder Character holding the weapon.
-     */
-	Weapon (std::string filename, Character& weaponHolder):
-        _weaponHolder(weaponHolder) {
-		_texture.loadFromFile(filename);
-        _texture.setSmooth(true);
-		_sprite.setTexture(_texture);
-        updateLocation();
-        _sprite.setOrigin(280,135);
-    	_sprite.setScale(-0.2,0.2);
-	}
+	Weapon() { };
 
-	sf::Sprite getSprite() const
+    /**
+     * @return The weapons sprite.
+     */
+	virtual sf::Sprite getSprite() const
 	{
 		return _sprite;
 	}
 
     /**
-     * Rotates the weapon sprite.
      * @param angle Degrees to rotate the sprite.
      */
 	void rotate(float angle)
@@ -47,17 +28,23 @@ public:
 		_sprite.rotate(angle);
 	}
 
-    void updateLocation() {
-        sf::Vector2f newPosition = _weaponHolder.getSprite().getPosition();
-        newPosition.x +=70;
-        newPosition.y +=40;
-        _sprite.setPosition(newPosition);
+    /**
+     * Updates the sprites location.
+     * Called when the character holding the weapon has moved and the weapon
+     * also needs to move.
+     */
+    virtual void updateLocation() =0;
 
-    }
+    /**
+     * Returns weapons muzzle location.
+     * Muzzle location is where projectiles are spawned.
+     * @return Vector2f of coords
+     */
+    virtual sf::Vector2f getMuzzleLocation() =0;
+
 private:
 	sf::Texture _texture;
 	sf::Sprite _sprite;
-    Character& _weaponHolder; //!< The character holding the weapon
 };
 
 #endif

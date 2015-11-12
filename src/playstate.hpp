@@ -4,7 +4,7 @@
 #include "gstate.hpp"
 #include "logo.hpp"
 #include "character.hpp"
-#include "weapon.hpp"
+#include "bazooka.hpp"
 
 class PlayState : public GState
 {
@@ -14,10 +14,10 @@ public:
 	virtual void handleEvents(sf::Event &event);
 	virtual void draw(sf::RenderWindow &window);
 private:
-	bool _running;
+    bool _running;
     Character _kuha;
-	sf::Clock _clock;
-    Weapon _bazooka;
+    sf::Clock _clock;
+    Bazooka _bazooka;
 };
 
 #endif

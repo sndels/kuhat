@@ -5,7 +5,7 @@
 PlayState::PlayState():
     _running(true),
     _kuha("resource/sprites/kuha.png"),
-    _bazooka("resource/sprites/bazooka.png", _kuha) { }
+    _bazooka(_kuha) { }
 
 
 void PlayState::handleEvents(sf::Event &event) {
