@@ -1,24 +1,19 @@
 ### Generating the documentation with Doxygen
 
 Install doxygen:
-```Bash
-sudo apt-get install doxygen
-```
+    sudo apt-get install doxygen
+
 
 Run doxygen:
-```Bash
-doxygen doxygenConfig
-```
+    doxygen doxygenConfig
+
 
 
 ### Using Doxygen with a GUI
 
 Install doxywizard:
-```Bash
-sudo apt-get install doxygen-gui
-```
+    sudo apt-get install doxygen-gui
 
 Run doxywizard:
-```Bash
-doxywizard doxygenConfig
-```
+    doxywizard doxygenConfig
+
