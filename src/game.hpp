@@ -23,6 +23,7 @@ public:
     void popState();
 
     void handleEvents();
+    void update();
     void draw();
 
     bool isRunning() const;
