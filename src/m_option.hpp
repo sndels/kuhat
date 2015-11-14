@@ -26,7 +26,6 @@ public:
         _sprite.setPosition(220,150 + (position * 100));
     }
 
-
     /**
      * Sets the sprite as "selected"
      * @params: none
