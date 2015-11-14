@@ -15,16 +15,14 @@ public:
     /**
      * @return The weapons sprite.
      */
-	virtual sf::Sprite getSprite() const
-	{
+	virtual sf::Sprite getSprite() {
 		return _sprite;
 	}
 
     /**
      * @param angle Degrees to rotate the sprite.
      */
-	void rotate(float angle)
-	{
+	void rotate(float angle) {
 		_sprite.rotate(angle);
 	}
 
@@ -33,7 +31,7 @@ public:
      * Called when the character holding the weapon has moved and the weapon
      * also needs to move.
      */
-    virtual void updateLocation() =0;
+    virtual void updateLocation(sf::Vector2f charPosition) =0;
 
     /**
      * Returns weapons muzzle location.
