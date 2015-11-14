@@ -12,6 +12,7 @@ public:
     virtual ~GState() { };
 
     virtual void handleEvents(sf::Event &event) = 0;
+    virtual void update() = 0;
     virtual void draw(sf::RenderWindow &window) = 0;
 
     bool isRunning() const {return _running;}
