@@ -4,15 +4,18 @@
 #include "gstate.hpp"
 #include "player.hpp"
 
+#include <iostream>
+
 class PlayState : public GState
 {
 public:
-    PlayState() {
+    PlayState() : _ammo() {
             _running = true;
         }
 
 
     void handleEvents(sf::Event &event) {
+        std::cout << _player.getWeapon().getAngle() << std::endl;
         ;
     }
 
@@ -29,6 +32,10 @@ public:
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             _player.rotateWeapon(-1);
         }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+            _ammo.fire(_player.getWeapon().getSprite().getPosition(), _player.getWeapon().getAngle(), 1000);
+        }
+        _ammo.updateLocation();
     }
 
 
@@ -36,8 +43,11 @@ public:
     {
         window.clear(sf::Color::White);
         _player.draw(window);
+        if (_ammo.shot())
+            window.draw(_ammo.getSprite());
     }
 private:
+    BazookaAmmo _ammo;
     Player _player;
     sf::Clock _clock;
 };

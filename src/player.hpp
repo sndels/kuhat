@@ -30,7 +30,9 @@ public:
         _weapon.rotate(deg);
     }
 
-
+    Bazooka getWeapon() {
+        return _weapon;
+    }
 
     void draw(sf::RenderWindow &window) {
         window.draw(_character.getSprite());
