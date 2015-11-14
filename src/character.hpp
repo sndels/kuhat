@@ -15,13 +15,11 @@ public:
         _sprite.setScale(0.5,0.5);
     }
 
-    sf::Sprite getSprite() const
-    {
+    sf::Sprite getSprite() {
         return _sprite;
     }
 
-    void move(float x, float y)
-    {
+    void move(float x, float y) {
         _sprite.move(x,y);
     }
 private:

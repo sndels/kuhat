@@ -18,12 +18,11 @@ public:
      * Initializes the bazooka sprite. Sets smoothing, origin, location and scaling.
      * @param weaponHolder Character holding the weapon.
      */
-    Bazooka(Character& weaponHolder):
-        _weaponHolder(weaponHolder) {
+    Bazooka(sf::Vector2f charPosition) {
         _texture.loadFromFile("resource/sprites/bazooka.png");
         _texture.setSmooth(true);
         _sprite.setTexture(_texture);
-        updateLocation();
+        updateLocation(charPosition);
         _sprite.setOrigin(280,135);
         _sprite.setScale(-0.2,0.2);
     }
@@ -31,27 +30,24 @@ public:
     /**
      * @return The bazookas sprite.
      */
-    sf::Sprite getSprite() const
-    {
+    sf::Sprite getSprite() {
         return _sprite;
     }
 
     /**
      * @param angle Degrees to rotate the sprite.
      */
-    void rotate(float angle)
-    {
+    void rotate(float angle) {
         _sprite.rotate(angle);
     }
 
     /**
      * Updates the sprites location.
      */
-    virtual void updateLocation() {
-        sf::Vector2f newPosition = _weaponHolder.getSprite().getPosition();
-        newPosition.x +=70;
-        newPosition.y +=40;
-        _sprite.setPosition(newPosition);
+    virtual void updateLocation(sf::Vector2f charPosition) {
+        charPosition.x +=70;
+        charPosition.y +=40;
+        _sprite.setPosition(charPosition);
     }
 
     virtual sf::Vector2f getMuzzleLocation() {
@@ -63,7 +59,6 @@ public:
 private:
     sf::Texture _texture;
     sf::Sprite _sprite;
-    Character& _weaponHolder; //!< The character holding the weapon
 };
 
 #endif

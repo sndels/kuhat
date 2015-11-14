@@ -73,7 +73,6 @@ public:
 private:
     std::vector<std::shared_ptr<Option>> _options;
     unsigned int _selected;
-    bool _running;
 };
 
 #endif

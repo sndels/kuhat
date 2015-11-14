@@ -2,17 +2,14 @@
 #define PLAY_H
 
 #include "gstate.hpp"
-#include "logo.hpp"
-#include "character.hpp"
-#include "bazooka.hpp"
+#include "player.hpp"
 
 class PlayState : public GState
 {
 public:
-    PlayState():
-        _running(true),
-        _kuha("resource/sprites/kuha.png"),
-        _bazooka(_kuha) { }
+    PlayState() {
+            _running = true;
+        }
 
 
     void handleEvents(sf::Event &event) {
@@ -21,18 +18,16 @@ public:
 
     void update() {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            _kuha.move(-1.5,0);
-            _bazooka.updateLocation();
+            _player.moveActive(-1.5,0);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            _kuha.move(1.5,0);
-            _bazooka.updateLocation();
+            _player.moveActive(1.5,0);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            _bazooka.rotate(1);
+            _player.rotateWeapon(1);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            _bazooka.rotate(-1);
+            _player.rotateWeapon(-1);
         }
     }
 
@@ -40,14 +35,11 @@ public:
     void draw(sf::RenderWindow &window)
     {
         window.clear(sf::Color::White);
-        window.draw(_kuha.getSprite());
-        window.draw(_bazooka.getSprite());
+        _player.draw(window);
     }
 private:
-    bool _running;
-    Character _kuha;
+    Player _player;
     sf::Clock _clock;
-    Bazooka _bazooka;
 };
 
 #endif

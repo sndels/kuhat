@@ -3,6 +3,8 @@
 
 #include <memory>
 #include "character.hpp"
+#include "weapon.hpp"
+#include "bazooka.hpp"
 
 /**
  * Class which holds a players character(s) and ammo counts
@@ -15,13 +17,25 @@ public:
 	 * Initializes the character(s), sets up default ammo counts and sets the turn
 	 * as not finished
 	 */
-	Player() {
-	    _character = std::make_shared<Character>("resources/sprites/kuha.png");
-	    _ammoCounts.push_back(15);
-	    _ammoCounts.push_back(5);
-	    _ammoCounts.push_back(3);
+	Player() : _character("resource/sprites/kuha.png"), _weapon(_character.getSprite().getPosition()) {
 	    _finished = false;
 	}
+
+    void moveActive(float x, float y) {
+        _character.move(x,y);
+        _weapon.updateLocation(_character.getSprite().getPosition());
+    }
+
+    void rotateWeapon(float deg) {
+        _weapon.rotate(deg);
+    }
+
+
+
+    void draw(sf::RenderWindow &window) {
+        window.draw(_character.getSprite());
+        window.draw(_weapon.getSprite());
+    }
 
 	/**
 	 * Checks if the player has ended his turn
@@ -38,25 +52,9 @@ public:
 	    _finished = true;
 	}
 
-	/**
-	 * Checks if given weapon has ammo left
-	 * @params: weaponsID number
-	 * @return: true if has ammo, false if not
-	 */
-	bool hasAmmo(int weaponID) const {
-	    return _ammoCounts[weaponID] > 0;
-	}
-
-	/**
-	 * Reduces the given weapon's ammo count by 1
-	 * @params: weaponsID number
-	 */
-	void reduceAmmo(int weaponID) {
-	    _ammoCounts[weaponID] -= 1;
-	}
 private:
-	std::shared_ptr<Character> _character;
-	std::vector<char> _ammoCounts;//Ammo counts in the weapon order
+	Character _character;
+    Bazooka _weapon;
 	bool _finished;
 };
 
