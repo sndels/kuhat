@@ -10,21 +10,21 @@
 class Weapon
 {
 public:
-	Weapon() { };
+    Weapon() { };
 
     /**
      * @return The weapons sprite.
      */
-	virtual sf::Sprite getSprite() {
-		return _sprite;
-	}
+    virtual sf::Sprite getSprite() {
+        return _sprite;
+    }
 
     /**
      * @param angle Degrees to rotate the sprite.
      */
-	void rotate(float angle) {
-		_sprite.rotate(angle);
-	}
+    void rotate(float angle) {
+        _sprite.rotate(angle);
+    }
 
     /**
      * Updates the sprites location.
@@ -41,8 +41,8 @@ public:
     virtual sf::Vector2f getMuzzleLocation() =0;
 
 private:
-	sf::Texture _texture;
-	sf::Sprite _sprite;
+    sf::Texture _texture;
+    sf::Sprite _sprite;
 };
 
 #endif

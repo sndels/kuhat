@@ -7,16 +7,16 @@
 class Projectile
 {
 public:
-	Projectile() {	}
+    Projectile() {    }
 
-	sf::Sprite getSprite() const
-	{
-		return _sprite;
-	}
-    
+    sf::Sprite getSprite() const
+    {
+        return _sprite;
+    }
+
 private:
-	sf::Texture _texture;
-	sf::Sprite _sprite;
+    sf::Texture _texture;
+    sf::Sprite _sprite;
 };
 
 #endif
