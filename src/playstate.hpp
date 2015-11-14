@@ -42,19 +42,25 @@ public:
     }
 
     void update() {
+        sf::Time currentUpdate = _clock.getElapsedTime();
+        float deltaT = (float)currentUpdate.asMilliseconds() - (float)_prevUpdate.asMilliseconds();
+
+
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            _player.moveActive(-1.5,0);
+            _player.moveActive(deltaT * (-0.5),deltaT * (0));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            _player.moveActive(1.5,0);
+            _player.moveActive(deltaT * (0.5),deltaT * (0));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            _player.rotateWeapon(1);
+            _player.rotateWeapon(deltaT * (0.1));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            _player.rotateWeapon(-1);
+            _player.rotateWeapon(deltaT * (-0.1));
         }
         _ammo.updateLocation();
+
+        _prevUpdate = currentUpdate;
     }
 
 
@@ -69,6 +75,7 @@ private:
     BazookaAmmo _ammo;
     Player _player;
     sf::Clock _clock;
+    sf::Time _prevUpdate;
     bool _charging;
     sf::Clock _charge;
 };
