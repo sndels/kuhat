@@ -13,7 +13,7 @@ public:
         _sprite.setTexture(_texture);
         _sprite.setPosition(820,350);
         _sprite.setScale(0.5,0.5);
-        _isFlipped = false; // Characters are drawn facing left.
+        _isFlipped = true; // Characters are drawn facing left.
         _Grip.x = 125;
         _Grip.y = 86;
     }
@@ -31,13 +31,13 @@ public:
         // Grips y-axis coord is always y-location + y-scale*y-offset.
         ret.y = loc.top + scale.y*_Grip.y;
 
-        if (!_isFlipped) {
-            // Character is not flipped:
+        if (_isFlipped) {
+            // Character is flipped:
             // Grip x-axis coord is characters location + scale*offset.
             ret.x = loc.left + scale.x*_Grip.x;
         }
         else {
-            // Character is flipped:
+            // Character is not flipped:
             // Grip x-axis coord is characters location + (width - scale*offset).
             ret.x = loc.left + loc.width - scale.x*_Grip.x;
         }
@@ -47,8 +47,8 @@ public:
 
     void move(float x, float y) {
         // Change the sprite to face the x-axis moving direction.
-        if ( x<0 && _isFlipped == true ) flip();
-        else if ( x>0 && _isFlipped == false) flip();
+        if ( x<0 && !_isFlipped ) flip();
+        else if ( x>0 && _isFlipped) flip();
         _sprite.move(x,y);
     }
 
@@ -60,7 +60,7 @@ public:
      * because they will all be flipped.
      */
     void flip() {
-        if (!_isFlipped) {
+        if (_isFlipped) {
             // Flip the texture on x-axis
             _sprite.setTextureRect(sf::IntRect(_sprite.getTextureRect().width, 0, -(_sprite.getTextureRect().width), _sprite.getTextureRect().height));
         }
