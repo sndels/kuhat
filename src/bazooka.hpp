@@ -35,13 +35,6 @@ public:
     }
 
     /**
-     * @param angle Degrees to rotate the sprite.
-     */
-    void rotate(float angle) {
-        _sprite.rotate(angle);
-    }
-
-    /**
      * Updates the sprites location.
      */
     void updateLocation(const Character& weaponHolder) {
@@ -54,9 +47,6 @@ public:
         muzzleLocation.y = 30;
         return muzzleLocation;
     }
-private:
-    sf::Texture _texture;
-    sf::Sprite _sprite;
 };
 
 #endif
