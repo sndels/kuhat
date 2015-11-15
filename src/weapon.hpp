@@ -40,7 +40,7 @@ public:
      */
     virtual sf::Vector2f getMuzzleLocation() =0;
 
-private:
+protected:
     sf::Texture _texture;
     sf::Sprite _sprite;
 };
