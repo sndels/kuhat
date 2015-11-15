@@ -23,7 +23,7 @@ public:
      * @param angle Degrees to rotate the sprite.
      */
     void rotate(float angle) {
-        _sprite.rotate(angle);
+        _sprite.setRotation(90-angle);
     }
 
     /**

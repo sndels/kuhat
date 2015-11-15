@@ -23,7 +23,8 @@ public:
         _texture.setSmooth(true);
         _sprite.setTexture(_texture);
         _sprite.setOrigin(280,135);
-        _sprite.setScale(-0.2,0.2);
+        _sprite.setScale(0.2,0.2);
+        _sprite.setRotation(0);
         updateLocation(weaponHolder);
     }
 
