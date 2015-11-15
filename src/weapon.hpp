@@ -31,7 +31,7 @@ public:
      * Called when the character holding the weapon has moved and the weapon
      * also needs to move.
      */
-    virtual void updateLocation(sf::Vector2f charPosition) =0;
+    virtual void updateLocation(const Character& weaponHolder) =0;
 
     /**
      * Returns weapons muzzle location.

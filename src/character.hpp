@@ -14,10 +14,35 @@ public:
         _sprite.setPosition(820,350);
         _sprite.setScale(0.5,0.5);
         _isFlipped = false; // Characters are drawn facing left.
+        _Grip.x = 125;
+        _Grip.y = 86;
     }
 
     sf::Sprite getSprite() {
         return _sprite;
+    }
+
+    sf::Vector2f getGripLocation() const {
+        // Character sprites current global bounds and scale.
+        sf::FloatRect loc = _sprite.getGlobalBounds();
+        sf::Vector2f scale = _sprite.getScale();
+
+        sf::Vector2f ret;
+        // Grips y-axis coord is always y-location + y-scale*y-offset.
+        ret.y = loc.top + scale.y*_Grip.y;
+
+        if (!_isFlipped) {
+            // Character is not flipped:
+            // Grip x-axis coord is characters location + scale*offset.
+            ret.x = loc.left + scale.x*_Grip.x;
+        }
+        else {
+            // Character is flipped:
+            // Grip x-axis coord is characters location + (width - scale*offset).
+            ret.x = loc.left + loc.width - scale.x*_Grip.x;
+        }
+
+        return ret;
     }
 
     void move(float x, float y) {
@@ -25,10 +50,6 @@ public:
         if ( x<0 && _isFlipped == true ) flip();
         else if ( x>0 && _isFlipped == false) flip();
         _sprite.move(x,y);
-    }
-
-    bool isSpriteFlipped() {
-        return _isFlipped;
     }
 
     /**
@@ -55,6 +76,10 @@ private:
     sf::Texture _texture;
     sf::Sprite _sprite;
     bool _isFlipped;
+
+    // Grip position i.e. The point on character where weapon origin is placed.
+    // Defined as pixel offset from top left.
+    sf::Vector2f _Grip;
 };
 
 #endif

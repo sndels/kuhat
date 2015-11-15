@@ -17,13 +17,13 @@ public:
      * Initializes the character(s), sets up default ammo counts and sets the turn
      * as not finished
      */
-    Player() : _character("resource/sprites/kuha.png"), _weapon(_character.getSprite().getPosition()) {
+    Player() : _character("resource/sprites/kuha.png"), _weapon(_character) {
         _finished = false;
     }
 
     void moveActive(float x, float y) {
         _character.move(x,y);
-        _weapon.updateLocation(_character.getSprite().getPosition());
+        _weapon.updateLocation(_character);
     }
 
     void rotateWeapon(float deg) {
