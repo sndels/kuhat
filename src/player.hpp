@@ -18,7 +18,7 @@ public:
      * as not finished
      */
     Player() : _character("resource/sprites/kuha.png"), _weapon(_character) {
-        _finished = false;
+        _finished = false, _aim = 90;
     }
 
     void moveActive(float x, float y) {
@@ -27,7 +27,12 @@ public:
     }
 
     void rotateWeapon(float deg) {
-        _weapon.rotate(deg);
+        _aim += deg;
+        // Limit _aim to 0-180 range.
+        if (_aim < 0 ) _aim = 0;
+        else if (_aim > 180 ) _aim = 180;
+        
+        _weapon.rotate(_aim);
     }
 
 
@@ -56,6 +61,7 @@ private:
     Character _character;
     Bazooka _weapon;
     bool _finished;
+    float _aim;
 };
 
 #endif
