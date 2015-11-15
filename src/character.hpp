@@ -72,6 +72,10 @@ public:
         _isFlipped ^= 1;
     }
 
+    bool isCharFlipped() const {
+        return _isFlipped;
+    }
+
 private:
     sf::Texture _texture;
     sf::Sprite _sprite;
