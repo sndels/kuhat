@@ -40,9 +40,30 @@ public:
      */
     virtual sf::Vector2f getMuzzleLocation() =0;
 
+    /**
+     * Flips the weapon horizontally.
+     *
+     * NOTE: Currently flipping is done by reversing the sprites texture. Which
+     * means that the same texture can't be used for many sprites to save memory,
+     * because they will all be flipped.
+     */
+    void flip() {
+        if (_isFlipped) {
+            // Flip the texture on x-axis
+            _sprite.setTextureRect(sf::IntRect(_sprite.getTextureRect().width, 0, -(_sprite.getTextureRect().width), _sprite.getTextureRect().height));
+        }
+        else {
+            // Use normal texture
+            _sprite.setTexture(_texture, true);
+        }
+        // Toggle flipped status
+        _isFlipped ^= 1;
+    }
+
 protected:
     sf::Texture _texture;
     sf::Sprite _sprite;
+    bool _isFlipped;
 };
 
 #endif
