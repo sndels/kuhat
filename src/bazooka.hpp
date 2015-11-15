@@ -25,7 +25,9 @@ public:
         _sprite.setOrigin(280,135);
         _sprite.setScale(0.2,0.2);
         _sprite.setRotation(0);
+        _isFlipped = true; // Texture was drawn facing left.
         updateLocation(weaponHolder);
+        flip();
     }
 
     /**
@@ -40,6 +42,13 @@ public:
      */
     void updateLocation(const Character& weaponHolder) {
         _sprite.setPosition(weaponHolder.getGripLocation());
+
+        // Make sure weapon is facing same direction as character.
+        // Also corrct the angle if flip is needed.
+        if (weaponHolder.isCharFlipped() != _isFlipped) {
+            _sprite.setRotation(-_sprite.getRotation() );
+            flip();
+        }
     }
 
     sf::Vector2f getMuzzleLocation() {

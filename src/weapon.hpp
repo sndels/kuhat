@@ -24,6 +24,8 @@ public:
      */
     void rotate(float angle) {
         _sprite.setRotation(90-angle);
+        // If the weapon is flipped, mirror the rotation.
+        if (_isFlipped) _sprite.setRotation(-_sprite.getRotation() );
     }
 
     /**
@@ -48,7 +50,7 @@ public:
      * because they will all be flipped.
      */
     void flip() {
-        if (_isFlipped) {
+        if (!_isFlipped) {
             // Flip the texture on x-axis
             _sprite.setTextureRect(sf::IntRect(_sprite.getTextureRect().width, 0, -(_sprite.getTextureRect().width), _sprite.getTextureRect().height));
         }
