@@ -67,6 +67,8 @@ public:
             // Use normal texture
             _sprite.setTexture(_texture, true);
         }
+        // Correct the origin point
+        _sprite.setOrigin(_sprite.getLocalBounds().width - _sprite.getOrigin().x , _sprite.getOrigin().y);
         // Correct the weapon angle
         _sprite.setRotation(-_sprite.getRotation() );
         // Toggle flipped status
