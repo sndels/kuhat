@@ -58,6 +58,8 @@ public:
             // Use normal texture
             _sprite.setTexture(_texture, true);
         }
+        // Correct the weapon angle
+        _sprite.setRotation(-_sprite.getRotation() );
         // Toggle flipped status
         _isFlipped ^= 1;
     }

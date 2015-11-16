@@ -46,7 +46,6 @@ public:
         // Make sure weapon is facing same direction as character.
         // Also corrct the angle if flip is needed.
         if (weaponHolder.isCharFlipped() != _isFlipped) {
-            _sprite.setRotation(-_sprite.getRotation() );
             flip();
         }
     }
