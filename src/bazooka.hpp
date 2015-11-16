@@ -7,7 +7,7 @@
 
 /**
  * Class for bazooka type weapon.
- * Inherits basics from weapon-class.
+ * Inherits basics and functionality from weapon-class.
  */
 class Bazooka: public Weapon
 {
@@ -27,33 +27,6 @@ public:
         _sprite.setRotation(0);
         _isFlipped = false; // Texture was drawn facing right.
         updateLocation(weaponHolder);
-    }
-
-    /**
-     * @return The bazookas sprite.
-     */
-    sf::Sprite getSprite() {
-        return _sprite;
-    }
-
-    /**
-     * Updates the sprites location.
-     */
-    void updateLocation(const Character& weaponHolder) {
-        _sprite.setPosition(weaponHolder.getGripLocation());
-
-        // Make sure weapon is facing same direction as character.
-        // Also corrct the angle if flip is needed.
-        if (weaponHolder.isCharFlipped() != _isFlipped) {
-            flip();
-        }
-    }
-
-    sf::Vector2f getMuzzleLocation() {
-        sf::Vector2f muzzleLocation;
-        muzzleLocation.x = 30;
-        muzzleLocation.y = 30;
-        return muzzleLocation;
     }
 };
 

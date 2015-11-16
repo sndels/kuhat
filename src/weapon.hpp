@@ -5,7 +5,8 @@
 #include "character.hpp"
 
 /**
- * A Virtual weapon class for different weapons to inherit from.
+ * A Virtual weapon class.
+ * Different weapons inherit basic functionality from this class.
  */
 class Weapon
 {
@@ -22,7 +23,7 @@ public:
     /**
      * @param angle Degrees to rotate the sprite.
      */
-    void rotate(float angle) {
+    virtual void rotate(float angle) {
         _sprite.setRotation(90-angle);
         // If the weapon is flipped, mirror the rotation.
         if (_isFlipped) _sprite.setRotation(-_sprite.getRotation() );
@@ -30,17 +31,25 @@ public:
 
     /**
      * Updates the sprites location.
-     * Called when the character holding the weapon has moved and the weapon
-     * also needs to move.
      */
-    virtual void updateLocation(const Character& weaponHolder) =0;
+    virtual void updateLocation(const Character& weaponHolder) {
+        _sprite.setPosition(weaponHolder.getGripLocation());
+
+        // Make sure weapon is facing same direction as character.
+        // Also corrct the angle if flip is needed.
+        if (weaponHolder.isCharFlipped() != _isFlipped) {
+            flip();
+        }
+    }
 
     /**
      * Returns weapons muzzle location.
      * Muzzle location is where projectiles are spawned.
      * @return Vector2f of coords
      */
-    virtual sf::Vector2f getMuzzleLocation() =0;
+    virtual sf::Vector2f getMuzzleLocation() {
+        return _muzzleLocation;
+    }
 
     /**
      * Flips the weapon horizontally.
@@ -68,6 +77,7 @@ protected:
     sf::Texture _texture;
     sf::Sprite _sprite;
     bool _isFlipped;
+    sf::Vector2f _muzzleLocation;
 };
 
 #endif
