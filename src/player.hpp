@@ -17,7 +17,7 @@ public:
      * Initializes the character(s), sets up default ammo counts and sets the turn
      * as not finished
      */
-    Player() : _character("resource/sprites/kuha.png"), _weapon(_character) {
+    Player() : _character("resource/sprites/kuha.png", true), _weapon(_character) {
         _finished = false, _aim = 90;
     }
 
@@ -31,7 +31,7 @@ public:
         // Limit _aim to 0-180 range.
         if (_aim < 0 ) _aim = 0;
         else if (_aim > 180 ) _aim = 180;
-        
+
         _weapon.rotate(_aim);
     }
 

@@ -8,7 +8,7 @@
 class Character
 {
 public:
-    Character (std::string t) {
+    Character (std::string t, bool turn = false) {
         _texture.loadFromFile(t);
         _sprite.setTexture(_texture);
         _sprite.setPosition(820,350);
@@ -16,7 +16,7 @@ public:
         _isFlipped = false; // Character is drawn facing right.
         _Grip.x = 293;
         _Grip.y = 83;
-        flip(); // Spawn the character facing left.
+        if (turn == true) flip(); // Spawn the character facing left.
     }
 
     sf::Sprite getSprite() {
