@@ -25,9 +25,8 @@ public:
         _sprite.setOrigin(280,135);
         _sprite.setScale(0.2,0.2);
         _sprite.setRotation(0);
-        _isFlipped = true; // Texture was drawn facing left.
+        _isFlipped = false; // Texture was drawn facing right.
         updateLocation(weaponHolder);
-        flip();
     }
 
     /**
