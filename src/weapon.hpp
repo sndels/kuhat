@@ -2,6 +2,7 @@
 #define WEAPON_H
 
 #include <SFML/Graphics.hpp>
+#include <cmath>
 #include "character.hpp"
 
 /**
@@ -48,7 +49,30 @@ public:
      * @return Vector2f of coords
      */
     virtual sf::Vector2f getMuzzleLocation() {
-        return _muzzleLocation;
+        sf::Vector2f muzzleLocation;
+        // Muzzles coords respect to local origin.
+        // Multiply by scale to get difference in global coords.
+        float x;
+        float y = (_muzzleOffset.y -_sprite.getOrigin().y)*_sprite.getScale().y;
+        // X depends on whether the texture is flipped.
+        if (!_isFlipped) {
+            x = (_muzzleOffset.x -_sprite.getOrigin().x)*_sprite.getScale().x;
+        }
+        else {
+            x = (_sprite.getLocalBounds().width - _muzzleOffset.x - _sprite.getOrigin().x)*_sprite.getScale().x;
+        }
+        // Sprites rotation in radians.
+        // 4*atan(1) = pi
+        float a = _sprite.getRotation() *(4*atan(1)) /180;
+
+        // Calculate the rotated coords.
+        muzzleLocation.y = x*sin(a) + y*cos(a);
+        muzzleLocation.x = x*cos(a) - y*sin(a);
+
+        // Add sprites global coords to get muzzles final global coords.
+        muzzleLocation += _sprite.getPosition();
+
+        return muzzleLocation;
     }
 
     /**
@@ -79,7 +103,7 @@ protected:
     sf::Texture _texture;
     sf::Sprite _sprite;
     bool _isFlipped;
-    sf::Vector2f _muzzleLocation;
+    sf::Vector2f _muzzleOffset; // Coords in sprite image.
 };
 
 #endif

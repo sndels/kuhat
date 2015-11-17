@@ -20,6 +20,8 @@ public:
      */
     Bazooka(Character& weaponHolder) {
         _texture.loadFromFile("resource/sprites/bazooka.png");
+        _muzzleOffset.x = 570;
+        _muzzleOffset.y = 105;
         _texture.setSmooth(true);
         _sprite.setTexture(_texture);
         _sprite.setOrigin(280,135);
