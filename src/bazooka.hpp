@@ -1,6 +1,5 @@
 #ifndef BAZOOKA_H
 #define BAZOOKA_H
-
 #include <SFML/Graphics.hpp>
 #include "character.hpp"
 #include "weapon.hpp"

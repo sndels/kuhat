@@ -3,7 +3,7 @@
 
 #include "gstate.hpp"
 #include "player.hpp"
-
+#include <cmath>
 #include <iostream>
 
 class PlayState : public GState
@@ -58,22 +58,51 @@ public:
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             _player.rotateWeapon(deltaT * (-0.1));
         }
+        //Control dummy with WASD
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+            _dummy.moveActive(deltaT * (-0.5),deltaT * (0));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+            _dummy.moveActive(deltaT * (0.5),deltaT * (0));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+            _dummy.moveActive(deltaT * (0),deltaT * (-0.5));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+            _dummy.moveActive(deltaT * (0),deltaT * (0.5));
+        }
         _ammo.updateLocation();
+        handleCollision();
 
         _prevUpdate = currentUpdate;
     }
-
+    
+    /**
+     * Collision handling
+     */
+    void handleCollision(){
+        if(_ammo.shot()){
+            sf::FloatRect _ammo_hitbox = _ammo.getSprite().getGlobalBounds();
+            sf::FloatRect _dummy_hitbox = _dummy.getCharacter().getSprite().getGlobalBounds();
+            if(_ammo_hitbox.intersects(_dummy_hitbox)){
+                std::cout<<"Bazooka hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                _ammo.destroy();              
+            }
+        }
+    }
 
     void draw(sf::RenderWindow &window)
     {
         window.clear(sf::Color::White);
         _player.draw(window);
+        _dummy.draw(window);
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
     }
 private:
     BazookaAmmo _ammo;
     Player _player;
+    Player _dummy;
     sf::Clock _clock;
     sf::Time _prevUpdate;
     bool _charging;

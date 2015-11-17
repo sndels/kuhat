@@ -53,6 +53,12 @@ public:
         return _shot;
     }
     /**
+     * Destroys the projectile
+     */
+    void destroy() {
+        _shot=false;
+    }
+    /**
      * Fires the projectile
      * @param location Current weapon location
      * @param angle Weapon angle
@@ -66,6 +72,14 @@ public:
         _shot = true;
     }
 
+    float getX() {
+        return _location.x + std::cos((180-_angle)*PI/180) * _velocity * (getAirTime().asMilliseconds() / 1000.0);
+    }
+
+    float getY() {
+        return _location.y - std::sin((180-_angle)*PI/180) *_velocity * (getAirTime().asMilliseconds() / 1000.0) + 0.5 * 999.81 * std::pow(getAirTime().asMilliseconds() / 1000.0, 2);
+    }
+    
 private:
     sf::Vector2f _location;
     float _angle;
@@ -79,16 +93,10 @@ private:
      * Get X coordinate on fire
      * @return horizontal coordinate
      */
-    float getX() {
-        return _location.x + std::cos((180-_angle)*PI/180) * _velocity * (getAirTime().asMilliseconds() / 1000.0);
-    }
     /**
      * Get Y coordinate on fire
      * @return vertical coordinate
      */
-    float getY() {
-        return _location.y - std::sin((180-_angle)*PI/180) *_velocity * (getAirTime().asMilliseconds() / 1000.0) + 0.5 * 999.81 * std::pow(getAirTime().asMilliseconds() / 1000.0, 2);
-    }
 };
 
 #endif

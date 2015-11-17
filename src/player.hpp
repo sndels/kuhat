@@ -5,6 +5,7 @@
 #include "character.hpp"
 #include "weapon.hpp"
 #include "bazooka.hpp"
+#include <iostream>
 
 /**
  * Class which holds a players character(s) and ammo counts
@@ -33,6 +34,11 @@ public:
     Bazooka getWeapon() {
         return _weapon;
     }
+
+    Character getCharacter(){
+        return _character;
+    }
+
 
     void draw(sf::RenderWindow &window) {
         window.draw(_character.getSprite());
