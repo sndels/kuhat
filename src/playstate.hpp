@@ -3,13 +3,14 @@
 
 #include "gstate.hpp"
 #include "player.hpp"
+#include "hud.hpp"
 #include <cmath>
 #include <iostream>
 
 class PlayState : public GState
 {
 public:
-    PlayState() : _ammo(), _charging(false) {
+    PlayState() : _ammo(), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
         }
     /**
@@ -72,11 +73,13 @@ public:
             _dummy.moveActive(deltaT * (0),deltaT * (0.5));
         }
         _ammo.updateLocation();
+        if (_charging)
+            _hud.setState(_charge.getElapsedTime().asSeconds());
         handleCollision();
 
         _prevUpdate = currentUpdate;
     }
-    
+
     /**
      * Collision handling
      */
@@ -86,7 +89,7 @@ public:
             sf::FloatRect _dummy_hitbox = _dummy.getCharacter().getSprite().getGlobalBounds();
             if(_ammo_hitbox.intersects(_dummy_hitbox)){
                 std::cout<<"Bazooka hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
-                _ammo.destroy();              
+                _ammo.destroy();
             }
         }
     }
@@ -95,6 +98,8 @@ public:
     {
         window.clear(sf::Color::White);
         _player.draw(window);
+        if (_charging)
+            _hud.draw(window);
         _dummy.draw(window);
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
@@ -103,6 +108,7 @@ private:
     BazookaAmmo _ammo;
     Player _player;
     Player _dummy;
+    Hud _hud;
     sf::Clock _clock;
     sf::Time _prevUpdate;
     bool _charging;
