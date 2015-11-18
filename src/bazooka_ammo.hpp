@@ -2,6 +2,7 @@
 #define B_AMMO_H
 
 #define PI 3.14 // For calculating projectile flight
+#define GRAVITY 900
 
 #include <SFML/Graphics.hpp>
 #include "projectile.hpp"
@@ -71,16 +72,27 @@ public:
         _airtime.restart();
         _shot = true;
     }
-
+    /**
+     * @return ammo horizontal coordinate
+     */
     float getX() {
         return _location.x + std::cos((180-_angle)*PI/180) * _velocity * (getAirTime().asMilliseconds() / 1000.0);
     }
+    /**
+     * @return ammo vertical coordinate
+     */
 
     float getY() {
-        return _location.y - std::sin((180-_angle)*PI/180) *_velocity * (getAirTime().asMilliseconds() / 1000.0) + 0.5 * 999.81 * std::pow(getAirTime().asMilliseconds() / 1000.0, 2);
+        return _location.y - std::sin((180-_angle)*PI/180) *_velocity * (getAirTime().asMilliseconds() / 1000.0) + 0.5 * GRAVITY * std::pow(getAirTime().asMilliseconds() / 1000.0, 2);
     }
+    /**
+     * Checks if the ammo has left the screen. NOTE: going above the screen
+     * does not count as leaving the screen as ammo falling back is a desired
+     *  feature.
+     * @return Whether ammo is still on screen.
+     */
     bool onScreen() {
-        if (getY() > 720 || getY() < 0 || getX() > 1280 || getX() < 0)
+        if (getY() > 720 || getX() > 1280 || getX() < 0)
             return false;
         else return true;
     }
@@ -94,14 +106,6 @@ private:
     sf::Sprite _sprite;
     bool _shot;
 
-    /**
-     * Get X coordinate on fire
-     * @return horizontal coordinate
-     */
-    /**
-     * Get Y coordinate on fire
-     * @return vertical coordinate
-     */
 };
 
 #endif
