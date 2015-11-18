@@ -3,16 +3,12 @@
 
 #include "gstate.hpp"
 #include "player.hpp"
-<<<<<<< HEAD
 #include <cmath>
 #include <iostream>
-=======
->>>>>>> 5aa60212d5fc957dd076315554e88627d513e505
 
 class PlayState : public GState
 {
 public:
-<<<<<<< HEAD
     PlayState() : _ammo(), _charging(false) {
             _running = true;
         }
@@ -95,38 +91,10 @@ public:
         }
     }
 
-=======
-    PlayState() {
-            _running = true;
-        }
-
-
-    void handleEvents(sf::Event &event) {
-        ;
-    }
-
-    void update() {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            _player.moveActive(-1.5,0);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            _player.moveActive(1.5,0);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            _player.rotateWeapon(1);
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            _player.rotateWeapon(-1);
-        }
-    }
-
-
->>>>>>> 5aa60212d5fc957dd076315554e88627d513e505
     void draw(sf::RenderWindow &window)
     {
         window.clear(sf::Color::White);
         _player.draw(window);
-<<<<<<< HEAD
         _dummy.draw(window);
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
@@ -139,12 +107,6 @@ private:
     sf::Time _prevUpdate;
     bool _charging;
     sf::Clock _charge;
-=======
-    }
-private:
-    Player _player;
-    sf::Clock _clock;
->>>>>>> 5aa60212d5fc957dd076315554e88627d513e505
 };
 
 #endif

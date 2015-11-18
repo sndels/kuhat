@@ -7,11 +7,7 @@
 class Projectile
 {
 public:
-<<<<<<< HEAD
     Projectile() {   }
-=======
-    Projectile() {    }
->>>>>>> 5aa60212d5fc957dd076315554e88627d513e505
 
     sf::Sprite getSprite() const
     {
@@ -21,10 +17,7 @@ public:
 private:
     sf::Texture _texture;
     sf::Sprite _sprite;
-<<<<<<< HEAD
 
-=======
->>>>>>> 5aa60212d5fc957dd076315554e88627d513e505
 };
 
 #endif
