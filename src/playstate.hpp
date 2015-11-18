@@ -18,23 +18,25 @@ public:
      * @param event Gets a reference to a SF event as parameter
      */
     void handleEvents(sf::Event &event) {
-        if (event.type == sf::Event::KeyPressed) {
-            // Using switch rather than if in case of future keypress events
-            switch (event.key.code) {
-                case sf::Keyboard::Space:
-                    if (!_charging) {
-                        _charge.restart();
-                        _charging = true;
-                    }
-                    break;
-                default:
-                    break;
+        if (!_ammo.shot()) {
+            if (event.type == sf::Event::KeyPressed) {
+                // Using switch rather than if in case of future keypress events
+                switch (event.key.code) {
+                    case sf::Keyboard::Space:
+                        if (!_charging) {
+                            _charge.restart();
+                            _charging = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
-        }
-        if (event.type == sf::Event::KeyReleased) {
-            if (event.key.code == sf::Keyboard::Space) {
-                _ammo.fire(_player.getWeapon().getSprite().getPosition(), _player.getWeapon().getAngle(), getVelocity());
-                _charging = false;
+            if (event.type == sf::Event::KeyReleased) {
+                if (event.key.code == sf::Keyboard::Space) {
+                    _ammo.fire(_player.getWeapon().getSprite().getPosition(), _player.getWeapon().getAngle(), getVelocity());
+                    _charging = false;
+                }
             }
         }
     }
@@ -77,6 +79,10 @@ public:
                  _ammo.fire(_player.getWeapon().getSprite().getPosition(), _player.getWeapon().getAngle(), getVelocity());
                 _charging = false;
             }
+        }
+        if (_ammo.shot() && !_ammo.onScreen()) {
+            std::cout << "Ammo is off the screen" << std::endl;
+            _ammo.destroy();
         }
         handleCollision();
 

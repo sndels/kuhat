@@ -79,7 +79,12 @@ public:
     float getY() {
         return _location.y - std::sin((180-_angle)*PI/180) *_velocity * (getAirTime().asMilliseconds() / 1000.0) + 0.5 * 999.81 * std::pow(getAirTime().asMilliseconds() / 1000.0, 2);
     }
-    
+    bool onScreen() {
+        if (getY() > 720 || getY() < 0 || getX() > 1280 || getX() < 0)
+            return false;
+        else return true;
+    }
+
 private:
     sf::Vector2f _location;
     float _angle;
