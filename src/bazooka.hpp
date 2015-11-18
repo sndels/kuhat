@@ -1,9 +1,9 @@
 #ifndef BAZOOKA_H
 #define BAZOOKA_H
-
 #include <SFML/Graphics.hpp>
 #include "character.hpp"
 #include "weapon.hpp"
+#include "bazooka_ammo.hpp"
 
 /**
  * Class for bazooka type weapon.
@@ -18,7 +18,7 @@ public:
      * Initializes the bazooka sprite. Sets smoothing, origin, location and scaling.
      * @param weaponHolder Character holding the weapon.
      */
-    Bazooka(sf::Vector2f charPosition) {
+    Bazooka(sf::Vector2f charPosition): _angle(0) {
         _texture.loadFromFile("resource/sprites/bazooka.png");
         _texture.setSmooth(true);
         _sprite.setTexture(_texture);
@@ -39,6 +39,11 @@ public:
      */
     void rotate(float angle) {
         _sprite.rotate(angle);
+        _angle += angle;
+    }
+
+    float getAngle() const {
+        return _angle;
     }
 
     /**
@@ -56,9 +61,11 @@ public:
         muzzleLocation.y = 30;
         return muzzleLocation;
     }
+
 private:
     sf::Texture _texture;
     sf::Sprite _sprite;
+    float _angle;
 };
 
 #endif
