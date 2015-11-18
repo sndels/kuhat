@@ -33,10 +33,7 @@ public:
         }
         if (event.type == sf::Event::KeyReleased) {
             if (event.key.code == sf::Keyboard::Space) {
-                float force = (1+ std::min(_charge.getElapsedTime().asSeconds(), 1.5f))*400;
-                // Min force: 400, max: 1000
-                std::cout << "Player 1 firing bazooka. Force " << force << "/1000" << std::endl;
-                _ammo.fire(_player.getWeapon().getSprite().getPosition(), _player.getWeapon().getAngle(), force);
+                _ammo.fire(_player.getWeapon().getSprite().getPosition(), _player.getWeapon().getAngle(), getVelocity());
                 _charging = false;
             }
         }
@@ -73,8 +70,14 @@ public:
             _dummy.moveActive(deltaT * (0),deltaT * (0.5));
         }
         _ammo.updateLocation();
-        if (_charging)
+        if (_charging) {
             _hud.setState(_charge.getElapsedTime().asSeconds());
+            // NOTE: For this to work properly, turns have to be implemented
+            if (_charge.getElapsedTime().asSeconds() > 1.5f) {
+                 _ammo.fire(_player.getWeapon().getSprite().getPosition(), _player.getWeapon().getAngle(), getVelocity());
+                _charging = false;
+            }
+        }
         handleCollision();
 
         _prevUpdate = currentUpdate;
@@ -105,6 +108,16 @@ public:
             window.draw(_ammo.getSprite());
     }
 private:
+    /**
+     * Get velocity of a charged bazooka shot
+     * @return Velocity value between 400 and 1000
+     */
+    float getVelocity() {
+        float vel = (1+ std::min(_charge.getElapsedTime().asSeconds(), 1.5f))*400;
+        std::cout << "Player 1 firing bazooka. Force " << vel << "/1000" << std::endl;
+        return vel;
+    }
+
     BazookaAmmo _ammo;
     Player _player;
     Player _dummy;
