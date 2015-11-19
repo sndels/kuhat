@@ -9,11 +9,11 @@
  */
 Game::Game(sf::RenderWindow &window) : _window(window) {
     _running = true;
-    std::shared_ptr<GState> mainMenu = std::make_shared<MainMenu>();
-    this->pushState(mainMenu);
+    // std::shared_ptr<GState> mainMenu = std::make_shared<MainMenu>();
+    // this->pushState(mainMenu);
     //  Comment the two lines above and uncomment the ones before to enter playstate on run
-    //    std::shared_ptr<GState> playState = std::make_shared<PlayState>();
-    //    this->pushState(playState);
+        std::shared_ptr<GState> playState = std::make_shared<PlayState>();
+        this->pushState(playState);
 
 }
 
@@ -46,7 +46,7 @@ void Game::popState() {
 }
 
 /**
- * Checks for closing of window and calls all active states for event handling
+ * Checks for closing of window and calls active state for event handling
  * @params: none
  * @return: none
  */
@@ -59,9 +59,17 @@ void Game::handleEvents() {
             _running = false;
             return;
         }
-        for (auto i : _states)
-            i->handleEvents(event);
+        _states[0]->handleEvents(event);
     }
+}
+
+/**
+ * Calls 
+ * @params: none
+ * @return: none
+ */
+void Game::update() {
+    _states[0]->update();
 }
 
 /**
