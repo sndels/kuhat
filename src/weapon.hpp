@@ -17,7 +17,7 @@ public:
     /**
      * @return The weapons sprite.
      */
-    virtual sf::Sprite getSprite() {
+    virtual const sf::Sprite& getSprite() {
         return _sprite;
     }
 
@@ -30,7 +30,7 @@ public:
         if (_isFlipped) _sprite.setRotation(-_sprite.getRotation() );
     }
 
-    virtual float getAim() {
+    virtual float getAim() const{
         if (_isFlipped) {
             float rotation = _sprite.getRotation() -180;
             // Make sure the angle stays on range 0-360

@@ -19,7 +19,7 @@ public:
         if (turn == true) flip(); // Spawn the character facing left.
     }
 
-    sf::Sprite getSprite() {
+    const sf::Sprite& getSprite() const {
         return _sprite;
     }
 

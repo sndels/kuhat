@@ -36,11 +36,11 @@ public:
         _weapon.rotate(_aim);
     }
 
-    Bazooka getWeapon() {
+    Bazooka getWeapon() const {
         return _weapon;
     }
 
-    Character getCharacter(){
+    Character getCharacter() const {
         return _character;
     }
 

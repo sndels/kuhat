@@ -119,7 +119,7 @@ private:
      * Get velocity of a charged bazooka shot
      * @return Velocity value between 400 and 1000
      */
-    float getVelocity() {
+    float getVelocity() const {
         float vel = (1+ std::min(_charge.getElapsedTime().asSeconds(), 1.5f))*400;
         std::cout << "Player 1 firing bazooka. Force " << vel << "/1000" << std::endl;
         return vel;

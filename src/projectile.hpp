@@ -9,7 +9,7 @@ class Projectile
 public:
     Projectile() {   }
 
-    sf::Sprite getSprite() const
+    const sf::Sprite& getSprite() const
     {
         return _sprite;
     }

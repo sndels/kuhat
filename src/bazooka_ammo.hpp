@@ -29,15 +29,13 @@ public:
     /**
      * @return the ammo sprite
      */
-    sf::Sprite getSprite()
-    {
+    const sf::Sprite& getSprite() const {
         return _sprite;
     }
     /**
      * @return the time since firing
      */
-    sf::Time getAirTime() const
-    {
+    sf::Time getAirTime() const {
         return _airtime.getElapsedTime();
     }
     /**
@@ -51,7 +49,7 @@ public:
     /**
      * @return Whether ammo has been shot
      */
-    bool shot() {
+    bool shot() const {
         return _shot;
     }
     /**
@@ -76,14 +74,14 @@ public:
     /**
      * @return ammo horizontal coordinate
      */
-    float getX() {
+    float getX() const {
         return _location.x - std::cos((180-_angle)*PI/180) * _velocity * (getAirTime().asMilliseconds() / 1000.0);
     }
     /**
      * @return ammo vertical coordinate
      */
 
-    float getY() {
+    float getY() const {
         return _location.y + std::sin((180-_angle)*PI/180) *_velocity * (getAirTime().asMilliseconds() / 1000.0) + 0.5 * GRAVITY * std::pow(getAirTime().asMilliseconds() / 1000.0, 2);
     }
     /**
@@ -92,7 +90,7 @@ public:
      *  feature.
      * @return Whether ammo is still on screen.
      */
-    bool onScreen() {
+    bool onScreen() const {
         if (getY() > 720 || getX() > 1280 || getX() < 0)
             return false;
         else return true;
