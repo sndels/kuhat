@@ -34,7 +34,7 @@ public:
             }
             if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Space) {
-                    _ammo.fire(_player.getWeapon().getSprite().getPosition(), _player.getWeapon().getAngle(), getVelocity());
+                    _ammo.fire(_player.getWeapon().getMuzzleLocation(), _player.getWeapon().getAim(), getVelocity());
                     _charging = false;
                 }
             }
@@ -76,7 +76,7 @@ public:
             _hud.setState(_charge.getElapsedTime().asSeconds());
             // NOTE: For this to work properly, turns have to be implemented
             if (_charge.getElapsedTime().asSeconds() > 1.5f) {
-                 _ammo.fire(_player.getWeapon().getSprite().getPosition(), _player.getWeapon().getAngle(), getVelocity());
+                _ammo.fire(_player.getWeapon().getMuzzleLocation(), _player.getWeapon().getAim(), getVelocity());
                 _charging = false;
             }
         }
@@ -106,12 +106,13 @@ public:
     void draw(sf::RenderWindow &window)
     {
         window.clear(sf::Color::White);
-        _player.draw(window);
         if (_charging)
             _hud.draw(window);
         _dummy.draw(window);
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
+        // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
+        _player.draw(window);
     }
 private:
     /**

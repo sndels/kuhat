@@ -22,7 +22,8 @@ public:
         _texture.setSmooth(true);
         _sprite.setTexture(_texture);
         _sprite.setPosition(_location);
-        _sprite.setScale(-0.5,0.5);
+        _sprite.setOrigin(32,32);
+        _sprite.setScale(-0.2,0.2);
         //updateLocation();
     };
     /**
@@ -76,14 +77,14 @@ public:
      * @return ammo horizontal coordinate
      */
     float getX() {
-        return _location.x + std::cos((180-_angle)*PI/180) * _velocity * (getAirTime().asMilliseconds() / 1000.0);
+        return _location.x - std::cos((180-_angle)*PI/180) * _velocity * (getAirTime().asMilliseconds() / 1000.0);
     }
     /**
      * @return ammo vertical coordinate
      */
 
     float getY() {
-        return _location.y - std::sin((180-_angle)*PI/180) *_velocity * (getAirTime().asMilliseconds() / 1000.0) + 0.5 * GRAVITY * std::pow(getAirTime().asMilliseconds() / 1000.0, 2);
+        return _location.y + std::sin((180-_angle)*PI/180) *_velocity * (getAirTime().asMilliseconds() / 1000.0) + 0.5 * GRAVITY * std::pow(getAirTime().asMilliseconds() / 1000.0, 2);
     }
     /**
      * Checks if the ammo has left the screen. NOTE: going above the screen
