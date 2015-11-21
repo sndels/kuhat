@@ -8,7 +8,7 @@
 int main() {
     // sf::RenderWindow window(sf::VideoMode(MAPWIDTH, MAPHEIGHT), "SFML window");
     // window.setVerticalSyncEnabled(true);
-    getMap(SEEDPHRASE);
+    generateMap(SEEDPHRASE);
     // while (window.isOpen()) {
     //     sf::Event event;
     //     while (window.pollEvent(event)) {

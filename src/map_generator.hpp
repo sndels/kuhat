@@ -26,7 +26,7 @@
  * @param roughness    coefficient for change in displacement as step gets smaller
  * @return             generated height values
  */
-std::vector<double> getHeights(std::string const& seed, int width, int const& height,
+std::vector<double> generateHeights(std::string const& seed, int width, int const& height,
                             int displacement, float roughness) {
     Xorshift xors(seed);
     std::vector<double> heights;
@@ -54,9 +54,9 @@ std::vector<double> getHeights(std::string const& seed, int width, int const& he
  * @param seed seed for the prng
  * @return     zero if generated succesfully, -1 for error
  */
-int getMap(std::string const& seed) {
+int generateMap(std::string const& seed) {
     //Get randomized height coordinates
-    std::vector<double> heights = getHeights(seed, MAPWIDTH, MAPHEIGHT,
+    std::vector<double> heights = generateHeights(seed, MAPWIDTH, MAPHEIGHT,
                                          DISPLACEMENT, ROUGHNESS);
     //Get amount of heights generated
     int steps = heights.size();
