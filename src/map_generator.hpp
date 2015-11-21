@@ -54,10 +54,14 @@ int getMap(std::string const& seed) {
     mapMask.create(MAPWIDTH, MAPHEIGHT, sf::Color::Black);
     double height;
     for (auto i = 0; i < MAPWIDTH; ++i) {
-        //Flip the height as coordinates originate from top left
         height = s(i);
-        if (!(height < 0) && !(height > MAPHEIGHT))
+        if (!(height < 0) && !(height > MAPHEIGHT)) {
+            //Draw border pixel
             mapMask.setPixel(i,height, sf::Color::White);
+            //Fill "under" border
+            for (auto j = height; j < MAPHEIGHT; ++j)
+                mapMask.setPixel(i,j, sf::Color::White);
+        }
     }
     if (!mapMask.saveToFile(MAPPATH))
         return -1;
