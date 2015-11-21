@@ -10,13 +10,13 @@
 /**
  * Basic xorshift* implementation
  *
- * Returns randomized doubles in range [-1,1]
+ * random() returns randomized doubles in range [-1,1]
  */
 class Xorshift {
 public:
     /**
      * Constructor seeds from the given string by adding the char values together
-     * @params: seed as std::string
+     * @param seed seed string
      */
     Xorshift(std::string const &seed) {
         _seed = 0;
@@ -26,7 +26,7 @@ public:
 
     /**
      * Xorshift*
-     * @return: randomized double in range [-1,1]
+     * @return randomized double in range [-1,1]
      */
     double random() {
         _seed ^= _seed >> 12;
@@ -38,7 +38,7 @@ public:
 
     /**
      * Reseed from the given string by adding the char values together
-     * @params: new seed
+     * @param seed new seed string
      */
     void reseed(std::string const &seed) {
         _seed = 0;
