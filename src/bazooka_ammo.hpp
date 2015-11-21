@@ -3,6 +3,7 @@
 
 #define PI 3.14 // For calculating projectile flight
 #define GRAVITY 900
+#define WIND 0
 
 #include <SFML/Graphics.hpp>
 #include "projectile.hpp"
@@ -75,14 +76,14 @@ public:
      * @return ammo horizontal coordinate
      */
     float getX() const {
-        return _location.x - std::cos((180-_angle)*PI/180) * _velocity * (getAirTime().asMilliseconds() / 1000.0);
+        return _location.x - std::cos((180-_angle)*PI/180) * _velocity * getAirTime().asSeconds() - getWind();
     }
     /**
      * @return ammo vertical coordinate
      */
 
     float getY() const {
-        return _location.y + std::sin((180-_angle)*PI/180) *_velocity * (getAirTime().asMilliseconds() / 1000.0) + 0.5 * GRAVITY * std::pow(getAirTime().asMilliseconds() / 1000.0, 2);
+        return _location.y + std::sin((180-_angle)*PI/180) *_velocity * getAirTime().asSeconds() + 0.5 * GRAVITY * std::pow(getAirTime().asSeconds(), 2);
     }
     /**
      * Checks if the ammo has left the screen. NOTE: going above the screen
@@ -97,6 +98,11 @@ public:
     }
 
 private:
+
+    float getWind() const {
+        return std::pow(getAirTime().asSeconds(), 2) * WIND;
+    }
+
     sf::Vector2f _location;
     float _angle;
     int _velocity;
