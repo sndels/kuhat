@@ -11,7 +11,9 @@
 #define MAPHEIGHT 720
 #define DISPLACEMENT 250
 #define ROUGHNESS 0.5
+#define SURFACEDEPTH 6 //Depth of surface color
 #define MAPPATH "resource/map_bitmask.png"
+#define MAPTEXTURE "resource/sprites/ground.png"
 
 /**
  * Returns randomized heights
@@ -67,18 +69,23 @@ int generateMap(std::string const& seed) {
     //Set up the spline-lib interpolation
     tk::spline s;
     s.set_points(xCoords, heights);
+    sf::Image mapTexture;
+    mapTexture.loadFromFile(MAPTEXTURE);
     sf::Image mapMask;
-    mapMask.create(MAPWIDTH, MAPHEIGHT, sf::Color::Black);
+    mapMask.create(MAPWIDTH, MAPHEIGHT, sf::Color::Transparent);
     double height;
     //Loop over the map width and draw the mask
     for (auto i = 0; i < MAPWIDTH; ++i) {
         height = s(i);
         if (!(height < 0) && !(height > MAPHEIGHT)) {
             //Draw border pixel
-            mapMask.setPixel(i,height, sf::Color::White);
+            mapMask.setPixel(i,height, mapTexture.getPixel(i, height));
             //Fill under border
             for (auto j = height; j < MAPHEIGHT; ++j)
-                mapMask.setPixel(i,j, sf::Color::White);
+                if (j < height + SURFACEDEPTH)
+                    mapMask.setPixel(i, j, sf::Color(139, 69, 19));
+                else
+                    mapMask.setPixel(i, j, mapTexture.getPixel(i, j));
         }
     }
     //Save the mask to set file
