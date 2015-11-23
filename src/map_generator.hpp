@@ -12,7 +12,7 @@
 #define DISPLACEMENT 250
 #define ROUGHNESS 0.5
 #define SURFACEDEPTH 6 //Depth of surface color
-#define MAPPATH "resource/map_bitmask.png"
+#define MAPPATH "resource/map.png"
 #define MAPTEXTURE "resource/sprites/ground.png"
 
 /**

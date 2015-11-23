@@ -3,7 +3,7 @@
 
 #include "map_generator.hpp"
 
-#define SEEDPHRASE "Random seedphrase"
+#define SEEDPHRASE "Insert random seedphrase here"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(MAPWIDTH, MAPHEIGHT), "SFML window");
@@ -12,7 +12,7 @@ int main() {
     sf::RenderTexture mapRender;
     mapRender.create(1280,720);
     sf::Texture mapTexture;
-    mapTexture.loadFromFile("resource/map_bitmask.png");
+    mapTexture.loadFromFile("resource/map.png");
     sf::Sprite mapSprite(mapTexture);
     mapSprite.setScale(1, 1);
     mapSprite.setPosition(0, 0);
