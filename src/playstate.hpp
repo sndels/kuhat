@@ -12,6 +12,7 @@ class PlayState : public GState
 public:
     PlayState() : _ammo(), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
+            _player2.finishTurn();
         }
     /**
      * Handles SFML events like keypresses, releases
@@ -34,7 +35,7 @@ public:
             }
             if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Space) {
-                    _ammo.fire(_player.getWeapon().getMuzzleLocation(), _player.getWeapon().getAim(), getVelocity());
+                    _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity());
                     _charging = false;
                 }
             }
@@ -45,44 +46,31 @@ public:
         sf::Time currentUpdate = _clock.getElapsedTime();
         float deltaT = (float)currentUpdate.asMilliseconds() - (float)_prevUpdate.asMilliseconds();
 
-
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            _player.moveActive(deltaT * (-0.5),deltaT * (0));
+            getCurrentPlayer().moveActive(deltaT * (-0.5),deltaT * (0));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            _player.moveActive(deltaT * (0.5),deltaT * (0));
+            getCurrentPlayer().moveActive(deltaT * (0.5),deltaT * (0));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            _player.rotateWeapon(deltaT * (0.1));
+            getCurrentPlayer().rotateWeapon(deltaT * (0.1));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            _player.rotateWeapon(deltaT * (-0.1));
-        }
-        //Control dummy with WASD
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-            _dummy.moveActive(deltaT * (-0.5),deltaT * (0));
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-            _dummy.moveActive(deltaT * (0.5),deltaT * (0));
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-            _dummy.moveActive(deltaT * (0),deltaT * (-0.5));
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-            _dummy.moveActive(deltaT * (0),deltaT * (0.5));
+            getCurrentPlayer().rotateWeapon(deltaT * (-0.1));
         }
         _ammo.updateLocation();
         if (_charging) {
             _hud.setState(_charge.getElapsedTime().asSeconds());
             // NOTE: For this to work properly, turns have to be implemented
             if (_charge.getElapsedTime().asSeconds() > 1.5f) {
-                _ammo.fire(_player.getWeapon().getMuzzleLocation(), _player.getWeapon().getAim(), getVelocity());
+                _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity());
                 _charging = false;
             }
         }
         if (_ammo.shot() && !_ammo.onScreen()) {
             std::cout << "Ammo is off the screen" << std::endl;
             _ammo.destroy();
+            switchTurn();
         }
         handleCollision();
 
@@ -95,10 +83,12 @@ public:
     void handleCollision(){
         if(_ammo.shot()){
             sf::FloatRect _ammo_hitbox = _ammo.getSprite().getGlobalBounds();
-            sf::FloatRect _dummy_hitbox = _dummy.getCharacter().getSprite().getGlobalBounds();
-            if(_ammo_hitbox.intersects(_dummy_hitbox)){
+            sf::FloatRect _player1_hitbox = _player1.getCharacter().getSprite().getGlobalBounds();
+            sf::FloatRect _player2_hitbox = _player2.getCharacter().getSprite().getGlobalBounds();
+            if(_ammo_hitbox.intersects(_player2_hitbox) || _ammo_hitbox.intersects(_player1_hitbox) ){
                 std::cout<<"Bazooka hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                 _ammo.destroy();
+                switchTurn();
             }
         }
     }
@@ -108,11 +98,11 @@ public:
         window.clear(sf::Color::White);
         if (_charging)
             _hud.draw(window);
-        _dummy.draw(window);
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
-        _player.draw(window);
+        _player1.draw(window);
+        _player2.draw(window);
     }
 private:
     /**
@@ -124,10 +114,22 @@ private:
         std::cout << "Player 1 firing bazooka. Force " << vel << "/1000" << std::endl;
         return vel;
     }
+    void switchTurn() {
+        if (! _player1.isFinished()) {
+            _player1.finishTurn();
+            _player2.beginTurn();
+        } else {
+            _player1.beginTurn();
+            _player2.finishTurn();
+        }
+    }
+    Player& getCurrentPlayer() {
+        return _player1.isFinished() ? _player2 : _player1;
+    }
 
     BazookaAmmo _ammo;
-    Player _player;
-    Player _dummy;
+    Player _player1;
+    Player _player2;
     Hud _hud;
     sf::Clock _clock;
     sf::Time _prevUpdate;

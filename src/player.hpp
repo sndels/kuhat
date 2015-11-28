@@ -56,7 +56,9 @@ public:
     bool isFinished() const {
         return _finished;
     }
-
+    void beginTurn() {
+        _finished = false;
+    }
     /**
      * Ends the player's turn
      */
