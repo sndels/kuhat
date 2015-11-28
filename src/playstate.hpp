@@ -45,23 +45,23 @@ public:
     void update() {
         sf::Time currentUpdate = _clock.getElapsedTime();
         float deltaT = (float)currentUpdate.asMilliseconds() - (float)_prevUpdate.asMilliseconds();
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            getCurrentPlayer().moveActive(deltaT * (-0.5),deltaT * (0));
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            getCurrentPlayer().moveActive(deltaT * (0.5),deltaT * (0));
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            getCurrentPlayer().rotateWeapon(deltaT * (0.1));
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            getCurrentPlayer().rotateWeapon(deltaT * (-0.1));
+        if (!_ammo.shot()) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+                getCurrentPlayer().moveActive(deltaT * (-0.5),deltaT * (0));
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                getCurrentPlayer().moveActive(deltaT * (0.5),deltaT * (0));
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+                getCurrentPlayer().rotateWeapon(deltaT * (0.1));
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+                getCurrentPlayer().rotateWeapon(deltaT * (-0.1));
+            }
         }
         _ammo.updateLocation();
         if (_charging) {
             _hud.setState(_charge.getElapsedTime().asSeconds());
-            // NOTE: For this to work properly, turns have to be implemented
             if (_charge.getElapsedTime().asSeconds() > 1.5f) {
                 _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
                 _charging = false;
@@ -73,7 +73,6 @@ public:
             endTurn();
         }
         handleCollision();
-
         _prevUpdate = currentUpdate;
     }
 
