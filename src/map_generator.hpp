@@ -12,7 +12,6 @@
 #define DISPLACEMENT 250
 #define ROUGHNESS 0.5
 #define SURFACEDEPTH 6 //Depth of surface color
-#define MAPPATH "resource/map.png"
 #define MAPTEXTURE "resource/sprites/ground.png"
 
 /**
@@ -56,7 +55,7 @@ std::vector<double> generateHeights(std::string const& seed, int width, int cons
  * @param seed seed for the prng
  * @return     zero if generated succesfully, -1 for error
  */
-int generateMap(std::string const& seed) {
+int generateMap(std::string const& seed, std::string const& mapPath) {
     //Get randomized height coordinates
     std::vector<double> heights = generateHeights(seed, MAPWIDTH, MAPHEIGHT,
                                          DISPLACEMENT, ROUGHNESS);
@@ -89,7 +88,7 @@ int generateMap(std::string const& seed) {
         }
     }
     //Save the mask to set file
-    if (!mapMask.saveToFile(MAPPATH))
+    if (!mapMask.saveToFile(mapPath))
         return -1;
     return 0;
 }
