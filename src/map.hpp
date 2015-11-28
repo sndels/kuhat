@@ -10,9 +10,7 @@
 class Map {
 public:
     Map(std::string const& seed) {
-        if (generateMap(seed, MAPPATH) < 0)
-            std::cout << "Error generating map" << std::endl;
-        // sf::Texture texture;
+        _mapMask = generateMap(seed, MAPPATH);
         texture.loadFromFile(MAPPATH);
         _mapSprite.setTexture(texture);
         _mapRender.create(MAPX,MAPY);
@@ -24,8 +22,12 @@ public:
         window.draw(_mapSprite);
     }
 
-    bool doesCollide(sf::Sprite const& check) {
-        return true;
+    sf::FloatRect getBounds() {
+        return _mapSprite.getGlobalBounds();
+    }
+
+    bool doesCollide(int x, int y) {
+        return _mapMask[x][y];
     }
 
     void addHole(int centerX, int centerY, int radius) {
@@ -35,6 +37,7 @@ public:
 private:
     sf::Texture texture;
     sf::RenderTexture _mapRender;
+    std::vector<std::vector<bool> > _mapMask;
     sf::Sprite _mapSprite;
 };
 #endif

@@ -50,12 +50,13 @@ std::vector<double> generateHeights(std::string const& seed, int width, int cons
 /**
  * Map generator -function
  *
- * Generates a b/w -mask from seed and saves it to a .png -file
+ * Generates map from seed, saves it to a .png -file and returns a mask for
+ * collision detection.
  *
  * @param seed seed for the prng
  * @return     zero if generated succesfully, -1 for error
  */
-int generateMap(std::string const& seed, std::string const& mapPath) {
+std::vector<std::vector<bool> > generateMap(std::string const& seed, std::string const& mapPath) {
     //Get randomized height coordinates
     std::vector<double> heights = generateHeights(seed, MAPWIDTH, MAPHEIGHT,
                                          DISPLACEMENT, ROUGHNESS);
@@ -70,27 +71,31 @@ int generateMap(std::string const& seed, std::string const& mapPath) {
     s.set_points(xCoords, heights);
     sf::Image mapTexture;
     mapTexture.loadFromFile(MAPTEXTURE);
-    sf::Image mapMask;
-    mapMask.create(MAPWIDTH, MAPHEIGHT, sf::Color::Transparent);
+    sf::Image map;
+    map.create(MAPWIDTH, MAPHEIGHT, sf::Color::Transparent);
     double height;
-    //Loop over the map width and draw the mask
+    std::vector<std::vector<bool> > mask;
+    std::vector<bool> temp;
+    //Loop over the map width, draw the map and generate the mask
     for (auto i = 0; i < MAPWIDTH; ++i) {
         height = s(i);
-        if (!(height < 0) && !(height > MAPHEIGHT)) {
-            //Draw border pixel
-            mapMask.setPixel(i,height, mapTexture.getPixel(i, height));
-            //Fill under border
-            for (auto j = height; j < MAPHEIGHT; ++j)
-                if (j < height + SURFACEDEPTH)
-                    mapMask.setPixel(i, j, sf::Color(139, 69, 19));
-                else
-                    mapMask.setPixel(i, j, mapTexture.getPixel(i, j));
+        temp.clear();
+        for (auto j = 0; j < MAPHEIGHT; ++j) {
+            if (j > height + SURFACEDEPTH) {
+                map.setPixel(i, j, mapTexture.getPixel(i, j));
+                temp.push_back(true);
+            } else if (j > height) {
+                map.setPixel(i, j, sf::Color(139, 69, 19));
+                temp.push_back(true);
+            } else {
+                temp.push_back(false);
+            }
+        mask.push_back(temp);
         }
     }
     //Save the mask to set file
-    if (!mapMask.saveToFile(mapPath))
-        return -1;
-    return 0;
+    map.saveToFile(mapPath);
+    return mask;
 }
 
 #endif
