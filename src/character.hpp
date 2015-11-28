@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <vector>
 
 //class for the main logo, facilitates animation
 class Character
@@ -17,7 +18,21 @@ public:
         _Grip.x = 293;
         _Grip.y = 83;
         if (turn == true) flip(); // Spawn the character facing left.
+        sf::Image temp;
+        temp.loadFromFile(t);
+        std::vector<bool> v;
+        for (unsigned int i = 0; i < temp.getSize().x; ++i) {
+            v.clear();
+            for (unsigned int j = 0; j < temp.getSize().y; ++j) {
+                if (temp.getPixel(i,j).a == 0)
+                    v.push_back(false);
+                else
+                    v.push_back(true);
+            }
+            _mask.push_back(v);
+        }
     }
+
 
     const sf::Sprite& getSprite() const {
         return _sprite;
@@ -44,6 +59,10 @@ public:
         }
 
         return ret;
+    }
+
+    bool doesCollide(int x, int y) {
+        return _mask[x][y];
     }
 
     void move(float x, float y) {
@@ -80,6 +99,7 @@ public:
 private:
     sf::Texture _texture;
     sf::Sprite _sprite;
+    std::vector<std::vector<bool> > _mask;
     bool _isFlipped;
 
     // Grip position i.e. The point on character where weapon origin is placed.

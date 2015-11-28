@@ -4,6 +4,7 @@
 #include "gstate.hpp"
 #include "player.hpp"
 #include "hud.hpp"
+#include "collision.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -82,10 +83,8 @@ public:
      */
     void handleCollision(){
         if(_ammo.shot()){
-            sf::FloatRect _ammo_hitbox = _ammo.getSprite().getGlobalBounds();
-            sf::FloatRect _player1_hitbox = _player1.getCharacter().getSprite().getGlobalBounds();
-            sf::FloatRect _player2_hitbox = _player2.getCharacter().getSprite().getGlobalBounds();
-            if(_ammo_hitbox.intersects(_player2_hitbox) || _ammo_hitbox.intersects(_player1_hitbox) ){
+            if(checkCollision(_ammo, _player1.getCharacter()) ||
+               checkCollision(_ammo, _player2.getCharacter())){
                 std::cout<<"Bazooka hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                 _ammo.destroy();
                 switchTurn();
