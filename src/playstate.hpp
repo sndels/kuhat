@@ -35,7 +35,7 @@ public:
             }
             if (event.type == sf::Event::KeyReleased) {
                 if (event.key.code == sf::Keyboard::Space) {
-                    _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity());
+                    _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
                     _charging = false;
                 }
             }
@@ -63,14 +63,14 @@ public:
             _hud.setState(_charge.getElapsedTime().asSeconds());
             // NOTE: For this to work properly, turns have to be implemented
             if (_charge.getElapsedTime().asSeconds() > 1.5f) {
-                _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity());
+                _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
                 _charging = false;
             }
         }
         if (_ammo.shot() && !_ammo.onScreen()) {
             std::cout << "Ammo is off the screen" << std::endl;
             _ammo.destroy();
-            switchTurn();
+            endTurn();
         }
         handleCollision();
 
@@ -88,7 +88,7 @@ public:
             if(_ammo_hitbox.intersects(_player2_hitbox) || _ammo_hitbox.intersects(_player1_hitbox) ){
                 std::cout<<"Bazooka hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                 _ammo.destroy();
-                switchTurn();
+                endTurn();
             }
         }
     }
@@ -97,7 +97,8 @@ public:
     {
         window.clear(sf::Color::White);
         if (_charging)
-            _hud.draw(window);
+            _hud.drawPower(window);
+        _hud.drawWind(window);
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
@@ -114,7 +115,11 @@ private:
         std::cout << "Player 1 firing bazooka. Force " << vel << "/1000" << std::endl;
         return vel;
     }
-    void switchTurn() {
+    /**
+     * Handles all activities needed to finish a turn. Switches players' turn
+     * values, recalculater wind and redraws the wind bar.
+     */
+    void endTurn() {
         if (! _player1.isFinished()) {
             _player1.finishTurn();
             _player2.beginTurn();
@@ -122,6 +127,9 @@ private:
             _player1.beginTurn();
             _player2.finishTurn();
         }
+        _wind = std::rand() % 200 - 100;
+        _hud.setWind(_wind);
+        std::cout << "Turn ended, wind has changed to " << _wind << std::endl;
     }
     Player& getCurrentPlayer() {
         return _player1.isFinished() ? _player2 : _player1;
@@ -130,6 +138,7 @@ private:
     BazookaAmmo _ammo;
     Player _player1;
     Player _player2;
+    int _wind;
     Hud _hud;
     sf::Clock _clock;
     sf::Time _prevUpdate;

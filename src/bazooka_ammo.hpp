@@ -65,7 +65,7 @@ public:
      * @param angle Weapon angle
      * @param velocity Initial velocity of the ammo
      */
-    void fire(sf::Vector2f location, float angle, int velocity) {
+    void fire(sf::Vector2f location, float angle, int velocity, int wind) {
         _location = location;
         _angle = angle;
         _velocity = velocity;
