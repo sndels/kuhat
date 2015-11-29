@@ -3,15 +3,17 @@
 
 #include "gstate.hpp"
 #include "player.hpp"
+#include "map.hpp"
 #include "hud.hpp"
 #include "collision.hpp"
 #include <cmath>
+#include <vector>
 #include <iostream>
 
 class PlayState : public GState
 {
 public:
-    PlayState() : _ammo(), _hud("resource/sprites/gradient.png"), _charging(false) {
+    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player2(0, 0), _map(mapSeed), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
             _player2.finishTurn();
         }
@@ -48,16 +50,24 @@ public:
         float deltaT = (float)currentUpdate.asMilliseconds() - (float)_prevUpdate.asMilliseconds();
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            getCurrentPlayer().moveActive(deltaT * (-0.5),deltaT * (0));
+            if (!checkCollision(_player1.getCharacter(), _player2.getCharacter(),
+                                deltaT * (-0.5), deltaT * (0)))
+                getCurrentPlayer().moveActive(deltaT * (-0.5),deltaT * (0));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            if (!checkCollision(_player1.getCharacter(), _player2.getCharacter(),
+                                deltaT * (0.5), deltaT * (0)))
             getCurrentPlayer().moveActive(deltaT * (0.5),deltaT * (0));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            getCurrentPlayer().rotateWeapon(deltaT * (0.1));
+            if (!checkCollision(_player1.getCharacter(), _player2.getCharacter(),
+                                deltaT * (0), deltaT * (-0.5)))
+            getCurrentPlayer().moveActive(deltaT * (0),deltaT * (-0.5));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            getCurrentPlayer().rotateWeapon(deltaT * (-0.1));
+            if (!checkCollision(_player1.getCharacter(), _player2.getCharacter(),
+                                deltaT * (0), deltaT * (0.5)))
+            getCurrentPlayer().moveActive(deltaT * (0),deltaT * (0.5));
         }
         _ammo.updateLocation();
         if (_charging) {
@@ -94,12 +104,13 @@ public:
 
     void draw(sf::RenderWindow &window)
     {
-        window.clear(sf::Color::White);
+        window.clear(sf::Color::Black);
         if (_charging)
             _hud.draw(window);
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
+        _map.draw(window);
         _player1.draw(window);
         _player2.draw(window);
     }
@@ -129,6 +140,7 @@ private:
     BazookaAmmo _ammo;
     Player _player1;
     Player _player2;
+    Map _map;
     Hud _hud;
     sf::Clock _clock;
     sf::Time _prevUpdate;

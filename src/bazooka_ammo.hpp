@@ -54,9 +54,12 @@ public:
         return _airtime.getElapsedTime();
     }
 
-    bool doesCollide(int x, int y) {
-        return _mask[x][y];
+    bool doesCollide(unsigned int x, unsigned int y) const {
+        if ((x < _mask.size()) && (y < _mask[x].size()))
+            return _mask[x][y];
+        return false;
     }
+
     /**
      * Gets current location during flight
      */

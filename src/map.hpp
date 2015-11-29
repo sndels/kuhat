@@ -10,24 +10,39 @@
 class Map {
 public:
     Map(std::string const& seed) {
-        _mapMask = generateMap(seed, MAPPATH);
-        texture.loadFromFile(MAPPATH);
-        _mapSprite.setTexture(texture);
-        _mapRender.create(MAPX,MAPY);
-        _mapRender.draw(_mapSprite);
-        _mapRender.display();
+        generateMap(seed, MAPPATH);
+        _texture.loadFromFile(MAPPATH);
+        _sprite.setTexture(_texture);
+        _render.create(MAPX,MAPY);
+        _render.draw(_sprite);
+        _render.display();
+        sf::Image temp;
+        temp.loadFromFile(MAPPATH);
+        std::vector<bool> v;
+        for (unsigned int i = 0; i < temp.getSize().x; ++i) {
+            v.clear();
+            for (unsigned int j = 0; j < temp.getSize().y; ++j) {
+                if (temp.getPixel(i,j).a == 0)
+                    v.push_back(false);
+                else
+                    v.push_back(true);
+            }
+            _mask.push_back(v);
+        }
     }
 
-    void draw(sf::RenderWindow &window) {
-        window.draw(_mapSprite);
+    void draw(sf::RenderWindow &window) const {
+        window.draw(_sprite);
     }
 
-    sf::FloatRect getBounds() {
-        return _mapSprite.getGlobalBounds();
+    sf::Sprite getSprite() const {
+        return _sprite;
     }
 
-    bool doesCollide(int x, int y) {
-        return _mapMask[x][y];
+    bool doesCollide(unsigned int x, unsigned int y) const {
+        if ((x < _mask.size()) && (y < _mask[x].size()))
+            return _mask[x][y];
+        return false;
     }
 
     void addHole(int centerX, int centerY, int radius) {
@@ -35,9 +50,9 @@ public:
     }
 
 private:
-    sf::Texture texture;
-    sf::RenderTexture _mapRender;
-    std::vector<std::vector<bool> > _mapMask;
-    sf::Sprite _mapSprite;
+    sf::Texture _texture;
+    sf::RenderTexture _render;
+    std::vector<std::vector<bool> > _mask;
+    sf::Sprite _sprite;
 };
 #endif

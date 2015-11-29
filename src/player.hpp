@@ -18,7 +18,7 @@ public:
      * Initializes the character(s), sets up default ammo counts and sets the turn
      * as not finished
      */
-    Player() : _character("resource/sprites/kuha.png", true), _weapon(_character) {
+    Player(int charX = 500, int charY = 75) : _character("resource/sprites/kuha.png", charX, charY, true), _weapon(_character) {
         _finished = false, _aim = 90;
     }
 

@@ -9,10 +9,10 @@
 class Character
 {
 public:
-    Character (std::string t, bool turn = false) {
+    Character (std::string t, int x, int y, bool turn = false) {
         _texture.loadFromFile(t);
         _sprite.setTexture(_texture);
-        _sprite.setPosition(820,350);
+        _sprite.setPosition(x, y);
         _sprite.setScale(0.5,0.5);
         _isFlipped = false; // Character is drawn facing right.
         _Grip.x = 293;
@@ -61,8 +61,10 @@ public:
         return ret;
     }
 
-    bool doesCollide(int x, int y) {
-        return _mask[x][y];
+    bool doesCollide(unsigned int x, unsigned int y) const {
+        if ((x < _mask.size()) && (y < _mask[x].size()))
+            return _mask[x][y];
+        return false;
     }
 
     void move(float x, float y) {

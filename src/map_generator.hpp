@@ -56,7 +56,7 @@ std::vector<double> generateHeights(std::string const& seed, int width, int cons
  * @param seed seed for the prng
  * @return     zero if generated succesfully, -1 for error
  */
-std::vector<std::vector<bool> > generateMap(std::string const& seed, std::string const& mapPath) {
+void generateMap(std::string const& seed, std::string const& mapPath) {
     //Get randomized height coordinates
     std::vector<double> heights = generateHeights(seed, MAPWIDTH, MAPHEIGHT,
                                          DISPLACEMENT, ROUGHNESS);
@@ -80,22 +80,15 @@ std::vector<std::vector<bool> > generateMap(std::string const& seed, std::string
     for (auto i = 0; i < MAPWIDTH; ++i) {
         height = s(i);
         temp.clear();
-        for (auto j = 0; j < MAPHEIGHT; ++j) {
-            if (j > height + SURFACEDEPTH) {
+        for (auto j = height; j < MAPHEIGHT; ++j) {
+            if (j > height + SURFACEDEPTH)
                 map.setPixel(i, j, mapTexture.getPixel(i, j));
-                temp.push_back(true);
-            } else if (j > height) {
+            else
                 map.setPixel(i, j, sf::Color(139, 69, 19));
-                temp.push_back(true);
-            } else {
-                temp.push_back(false);
-            }
-        mask.push_back(temp);
         }
     }
     //Save the mask to set file
     map.saveToFile(mapPath);
-    return mask;
 }
 
 #endif
