@@ -3,7 +3,6 @@
 
 #define PI 3.14 // For calculating projectile flight
 #define GRAVITY 900
-#define WIND 0
 
 #include <SFML/Graphics.hpp>
 #include "projectile.hpp"
@@ -71,6 +70,7 @@ public:
         _velocity = velocity;
         _airtime.restart();
         _shot = true;
+        _wind = wind;
     }
     /**
      * @return ammo horizontal coordinate
@@ -100,12 +100,13 @@ public:
 private:
 
     float getWind() const {
-        return std::pow(getAirTime().asSeconds(), 2) * WIND;
+        return std::pow(getAirTime().asSeconds(), 3) * _wind;
     }
 
     sf::Vector2f _location;
     float _angle;
     int _velocity;
+    int _wind;
     sf::Clock _airtime;
     sf::Texture _texture;
     sf::Sprite _sprite;
