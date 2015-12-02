@@ -50,8 +50,7 @@ std::vector<double> generateHeights(std::string const& seed, int width, int cons
 /**
  * Map generator -function
  *
- * Generates map from seed, saves it to a .png -file and returns a mask for
- * collision detection.
+ * Generates map from seed and saves it to a .png -file
  *
  * @param seed seed for the prng
  * @return     zero if generated succesfully, -1 for error
@@ -76,7 +75,7 @@ void generateMap(std::string const& seed, std::string const& mapPath) {
     double height;
     std::vector<std::vector<bool> > mask;
     std::vector<bool> temp;
-    //Loop over the map width, draw the map and generate the mask
+    //Loop over the map width, draw the map
     for (auto i = 0; i < MAPWIDTH; ++i) {
         height = s(i);
         temp.clear();
@@ -87,7 +86,7 @@ void generateMap(std::string const& seed, std::string const& mapPath) {
                 map.setPixel(i, j, sf::Color(139, 69, 19));
         }
     }
-    //Save the mask to set file
+    //Save the map to set file
     map.saveToFile(mapPath);
 }
 

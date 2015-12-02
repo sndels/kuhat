@@ -48,26 +48,25 @@ public:
     void update() {
         sf::Time currentUpdate = _clock.getElapsedTime();
         float deltaT = (float)currentUpdate.asMilliseconds() - (float)_prevUpdate.asMilliseconds();
-
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            if (!checkCollision(_player1.getCharacter(), _player2.getCharacter(),
+            if (!checkCollision(_player1.getCharacter(), _map,
                                 deltaT * (-0.5), deltaT * (0)))
                 getCurrentPlayer().moveActive(deltaT * (-0.5),deltaT * (0));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            if (!checkCollision(_player1.getCharacter(), _player2.getCharacter(),
+            if (!checkCollision(_player1.getCharacter(), _map,
                                 deltaT * (0.5), deltaT * (0)))
-            getCurrentPlayer().moveActive(deltaT * (0.5),deltaT * (0));
+                getCurrentPlayer().moveActive(deltaT * (0.5),deltaT * (0));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            if (!checkCollision(_player1.getCharacter(), _player2.getCharacter(),
+            if (!checkCollision(_player1.getCharacter(), _map,
                                 deltaT * (0), deltaT * (-0.5)))
-            getCurrentPlayer().moveActive(deltaT * (0),deltaT * (-0.5));
+                getCurrentPlayer().moveActive(deltaT * (0),deltaT * (-0.5));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            if (!checkCollision(_player1.getCharacter(), _player2.getCharacter(),
+            if (!checkCollision(_player1.getCharacter(), _map,
                                 deltaT * (0), deltaT * (0.5)))
-            getCurrentPlayer().moveActive(deltaT * (0),deltaT * (0.5));
+                getCurrentPlayer().moveActive(deltaT * (0),deltaT * (0.5));
         }
         _ammo.updateLocation();
         if (_charging) {
