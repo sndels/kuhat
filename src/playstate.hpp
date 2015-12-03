@@ -49,14 +49,32 @@ public:
         sf::Time currentUpdate = _clock.getElapsedTime();
         float deltaT = (float)currentUpdate.asMilliseconds() - (float)_prevUpdate.asMilliseconds();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            if (!checkCollision(_player1.getCharacter(), _map,
-                                deltaT * (-0.5), deltaT * (0)))
-                getCurrentPlayer().moveActive(deltaT * (-0.5),deltaT * (0));
+            for (int dX = 0; dX > (int) deltaT * (-0.5); --dX) {
+                if (!checkCollision(_player1.getCharacter(), _map, dX))
+                        getCurrentPlayer().moveActive(-0.5,0);
+                else {
+                    for (int dY = 0; dY > -10; --dY) {
+                        if (!checkCollision(_player1.getCharacter(), _map, 0, dY)) {
+                            getCurrentPlayer().moveActive(0,dY);
+                            break;
+                        }
+                    }
+                }
+            }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            if (!checkCollision(_player1.getCharacter(), _map,
-                                deltaT * (0.5), deltaT * (0)))
-                getCurrentPlayer().moveActive(deltaT * (0.5),deltaT * (0));
+            for (int dX = 0; dX < (int) deltaT * (0.5); ++dX) {
+                if (!checkCollision(_player1.getCharacter(), _map, dX))
+                        getCurrentPlayer().moveActive(0.5,0);
+                else {
+                    for (int dY = 0; dY > -10; --dY) {
+                        if (!checkCollision(_player1.getCharacter(), _map, 0, dY)) {
+                            getCurrentPlayer().moveActive(0,dY);
+                            break;
+                        }
+                    }
+                }
+            }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             if (!checkCollision(_player1.getCharacter(), _map,

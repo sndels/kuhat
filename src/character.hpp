@@ -62,8 +62,12 @@ public:
     }
 
     bool doesCollide(unsigned int x, unsigned int y) const {
-        if ((x < _mask.size()) && (y < _mask[x].size()))
-            return _mask[x][y];
+        if ((x < _mask.size()) && (y < _mask[x].size())) {
+            if (_isFlipped)
+                return _mask[_mask.size()-x-1][y];
+            else
+                return _mask[x][y];
+        }
         return false;
     }
 
