@@ -2,6 +2,7 @@
 #define CHAR_H
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -11,13 +12,6 @@ class Character
 public:
     Character (std::string t, int x, int y, bool turn = false) {
         _texture.loadFromFile(t);
-        _sprite.setTexture(_texture);
-        _sprite.setPosition(x, y);
-        _sprite.setScale(0.5,0.5);
-        _isFlipped = false; // Character is drawn facing right.
-        _Grip.x = 293;
-        _Grip.y = 83;
-        if (turn == true) flip(); // Spawn the character facing left.
         sf::Image temp;
         temp.loadFromFile(t);
         std::vector<bool> v;
@@ -31,6 +25,13 @@ public:
             }
             _mask.push_back(v);
         }
+        _sprite.setTexture(_texture);
+        _sprite.setPosition(x, y);
+        _sprite.setScale(0.5,0.5);
+        _isFlipped = false; // Character is drawn facing right.
+        _Grip.x = 293;
+        _Grip.y = 83;
+        if (turn == true) flip(); // Spawn the character facing left.
     }
 
 
@@ -62,11 +63,10 @@ public:
     }
 
     bool doesCollide(unsigned int x, unsigned int y) const {
+        if (_isFlipped)
+            x = _mask.size() - x - 1;
         if ((x < _mask.size()) && (y < _mask[x].size())) {
-            if (_isFlipped)
-                return _mask[_mask.size()-x-1][y];
-            else
-                return _mask[x][y];
+            return _mask[x][y];
         }
         return false;
     }

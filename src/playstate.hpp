@@ -47,15 +47,15 @@ public:
 
     void update() {
         sf::Time currentUpdate = _clock.getElapsedTime();
-        float deltaT = (float)currentUpdate.asMilliseconds() - (float)_prevUpdate.asMilliseconds();
+        int deltaT = currentUpdate.asMilliseconds() - _prevUpdate.asMilliseconds();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            for (int dX = 0; dX > (int) deltaT * (-0.5); --dX) {
-                if (!checkCollision(_player1.getCharacter(), _map, dX))
-                        getCurrentPlayer().moveActive(-0.5,0);
+            for (int dX = 0; dX < deltaT /8; ++dX) {
+                if (!checkCollision(_player1.getCharacter(), _map, -1))
+                        getCurrentPlayer().moveActive(-1,0);
                 else {
                     for (int dY = 0; dY > -10; --dY) {
-                        if (!checkCollision(_player1.getCharacter(), _map, 0, dY)) {
-                            getCurrentPlayer().moveActive(0,dY);
+                        if (!checkCollision(_player1.getCharacter(), _map, -1, dY)) {
+                            getCurrentPlayer().moveActive(-1,dY);
                             break;
                         }
                     }
@@ -63,13 +63,13 @@ public:
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            for (int dX = 0; dX < (int) deltaT * (0.5); ++dX) {
-                if (!checkCollision(_player1.getCharacter(), _map, dX))
-                        getCurrentPlayer().moveActive(0.5,0);
+            for (int dX = 0; dX < deltaT /8; ++dX) {
+                if (!checkCollision(_player1.getCharacter(), _map, 1))
+                        getCurrentPlayer().moveActive(1,0);
                 else {
                     for (int dY = 0; dY > -10; --dY) {
-                        if (!checkCollision(_player1.getCharacter(), _map, 0, dY)) {
-                            getCurrentPlayer().moveActive(0,dY);
+                        if (!checkCollision(_player1.getCharacter(), _map, 1, dY)) {
+                            getCurrentPlayer().moveActive(1,dY);
                             break;
                         }
                     }
