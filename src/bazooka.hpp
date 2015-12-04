@@ -19,13 +19,12 @@ public:
      * @param weaponHolder Character holding the weapon.
      */
     Bazooka(Character& weaponHolder) {
-        _texture.loadFromFile("resource/sprites/bazooka.png");
-        _muzzleOffset.x = 570;
-        _muzzleOffset.y = 105;
+        _texture.loadFromFile("resource/sprites/diysinko.png");
+        _muzzleOffset.x = 35;
+        _muzzleOffset.y = 5;
         _texture.setSmooth(true);
         _sprite.setTexture(_texture);
-        _sprite.setOrigin(280,135);
-        _sprite.setScale(0.1,0.1);
+        _sprite.setOrigin(16,7);
         _sprite.setRotation(0);
         _isFlipped = false; // Texture was drawn facing right.
         updateLocation(weaponHolder);
