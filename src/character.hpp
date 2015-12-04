@@ -29,8 +29,8 @@ public:
         _sprite.setPosition(x, y);
         _sprite.setScale(0.5,0.5);
         _isFlipped = false; // Character is drawn facing right.
-        _Grip.x = 293;
-        _Grip.y = 83;
+        _Grip.x = 30;
+        _Grip.y = 30;
         if (turn == true) flip(); // Spawn the character facing left.
     }
 

@@ -10,6 +10,10 @@
 #include <vector>
 #include <iostream>
 
+#define CHARSPEED 0.1
+#define CHARGRAV 0.2
+#define MAXCLIMB -10
+
 class PlayState : public GState
 {
 public:
@@ -46,16 +50,18 @@ public:
     }
 
     void update() {
+        Player &currentPlayer = getCurrentPlayer();
         sf::Time currentUpdate = _clock.getElapsedTime();
-        int deltaT = currentUpdate.asMilliseconds() - _prevUpdate.asMilliseconds();
+        int dT = currentUpdate.asMilliseconds() - _prevUpdate.asMilliseconds();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            for (int dX = 0; dX < deltaT /8; ++dX) {
-                if (!checkCollision(_player1.getCharacter(), _map, -1))
-                        getCurrentPlayer().moveActive(-1,0);
-                else {
-                    for (int dY = 0; dY > -10; --dY) {
-                        if (!checkCollision(_player1.getCharacter(), _map, -1, dY)) {
-                            getCurrentPlayer().moveActive(-1,dY);
+            for (int dX = 0; dX < dT * CHARSPEED; ++dX) {
+                if (!checkCollision(currentPlayer.getCharacter(), _map, -1))
+                        currentPlayer.moveActive(-1,0);
+                else {//If there is a collision, try climbing
+                    for (int dY = 0; dY > MAXCLIMB; --dY) {
+                        if (!checkCollision(currentPlayer.getCharacter(), _map, -1, dY)) {
+                            currentPlayer.moveActive(-1,dY);
+                            ++dX;//Slow down on steep hills
                             break;
                         }
                     }
@@ -63,13 +69,14 @@ public:
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            for (int dX = 0; dX < deltaT /8; ++dX) {
-                if (!checkCollision(_player1.getCharacter(), _map, 1))
-                        getCurrentPlayer().moveActive(1,0);
-                else {
-                    for (int dY = 0; dY > -10; --dY) {
-                        if (!checkCollision(_player1.getCharacter(), _map, 1, dY)) {
-                            getCurrentPlayer().moveActive(1,dY);
+            for (int dX = 0; dX < dT * CHARSPEED; ++dX) {
+                if (!checkCollision(currentPlayer.getCharacter(), _map, 1))
+                        currentPlayer.moveActive(1,0);
+                else {//If there is a collision, try climbing
+                    for (int dY = 0; dY > MAXCLIMB; --dY) {
+                        if (!checkCollision(currentPlayer.getCharacter(), _map, 1, dY)) {
+                            currentPlayer.moveActive(1,dY);
+                            ++dX;//Slow down on steep hills
                             break;
                         }
                     }
@@ -77,21 +84,23 @@ public:
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-            if (!checkCollision(_player1.getCharacter(), _map,
-                                deltaT * (0), deltaT * (-0.5)))
-                getCurrentPlayer().moveActive(deltaT * (0),deltaT * (-0.5));
+            currentPlayer.rotateWeapon(1);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-            if (!checkCollision(_player1.getCharacter(), _map,
-                                deltaT * (0), deltaT * (0.5)))
-                getCurrentPlayer().moveActive(deltaT * (0),deltaT * (0.5));
+            currentPlayer.rotateWeapon(-1);
+        }
+        for (int dY = 0; dY < dT * CHARGRAV; ++dY){
+            if (!checkCollision(currentPlayer.getCharacter(), _map, 0, 1)) {
+                currentPlayer.moveActive(0,1);
+            } else
+                break;
         }
         _ammo.updateLocation();
         if (_charging) {
             _hud.setState(_charge.getElapsedTime().asSeconds());
             // NOTE: For this to work properly, turns have to be implemented
             if (_charge.getElapsedTime().asSeconds() > 1.5f) {
-                _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity());
+                _ammo.fire(currentPlayer.getWeapon().getMuzzleLocation(), currentPlayer.getWeapon().getAim(), getVelocity());
                 _charging = false;
             }
         }
