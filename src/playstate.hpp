@@ -59,9 +59,9 @@ public:
                         currentPlayer.moveActive(-1,0);
                 else {//If there is a collision, try climbing
                     for (int dY = 0; dY > MAXCLIMB; --dY) {
+                        ++dX;//Slow down on steep hills
                         if (!checkCollision(currentPlayer.getCharacter(), _map, -1, dY)) {
                             currentPlayer.moveActive(-1,dY);
-                            ++dX;//Slow down on steep hills
                             break;
                         }
                     }
@@ -74,9 +74,9 @@ public:
                         currentPlayer.moveActive(1,0);
                 else {//If there is a collision, try climbing
                     for (int dY = 0; dY > MAXCLIMB; --dY) {
+                        ++dX;//Slow down on steep hills
                         if (!checkCollision(currentPlayer.getCharacter(), _map, 1, dY)) {
                             currentPlayer.moveActive(1,dY);
-                            ++dX;//Slow down on steep hills
                             break;
                         }
                     }
