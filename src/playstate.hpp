@@ -55,6 +55,7 @@ public:
         int dT = currentUpdate.asMilliseconds() - _prevUpdate.asMilliseconds();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
             for (int dX = 0; dX < dT * CHARSPEED; ++dX) {
+                //Try moving for every dX
                 if (!checkCollision(currentPlayer.getCharacter(), _map, -1))
                         currentPlayer.moveActive(-1,0);
                 else {//If there is a collision, try climbing

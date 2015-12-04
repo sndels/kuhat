@@ -25,7 +25,7 @@ public:
         _texture.setSmooth(true);
         _sprite.setTexture(_texture);
         _sprite.setOrigin(280,135);
-        _sprite.setScale(0.2,0.2);
+        _sprite.setScale(0.1,0.1);
         _sprite.setRotation(0);
         _isFlipped = false; // Texture was drawn facing right.
         updateLocation(weaponHolder);
