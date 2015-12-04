@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "projectile.hpp"
+#include <vector>
 #include <cmath>
 
 class BazookaAmmo: public Projectile
@@ -25,6 +26,19 @@ public:
         _sprite.setOrigin(32,32);
         _sprite.setScale(-0.2,0.2);
         //updateLocation();
+        sf::Image temp;
+        temp.loadFromFile("resource/sprites/ammo.png");
+        std::vector<bool> v;
+        for (unsigned int i = 0; i < temp.getSize().x; ++i) {
+            v.clear();
+            for (unsigned int  j = 0; j < temp.getSize().y; ++j) {
+                if (temp.getPixel(i,j).a == 0)
+                    v.push_back(false);
+                else
+                    v.push_back(true);
+            }
+            _mask.push_back(v);
+        }
     };
     /**
      * @return the ammo sprite
@@ -38,6 +52,13 @@ public:
     sf::Time getAirTime() const {
         return _airtime.getElapsedTime();
     }
+
+    bool doesCollide(unsigned int x, unsigned int y) const {
+        if ((x < _mask.size()) && (y < _mask[x].size()))
+            return _mask[x][y];
+        return false;
+    }
+
     /**
      * Gets current location during flight
      */
@@ -110,6 +131,7 @@ private:
     sf::Clock _airtime;
     sf::Texture _texture;
     sf::Sprite _sprite;
+    std::vector<std::vector<bool> > _mask;
     bool _shot;
 
 };

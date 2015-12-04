@@ -9,16 +9,16 @@ public:
     Hud(std::string s) {
         _gradient.loadFromFile(s);
         _spritePower.setTexture(_gradient);
-        _spritePower.setPosition(500,450);
+        _spritePower.setPosition(480,650);
         _spritePower.setTextureRect(sf::IntRect(0,0,0,100));
-        _spritePower.setScale(0.5,0.5);
+        _spritePower.setScale(0.40,0.5);
 
         _spriteWind.setTexture(_gradient);
-        _spriteWind.setPosition(650,100);
+        _spriteWind.setPosition(630,600);
         _spriteWind.setTextureRect(sf::IntRect(0,0,100,100));
         _spriteWind.setScale(0.5,0.5);
         _r.setSize(sf::Vector2f(300, 50));
-        _r.setPosition(500, 100);
+        _r.setPosition(480, 600);
         _r.setOutlineThickness(2);
         _r.setOutlineColor(sf::Color::Black);
 

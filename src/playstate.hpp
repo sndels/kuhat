@@ -3,14 +3,21 @@
 
 #include "gstate.hpp"
 #include "player.hpp"
+#include "map.hpp"
 #include "hud.hpp"
+#include "collision.hpp"
 #include <cmath>
+#include <vector>
 #include <iostream>
+
+#define CHARSPEED 0.1
+#define CHARGRAV 0.2
+#define MAXCLIMB -10
 
 class PlayState : public GState
 {
 public:
-    PlayState() : _ammo(), _hud("resource/sprites/gradient.png"), _charging(false) {
+    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player2(0, 0), _map(mapSeed), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
             _player2.finishTurn();
         }
@@ -43,27 +50,58 @@ public:
     }
 
     void update() {
+        Player &currentPlayer = getCurrentPlayer();
         sf::Time currentUpdate = _clock.getElapsedTime();
-        float deltaT = (float)currentUpdate.asMilliseconds() - (float)_prevUpdate.asMilliseconds();
-        if (!_ammo.shot()) {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-                getCurrentPlayer().moveActive(deltaT * (-0.5),deltaT * (0));
+        int dT = currentUpdate.asMilliseconds() - _prevUpdate.asMilliseconds();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            for (int dX = 0; dX < dT * CHARSPEED; ++dX) {
+                //Try moving for every dX
+                if (!checkCollision(currentPlayer.getCharacter(), _map, -1))
+                        currentPlayer.moveActive(-1,0);
+                else {//If there is a collision, try climbing
+                    for (int dY = 0; dY > MAXCLIMB; --dY) {
+                        ++dX;//Slow down on steep hills
+                        if (!checkCollision(currentPlayer.getCharacter(), _map, -1, dY)) {
+                            currentPlayer.moveActive(-1,dY);
+                            break;
+                        }
+                    }
+                }
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                getCurrentPlayer().moveActive(deltaT * (0.5),deltaT * (0));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            for (int dX = 0; dX < dT * CHARSPEED; ++dX) {
+                if (!checkCollision(currentPlayer.getCharacter(), _map, 1))
+                        currentPlayer.moveActive(1,0);
+                else {//If there is a collision, try climbing
+                    for (int dY = 0; dY > MAXCLIMB; --dY) {
+                        ++dX;//Slow down on steep hills
+                        if (!checkCollision(currentPlayer.getCharacter(), _map, 1, dY)) {
+                            currentPlayer.moveActive(1,dY);
+                            break;
+                        }
+                    }
+                }
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-                getCurrentPlayer().rotateWeapon(deltaT * (0.1));
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-                getCurrentPlayer().rotateWeapon(deltaT * (-0.1));
-            }
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+            currentPlayer.rotateWeapon(dT * 0.1);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+            currentPlayer.rotateWeapon(dT * (-0.1));
+        }
+        //"Gravity" to keep active character on the ground
+        for (int dY = 0; dY < dT * CHARGRAV; ++dY){
+            if (!checkCollision(currentPlayer.getCharacter(), _map, 0, 1)) {
+                currentPlayer.moveActive(0,1);
+            } else
+                break;
         }
         _ammo.updateLocation();
         if (_charging) {
             _hud.setState(_charge.getElapsedTime().asSeconds());
             if (_charge.getElapsedTime().asSeconds() > 1.5f) {
-                _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
+                _ammo.fire(currentPlayer.getWeapon().getMuzzleLocation(), currentPlayer.getWeapon().getAim(), getVelocity(), _wind);
                 _charging = false;
             }
         }
@@ -81,10 +119,8 @@ public:
      */
     void handleCollision(){
         if(_ammo.shot()){
-            sf::FloatRect _ammo_hitbox = _ammo.getSprite().getGlobalBounds();
-            sf::FloatRect _player1_hitbox = _player1.getCharacter().getSprite().getGlobalBounds();
-            sf::FloatRect _player2_hitbox = _player2.getCharacter().getSprite().getGlobalBounds();
-            if(_ammo_hitbox.intersects(_player2_hitbox) || _ammo_hitbox.intersects(_player1_hitbox) ){
+            if(checkCollision(_ammo, _player1.getCharacter()) ||
+               checkCollision(_ammo, _player2.getCharacter())){
                 std::cout<<"Bazooka hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                 _ammo.destroy();
                 endTurn();
@@ -94,15 +130,16 @@ public:
 
     void draw(sf::RenderWindow &window)
     {
-        window.clear(sf::Color::White);
-        if (_charging)
-            _hud.drawPower(window);
-        _hud.drawWind(window);
+        window.clear(sf::Color::Black);
+        _map.draw(window);
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
         _player1.draw(window);
         _player2.draw(window);
+        if (_charging)
+            _hud.drawPower(window);
+        _hud.drawWind(window);
     }
 private:
     /**
@@ -138,6 +175,7 @@ private:
     Player _player1;
     Player _player2;
     int _wind;
+    Map _map;
     Hud _hud;
     sf::Clock _clock;
     sf::Time _prevUpdate;
