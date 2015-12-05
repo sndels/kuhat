@@ -19,12 +19,11 @@ public:
      * Flight parameters are set to zero and changed on fire.
      */
     BazookaAmmo ():_location(0,0), _angle(0), _velocity(0), _shot(false) {
-        _texture.loadFromFile("resource/sprites/ammo.png");
+        _texture.loadFromFile("resource/sprites/kuula.png");
         _texture.setSmooth(true);
         _sprite.setTexture(_texture);
         _sprite.setPosition(_location);
-        _sprite.setOrigin(32,32);
-        _sprite.setScale(-0.2,0.2);
+        _sprite.setOrigin(4,4);
         //updateLocation();
         sf::Image temp;
         temp.loadFromFile("resource/sprites/ammo.png");
