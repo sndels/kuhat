@@ -97,7 +97,7 @@ public:
      * @return ammo horizontal coordinate
      */
     float getX() const {
-        return _location.x - std::cos((180-_angle)*PI/180) * _velocity * getAirTime().asSeconds() - getWind();
+        return _location.x - std::cos((180-_angle)*PI/180) * _velocity * getAirTime().asSeconds() + getWind();
     }
     /**
      * @return ammo vertical coordinate
