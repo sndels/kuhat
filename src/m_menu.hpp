@@ -25,6 +25,14 @@ public:
         _options.push_back(newOption);
     }
 
+    void pause() {
+        ;
+    }
+
+    void resume() {
+        ;
+    }
+
     /**
      * Selects the active item according to user input
      * @params: reference to sf::Event
