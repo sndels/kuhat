@@ -4,6 +4,8 @@
 #include <vector>
 #include "gstate.hpp"
 #include "m_option.hpp"
+// include all gamestates you want to move or swap into
+#include "playstate.hpp"
 
 #define OPTNUM 2 //number of options in menu
 
@@ -62,6 +64,10 @@ public:
                         ++_selected;
                         _options[_selected]->setSelected();
                     }
+                }
+                if (event.key.code == sf::Keyboard::Return) {
+                    game.moveToState(std::make_shared<PlayState>() );
+                    return;
                 }
             }
         }
