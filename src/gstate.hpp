@@ -19,8 +19,16 @@ public:
     virtual void update(Game& game) = 0;
     virtual void draw(Game& game) = 0;
 
-    void changeState(Game& game, std::shared_ptr<GState> state) {
-		game.changeState(state);
+    void moveToState(Game& game, std::shared_ptr<GState> state) {
+		game.moveToState(state);
+	}
+
+    void swapActiveState(Game& game, std::shared_ptr<GState> state) {
+		game.swapActiveState(state);
+	}
+
+    void goToPreviousState(Game& game) {
+		game.goToPreviousState();
 	}
 
     bool isRunning() const {return _running;}

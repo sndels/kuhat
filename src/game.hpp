@@ -18,9 +18,9 @@ class Game
 public:
     Game(sf::RenderWindow &window);
 
-    void changeState(std::shared_ptr<GState> state);
-    void pushState(std::shared_ptr<GState> state);
-    void popState();
+    void swapActiveState(std::shared_ptr<GState> state);
+    void moveToState(std::shared_ptr<GState> state);
+    void goToPreviousState();
 
     void handleEvents();
     void update();

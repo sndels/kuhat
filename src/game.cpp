@@ -1,7 +1,7 @@
 #include "game.hpp"
 // Include all gamestates
 #include "m_menu.hpp"
-#include "playstate.hpp"
+//#include "playstate.hpp"
 
 /**
  * Inits the MainMenu instance and pushes it to the GState-vector
@@ -22,13 +22,13 @@ Game::Game(sf::RenderWindow &window) : window(window) {
  * Pops the last (active) GState and sets given state in it's place
  * @param state GState to be added
  */
-void Game::changeState(std::shared_ptr<GState> state) {
+void Game::swapActiveState(std::shared_ptr<GState> state) {
     if (!_states.empty()) {
-        this->popState();
-        this->pushState(state);
+        this->goToPreviousState();
+        this->swapActiveState(state);
     }
     else {
-        this->pushState(state);
+        this->swapActiveState(state);
     }
 }
 
@@ -36,14 +36,14 @@ void Game::changeState(std::shared_ptr<GState> state) {
  * Pushes the given state as active state
  * @param state GState to be pushed to vector.
  */
-void Game::pushState(std::shared_ptr<GState> state) {
+void Game::moveToState(std::shared_ptr<GState> state) {
     _states.push_back(state);
 }
 
 /**
  * Pops the last (active) state from the vector
  */
-void Game::popState() {
+void Game::goToPreviousState() {
     if (!_states.empty()) {
         _states.pop_back();
     }
