@@ -26,7 +26,7 @@ public:
         _sprite.setOrigin(4,4);
         //updateLocation();
         sf::Image temp;
-        temp.loadFromFile("resource/sprites/ammo.png");
+        temp.loadFromFile("resource/sprites/kuula.png");
         std::vector<bool> v;
         for (unsigned int i = 0; i < temp.getSize().x; ++i) {
             v.clear();
