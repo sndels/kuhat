@@ -64,7 +64,8 @@ public:
 
     void draw(sf::RenderWindow &window) {
         for (int i = 0; i < 4; i++) {
-            window.draw(_chararr[i].getSprite());
+            if (getCharacter(i).isAlive())
+                window.draw(_chararr[i].getSprite());
         }
         if (!_finished) {
             window.draw(_weapon.getSprite());
@@ -85,7 +86,14 @@ public:
      * Ends the player's turn
      */
     void finishTurn() {
-        nextCharacter();
+        int deadcount = -1;
+        do {
+            nextCharacter();
+            if(deadcount++>=4) {
+                std::cout << "all ded" <<std::endl;
+                exit(0);
+            }
+        } while (!getCharacter().isAlive());
         _finished = true;
     }
 

@@ -38,6 +38,7 @@ public:
         _Grip.x = 17;
         _Grip.y = 15;
         if (turn == true) flip(); // Spawn the character facing left.
+        _alive = true;
     }
 
 
@@ -83,6 +84,9 @@ public:
         if ( x<0 && !_isFlipped ) flip();
         else if ( x>0 && _isFlipped) flip();
         _sprite.move(x,y);
+        if (!onScreen()) {
+            kill();
+        }
     }
 
     /**
@@ -108,12 +112,29 @@ public:
     bool isCharFlipped() const {
         return _isFlipped;
     }
+    void kill() {
+        _alive = false;
+    }
+    bool isAlive() {
+        return _alive;
+    }
+    bool onScreen() const {
+        int x = getSprite().getPosition().x,
+            y = getSprite().getPosition().y;
+        if (y > 720
+            || y < 0
+            || x > 1280
+            || x < 0) return false;
+        return true;
+    }
+
 
 private:
     sf::Texture _texture;
     sf::Sprite _sprite;
     std::vector<std::vector<bool> > _mask;
     bool _isFlipped;
+    bool _alive;
 
     // Grip position i.e. The point on character where weapon origin is placed.
     // Defined as pixel offset from top left.

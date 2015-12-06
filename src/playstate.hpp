@@ -90,6 +90,7 @@ public:
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             currentPlayer.rotateWeapon(dT * (-0.1));
         }
+        if (!currentPlayer.getCharacter().isAlive()) endTurn();
         checkGravity(dT);
         _ammo.updateLocation();
         if (_charging) {
@@ -175,6 +176,7 @@ private:
      * values, recalculater wind and redraws the wind bar.
      */
     void endTurn() {
+        checkBounds();
         if (! _player1.isFinished()) {
             _player1.finishTurn();
             _player2.beginTurn();
@@ -188,6 +190,17 @@ private:
     }
     Player& getCurrentPlayer() {
         return _player1.isFinished() ? _player2 : _player1;
+    }
+
+    void checkBounds() {
+        for (int i = 0; i < 4; i++) {
+            if (!_player1.getCharacter(i).onScreen()) _player1.getCharacter(i).kill();
+        }
+        for (int i = 0; i < 4; i++) {
+            if (!_player2.getCharacter(i).onScreen()) _player2.getCharacter(i).kill();
+
+        }
+
     }
 
     BazookaAmmo _ammo;
