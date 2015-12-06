@@ -19,50 +19,57 @@ Game::Game(sf::RenderWindow &window) : window(window) {
 }
 
 /**
- * Pops the top GState and sets given state in it's place
- * @params: GState to be added
+ * Pops the last (active) GState and sets given state in it's place
+ * @param state GState to be added
  */
 void Game::changeState(std::shared_ptr<GState> state) {
-    this->popState();
-    this->pushState(state);
+    if (!_states.empty()) {
+        this->popState();
+        this->pushState(state);
+    }
+    else {
+        this->pushState(state);
+    }
 }
 
 /**
  * Pushes the given state as active state
- * @params: GState to be added
+ * @param state GState to be pushed to vector.
  */
 void Game::pushState(std::shared_ptr<GState> state) {
-    _states.insert(_states.begin(),state);
+    _states.push_back(state);
 }
 
 /**
- * Pops the top GState
+ * Pops the last (active) state from the vector
  */
 void Game::popState() {
-    _states.erase(_states.begin());
+    if (!_states.empty()) {
+        _states.pop_back();
+    }
 }
 
 /**
- * Calls the top state for event handling
+ * Calls the active state for event handling
  */
 void Game::handleEvents() {
-    _states[0]->handleEvents(*this);
+    _states.back()->handleEvents(*this);
 }
 
 /**
- * Updates the top state
+ * Updates the active state
  */
 void Game::update() {
-    _states[0]->update(*this);
+    _states.back()->update(*this);
 }
 
 /**
- * Clears the screen to black and calls the top state for drawing
+ * Clears the screen to black and calls the active state for drawing
  */
 void Game::draw() {
     window.setActive();
     window.clear(sf::Color::Black);
-    _states[0]->draw(*this);
+    _states.back()->draw(*this);
     window.display();
 }
 
