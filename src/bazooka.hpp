@@ -18,7 +18,7 @@ public:
      * Initializes the bazooka sprite. Sets smoothing, origin, location and scaling.
      * @param weaponHolder Character holding the weapon.
      */
-    Bazooka(Character& weaponHolder) {
+    Bazooka() {
         _texture.loadFromFile("resource/sprites/diysinko.png");
         _muzzleOffset.x = 35;
         _muzzleOffset.y = 5;
@@ -27,7 +27,6 @@ public:
         _sprite.setOrigin(16,7);
         _sprite.setRotation(0);
         _isFlipped = false; // Texture was drawn facing right.
-        updateLocation(weaponHolder);
     }
 };
 

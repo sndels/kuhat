@@ -6,6 +6,7 @@
 #include "weapon.hpp"
 #include "bazooka.hpp"
 #include <iostream>
+#include <vector>
 
 /**
  * Class which holds a players character(s) and ammo counts
@@ -18,13 +19,17 @@ public:
      * Initializes the character(s), sets up default ammo counts and sets the turn
      * as not finished
      */
-    Player(int charX = 500, int charY = 75) : _character("resource/sprites/diykuha.png", charX, charY, true), _weapon(_character) {
+    Player(int charX = 500, int charY = 75) : _weapon() {
         _finished = false, _aim = 90;
+        for (int i = 0; i < 4; i++) {
+            _chararr.push_back(Character("resource/sprites/diykuha.png", charX+i*100, 0, true));
+        }
+        _current = 0;
     }
 
     void moveActive(float x, float y) {
-        _character.move(x,y);
-        _weapon.updateLocation(_character);
+        _chararr[_current].move(x,y);
+        _weapon.updateLocation(getCharacter());
     }
 
     void rotateWeapon(float deg) {
@@ -40,13 +45,29 @@ public:
         return _weapon;
     }
 
-    Character getCharacter() const {
-        return _character;
+    Character& getCharacter(int i = -1) {
+        if (i < 4 && i >= 0) {
+            return _chararr[i];
+        }
+        else return _chararr[_current];
+        // throw error?
+    }
+    /**
+     * Switch over to next character
+     */
+    void nextCharacter() {
+        if (_current < 3)
+            _current++;
+        else _current = 0;
     }
 
     void draw(sf::RenderWindow &window) {
-        window.draw(_character.getSprite());
-        window.draw(_weapon.getSprite());
+        for (int i = 0; i < 4; i++) {
+            window.draw(_chararr[i].getSprite());
+        }
+        if (!_finished) {
+            window.draw(_weapon.getSprite());
+        }
     }
 
     /**
@@ -63,11 +84,14 @@ public:
      * Ends the player's turn
      */
     void finishTurn() {
+        nextChahacter();
         _finished = true;
     }
 
 private:
-    Character _character;
+    std::vector<Character> _chararr;
+    //Character _character;
+    int _current;
     Bazooka _weapon;
     bool _finished;
     float _aim;
