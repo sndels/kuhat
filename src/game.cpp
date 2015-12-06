@@ -1,4 +1,5 @@
 #include "game.hpp"
+// Include all gamestates
 #include "m_menu.hpp"
 #include "playstate.hpp"
 
@@ -7,20 +8,19 @@
  * @params: active render window
  * @return: none
  */
-Game::Game(sf::RenderWindow &window) : _window(window) {
+Game::Game(sf::RenderWindow &window) : window(window) {
     _running = true;
-    // std::shared_ptr<GState> mainMenu = std::make_shared<MainMenu>();
-    // this->pushState(mainMenu);
+    std::shared_ptr<GState> mainMenu = std::make_shared<MainMenu>();
+    this->pushState(mainMenu);
     //  Comment the two lines above and uncomment the ones before to enter playstate on run
-        std::shared_ptr<GState> playState = std::make_shared<PlayState>();
-        this->pushState(playState);
+    //    std::shared_ptr<GState> playState = std::make_shared<PlayState>();
+    //    this->pushState(playState);
 
 }
 
 /**
  * Pops the top GState and sets given state in it's place
  * @params: GState to be added
- * @return: none
  */
 void Game::changeState(std::shared_ptr<GState> state) {
     this->popState();
@@ -30,7 +30,6 @@ void Game::changeState(std::shared_ptr<GState> state) {
 /**
  * Pushes the given state as active state
  * @params: GState to be added
- * @return: none
  */
 void Game::pushState(std::shared_ptr<GState> state) {
     _states.insert(_states.begin(),state);
@@ -38,56 +37,37 @@ void Game::pushState(std::shared_ptr<GState> state) {
 
 /**
  * Pops the top GState
- * @params: none
- * @return: none
  */
 void Game::popState() {
     _states.erase(_states.begin());
 }
 
 /**
- * Checks for closing of window and calls active state for event handling
- * @params: none
- * @return: none
+ * Calls the top state for event handling
  */
 void Game::handleEvents() {
-    sf::Event event;
-    while (_window.pollEvent(event))
-    {
-        // Request for closing the _window
-        if (event.type == sf::Event::Closed) {
-            _running = false;
-            return;
-        }
-        _states[0]->handleEvents(event);
-    }
+    _states[0]->handleEvents(*this);
 }
 
 /**
- * Calls 
- * @params: none
- * @return: none
+ * Updates the top state
  */
 void Game::update() {
-    _states[0]->update();
+    _states[0]->update(*this);
 }
 
 /**
- * Draws all active states
- * @params: none
- * @return: none
+ * Clears the screen to black and calls the top state for drawing
  */
 void Game::draw() {
-    _window.setActive();
-    _window.clear(sf::Color::Black);
-    for (auto i : _states)
-        i->draw(this->_window);
-    _window.display();
+    window.setActive();
+    window.clear(sf::Color::Black);
+    _states[0]->draw(*this);
+    window.display();
 }
 
 /**
  * Checks if game is still running
- * @params: none
  * @return: true if game is running, false if not
  */
 bool Game::isRunning() const {
@@ -96,8 +76,6 @@ bool Game::isRunning() const {
 
 /**
  * Sets the game to quit
- * @params: none
- * @return: none
  */
 void Game::quit() {
     _running = false;
