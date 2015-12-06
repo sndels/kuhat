@@ -19,6 +19,10 @@ public:
     virtual void update(Game& game) = 0;
     virtual void draw(Game& game) = 0;
 
+    void changeState(Game& game, std::shared_ptr<GState> state) {
+		game.changeState(state);
+	}
+
     bool isRunning() const {return _running;}
     void quit() {_running = false;}
 protected:
