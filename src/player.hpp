@@ -27,8 +27,9 @@ public:
         _current = 0;
     }
 
-    void moveActive(float x, float y) {
-        _chararr[_current].move(x,y);
+    void moveActive(float x, float y, int charnum = -1) {
+        if (charnum < 0) charnum = _current;
+        _chararr[charnum].move(x,y);
         _weapon.updateLocation(getCharacter());
     }
 

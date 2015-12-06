@@ -91,13 +91,7 @@ public:
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             currentPlayer.rotateWeapon(dT * (-0.1));
         }
-        //"Gravity" to keep active character on the ground
-        for (int dY = 0; dY < dT * CHARGRAV; ++dY){
-            if (!checkCollision(currentPlayer.getCharacter(), _map, 0, 1)) {
-                currentPlayer.moveActive(0,1);
-            } else
-                break;
-        }
+        checkGravity(dT);
         _ammo.updateLocation();
         if (_charging) {
             _hud.setState(_charge.getElapsedTime().asSeconds());
@@ -147,6 +141,25 @@ public:
         if (_charging)
             _hud.drawPower(window);
         _hud.drawWind(window);
+    }
+
+    void checkGravity(int dT) {
+        //"Gravity" to keep active character on the ground
+        for (int i = 0; i < 4; i++) {
+            for (int dY = 0; dY < dT * CHARGRAV; ++dY){
+                if (!checkCollision(_player1.getCharacter(i), _map, 0, 1)) {
+                    _player1.moveActive(0,1, i);
+                } else break;
+            }
+        }
+        for (int i = 0; i < 4; i++) {
+            for (int dY = 0; dY < dT * CHARGRAV; ++dY){
+                if (!checkCollision(_player2.getCharacter(i), _map, 0, 1)) {
+                    _player2.moveActive(0,1, i);
+                } else break;
+            }
+        }
+
     }
 private:
     /**
