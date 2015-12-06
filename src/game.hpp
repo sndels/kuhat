@@ -28,8 +28,10 @@ public:
 
     bool isRunning() const;
     void quit();
+
+    sf::RenderWindow &window;
+
 private:
-    sf::RenderWindow &_window;
     bool _running;
     std::vector<std::shared_ptr<GState>> _states;
 };
