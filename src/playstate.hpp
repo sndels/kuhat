@@ -13,11 +13,12 @@
 #define CHARSPEED 0.1
 #define CHARGRAV 0.2
 #define MAXCLIMB -10
+#define CHARS 10
 
 class PlayState : public GState
 {
 public:
-    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(100,100), _player2(0, 0), _map(mapSeed), _hud("resource/sprites/gradient.png"), _charging(false) {
+    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100), _player2(CHARS, 0, 0), _map(mapSeed), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
             _player2.finishTurn();
         }
@@ -145,14 +146,14 @@ public:
 
     void checkGravity(int dT) {
         //"Gravity" to keep active character on the ground
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < CHARS; i++) {
             for (int dY = 0; dY < dT * CHARGRAV; ++dY){
                 if (!checkCollision(_player1.getCharacter(i), _map, 0, 1)) {
                     _player1.moveActive(0,1, i);
                 } else break;
             }
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < CHARS; i++) {
             for (int dY = 0; dY < dT * CHARGRAV; ++dY){
                 if (!checkCollision(_player2.getCharacter(i), _map, 0, 1)) {
                     _player2.moveActive(0,1, i);
@@ -193,10 +194,10 @@ private:
     }
 
     void checkBounds() {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < CHARS; i++) {
             if (!_player1.getCharacter(i).onScreen()) _player1.getCharacter(i).kill();
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < CHARS; i++) {
             if (!_player2.getCharacter(i).onScreen()) _player2.getCharacter(i).kill();
 
         }
