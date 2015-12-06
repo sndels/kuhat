@@ -84,7 +84,7 @@ public:
      * Ends the player's turn
      */
     void finishTurn() {
-        nextChahacter();
+        nextCharacter();
         _finished = true;
     }
 
