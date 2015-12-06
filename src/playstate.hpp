@@ -20,6 +20,7 @@ public:
     PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(100,100), _player2(0, 0), _map(mapSeed), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
             _player2.finishTurn();
+            _map.addHole(300,200);
         }
     /**
      * Handles SFML events like keypresses, releases
@@ -121,7 +122,13 @@ public:
         if(_ammo.shot()){
             if(checkCollision(_ammo, _player1.getCharacter()) ||
                checkCollision(_ammo, _player2.getCharacter())){
-                std::cout<<"Bazooka hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                _ammo.destroy();
+                endTurn();
+            }
+            if (checkCollision(_ammo, _map)) {
+                std::cout<<"Terrain hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                _map.addHole(_ammo.getX(), _ammo.getY());
                 _ammo.destroy();
                 endTurn();
             }
