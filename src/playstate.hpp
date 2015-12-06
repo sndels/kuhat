@@ -20,7 +20,6 @@ public:
     PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(100,100), _player2(0, 0), _map(mapSeed), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
             _player2.finishTurn();
-            _map.addHole(300,200);
         }
     /**
      * Handles SFML events like keypresses, releases
