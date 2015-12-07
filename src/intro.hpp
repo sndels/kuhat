@@ -17,7 +17,15 @@ public:
         }
         _logoSprite.setTexture(_logoTexture);
         _logoSprite.setPosition(1280/2 - _logoSprite.getGlobalBounds().width/2, 100);
-
+        // Slogan
+        if (!_aileron_bold_italic.loadFromFile("resource/fonts/aileron/Aileron-BoldItalic.otf") ) {
+            std::cout << "Slogan font failed to load from file." << std::endl;
+        }
+        _slogan.setFont(_aileron_bold_italic);
+        _slogan.setCharacterSize(50);
+        _slogan.setColor(sf::Color::Black);
+        _slogan.setString("Jee!");
+        _slogan.setPosition(1280/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
     }
 
     void pause() {
@@ -62,12 +70,15 @@ public:
     void draw(Game& game) {
         game.window.clear(sf::Color::White);
         game.window.draw(_logoSprite);
+        game.window.draw(_slogan);
     }
 
 private:
 
     sf::Sprite _logoSprite;
     sf::Texture _logoTexture;
+    sf::Text _slogan;
+    sf::Font _aileron_bold_italic;
 };
 
 #endif
