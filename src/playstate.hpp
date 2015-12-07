@@ -165,8 +165,8 @@ public:
         //Testing shotgun collision for characters
         if(getCurrentPlayer().getWeapon().shot()){
             for (int i = 0; i < CHARS; i++) {
-               if(getCurrentPlayer().getWeapon().shotgunCollision(_player1.getCharacter(i))) std::cout<<"Shotgun hit player 1 char"<<std::endl;
-               if(getCurrentPlayer().getWeapon().shotgunCollision(_player2.getCharacter(i))) std::cout<<"Shotgun hit player 2 char"<<std::endl;
+               if(getCurrentPlayer().getWeapon().shotgunCollision(_player1.getCharacter(i))) std::cout<<"Shotgun hit player 1 character"<<std::endl;
+               if(getCurrentPlayer().getWeapon().shotgunCollision(_player2.getCharacter(i))) std::cout<<"Shotgun hit player 2 character"<<std::endl;
             }
             endTurn();
         }
