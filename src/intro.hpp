@@ -15,6 +15,8 @@ class Intro : public GState
 public:
 
     Intro() {
+        // Start the clock
+        _clock.restart();
         // Logo
         if (!_logoTexture.loadFromFile("resource/sprites/logo.png") ) {
             std::cout << "Logo texture failed to load from file." << std::endl;
@@ -63,7 +65,10 @@ public:
     }
 
     void update(Game& game) {
-        ;
+        // Update the slogan every 5 seconds
+        if ((_clock.getElapsedTime().asMilliseconds() - _lastSloganUpdate.asMilliseconds() ) >= 5000) {
+            _newSlogan();
+        }
     }
 
     /**
@@ -105,6 +110,8 @@ private:
         _slogan.setString(string);
         // Update the _slogan position, center and 150px from bottom
         _slogan.setPosition(1280/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
+        // Update the timestamp
+        _lastSloganUpdate = _clock.getElapsedTime();
     }
 
 
@@ -112,6 +119,8 @@ private:
     sf::Texture _logoTexture;
     sf::Text _slogan;
     sf::Font _aileron_bold_italic;
+    sf::Clock _clock;
+    sf::Time _lastSloganUpdate;
 };
 
 #endif
