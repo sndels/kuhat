@@ -23,10 +23,10 @@ Game::Game(sf::RenderWindow &window) : window(window) {
 void Game::swapActiveState(std::shared_ptr<GState> state) {
     if (!_states.empty()) {
         this->goToPreviousState();
-        this->swapActiveState(state);
+        this->moveToState(state);
     }
     else {
-        this->swapActiveState(state);
+        this->moveToState(state);
     }
 }
 
