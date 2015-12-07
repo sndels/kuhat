@@ -115,11 +115,13 @@ public:
      */
     void handleCollision(){
         if(_ammo.shot()){
-            if(checkCollision(_ammo, _player1.getCharacter()) ||
-               checkCollision(_ammo, _player2.getCharacter())){
-                std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
-                _ammo.destroy();
-                endTurn();
+            for (int i = 0; i < CHARS; i++) {
+                if(checkCollision(_ammo, _player1.getCharacter(i)) ||
+                   checkCollision(_ammo, _player2.getCharacter(i))){
+                    std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                    _ammo.destroy();
+                    endTurn();
+                }
             }
             if (checkCollision(_ammo, _map)) {
                 std::cout<<"Terrain hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
