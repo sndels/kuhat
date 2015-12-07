@@ -56,10 +56,9 @@ public:
 
             // Check keypresses
             if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Return) {
-                    game.moveToState(std::make_shared<MainMenu>() );
-                    return;
-                }
+                // Q quits the game, all other keys swap to mainmenu
+                if (event.key.code == sf::Keyboard::Q) game.quit();
+                else game.swapActiveState(std::make_shared<MainMenu>() );
             }
         }
     }
