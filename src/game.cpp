@@ -10,11 +10,8 @@
  */
 Game::Game(sf::RenderWindow &window) : window(window) {
     _running = true;
-    std::shared_ptr<GState> mainMenu = std::make_shared<MainMenu>();
-    this->pushState(mainMenu);
-    //  Comment the two lines above and uncomment the ones before to enter playstate on run
-    //    std::shared_ptr<GState> playState = std::make_shared<PlayState>();
-    //    this->pushState(playState);
+    _states.clear();
+    this->moveToState(std::make_shared<MainMenu>() );
 
 }
 
