@@ -11,6 +11,13 @@ class Intro : public GState
 public:
 
     Intro() {
+        // Logo
+        if (!_logoTexture.loadFromFile("resource/sprites/logo.png") ) {
+            std::cout << "Logo texture failed to load from file." << std::endl;
+        }
+        _logoSprite.setTexture(_logoTexture);
+        _logoSprite.setPosition(1280/2 - _logoSprite.getGlobalBounds().width/2, 100);
+
     }
 
     void pause() {
@@ -53,8 +60,14 @@ public:
      * @param game Reference to game-engine
      */
     void draw(Game& game) {
-        ;
+        game.window.clear(sf::Color::White);
+        game.window.draw(_logoSprite);
     }
+
+private:
+
+    sf::Sprite _logoSprite;
+    sf::Texture _logoTexture;
 };
 
 #endif
