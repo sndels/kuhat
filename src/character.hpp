@@ -2,22 +2,45 @@
 #define CHAR_H
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <string>
+#include <vector>
+
+//The amount of tail to be cut from collisionmask
+#define TAILEND 12
+//How much overlap is allowed for Character sprites
+#define OVERLAP 2
 
 //class for the main logo, facilitates animation
 class Character
 {
 public:
-    Character (std::string t, bool turn = false) {
+    Character (std::string t, int x, int y, bool turn = false) {
         _texture.loadFromFile(t);
+        sf::Image temp;
+        temp.loadFromFile(t);
+        std::vector<bool> v;
+        for (unsigned int i = 0; i < temp.getSize().x; ++i) {
+            v.clear();
+            for (unsigned int j = 0; j < temp.getSize().y; ++j) {
+                if (i < TAILEND)
+                    v.push_back(false);
+                else if (temp.getPixel(i,j).a == 0)
+                    v.push_back(false);
+                else
+                    v.push_back(true);
+            }
+            _mask.push_back(v);
+        }
         _sprite.setTexture(_texture);
-        _sprite.setPosition(820,350);
-        _sprite.setScale(0.5,0.5);
+        _sprite.setPosition(x, y);
         _isFlipped = false; // Character is drawn facing right.
-        _Grip.x = 293;
-        _Grip.y = 83;
+        _Grip.x = 17;
+        _Grip.y = 15;
         if (turn == true) flip(); // Spawn the character facing left.
+        _alive = true;
     }
+
 
     const sf::Sprite& getSprite() const {
         return _sprite;
@@ -46,11 +69,24 @@ public:
         return ret;
     }
 
+    bool doesCollide(unsigned int x, unsigned int y) const {
+        //Read mask from opposite side if sprite is flipped
+        if (_isFlipped)
+            x = _mask.size() - x - 1;
+        if ((x + OVERLAP < _mask.size()) && (y + OVERLAP < _mask[x].size())) {
+            return _mask[x + OVERLAP][y + OVERLAP];
+        }
+        return false;
+    }
+
     void move(float x, float y) {
         // Change the sprite to face the x-axis moving direction.
         if ( x<0 && !_isFlipped ) flip();
         else if ( x>0 && _isFlipped) flip();
         _sprite.move(x,y);
+        if (!onScreen()) {
+            kill();
+        }
     }
 
     /**
@@ -76,11 +112,29 @@ public:
     bool isCharFlipped() const {
         return _isFlipped;
     }
+    void kill() {
+        _alive = false;
+    }
+    bool isAlive() {
+        return _alive;
+    }
+    bool onScreen() const {
+        int x = getSprite().getPosition().x,
+            y = getSprite().getPosition().y;
+        if (y > 720
+            || y < 0
+            || x > 1280
+            || x < 0) return false;
+        return true;
+    }
+
 
 private:
     sf::Texture _texture;
     sf::Sprite _sprite;
+    std::vector<std::vector<bool> > _mask;
     bool _isFlipped;
+    bool _alive;
 
     // Grip position i.e. The point on character where weapon origin is placed.
     // Defined as pixel offset from top left.

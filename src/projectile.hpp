@@ -68,7 +68,7 @@ public:
      * @return ammo horizontal coordinate
      */
     virtual float getX() const {
-        return _location.x - std::cos((180-_angle)*PI/180) * _velocity * getAirTime().asSeconds() - getWind();
+        return _location.x - std::cos((180-_angle)*PI/180) * _velocity * getAirTime().asSeconds() + getWind();
     }
 
 
@@ -92,6 +92,17 @@ public:
         else return true;
     }
 
+    /**
+     * Checks mask at the given pixel coordinates
+     * @param  x X-coordinate
+     * @param  y Y-coordinate
+     * @return   True/False depending on mask status
+     */
+    bool doesCollide(unsigned int x, unsigned int y) const {
+        if ((x < _mask.size()) && (y < _mask[x].size()))
+            return _mask[x][y];
+        return false;
+    }
 
 
 protected:
@@ -108,6 +119,7 @@ protected:
       sf::Texture _texture;
       sf::Sprite _sprite;
       bool _shot;
+      std::vector<std::vector<bool> > _mask;
 };
 
 #endif
