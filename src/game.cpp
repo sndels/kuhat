@@ -1,93 +1,77 @@
 #include "game.hpp"
+// Include all gamestates
 #include "m_menu.hpp"
-#include "playstate.hpp"
+//#include "playstate.hpp"
 
 /**
  * Inits the MainMenu instance and pushes it to the GState-vector
  * @params: active render window
  * @return: none
  */
-Game::Game(sf::RenderWindow &window) : _window(window) {
+Game::Game(sf::RenderWindow &window) : window(window) {
     _running = true;
-    // std::shared_ptr<GState> mainMenu = std::make_shared<MainMenu>();
-    // this->pushState(mainMenu);
-    //  Comment the two lines above and uncomment the ones before to enter playstate on run
-        std::shared_ptr<GState> playState = std::make_shared<PlayState>();
-        this->pushState(playState);
+    _states.clear();
+    this->moveToState(std::make_shared<MainMenu>() );
 
 }
 
 /**
- * Pops the top GState and sets given state in it's place
- * @params: GState to be added
- * @return: none
+ * Pops the last (active) GState and sets given state in it's place
+ * @param state GState to be added
  */
-void Game::changeState(std::shared_ptr<GState> state) {
-    this->popState();
-    this->pushState(state);
-}
-
-/**
- * Pushes the given state as active state
- * @params: GState to be added
- * @return: none
- */
-void Game::pushState(std::shared_ptr<GState> state) {
-    _states.insert(_states.begin(),state);
-}
-
-/**
- * Pops the top GState
- * @params: none
- * @return: none
- */
-void Game::popState() {
-    _states.erase(_states.begin());
-}
-
-/**
- * Checks for closing of window and calls active state for event handling
- * @params: none
- * @return: none
- */
-void Game::handleEvents() {
-    sf::Event event;
-    while (_window.pollEvent(event))
-    {
-        // Request for closing the _window
-        if (event.type == sf::Event::Closed) {
-            _running = false;
-            return;
-        }
-        _states[0]->handleEvents(event);
+void Game::swapActiveState(std::shared_ptr<GState> state) {
+    if (!_states.empty()) {
+        this->goToPreviousState();
+        this->swapActiveState(state);
+    }
+    else {
+        this->swapActiveState(state);
     }
 }
 
 /**
- * Calls 
- * @params: none
- * @return: none
+ * Pushes the given state as active state
+ * @param state GState to be pushed to vector.
  */
-void Game::update() {
-    _states[0]->update();
+void Game::moveToState(std::shared_ptr<GState> state) {
+    _states.push_back(state);
 }
 
 /**
- * Draws all active states
- * @params: none
- * @return: none
+ * Pops the last (active) state from the vector
+ */
+void Game::goToPreviousState() {
+    if (!_states.empty()) {
+        _states.pop_back();
+    }
+}
+
+/**
+ * Calls the active state for event handling
+ */
+void Game::handleEvents() {
+    _states.back()->handleEvents(*this);
+}
+
+/**
+ * Updates the active state
+ */
+void Game::update() {
+    _states.back()->update(*this);
+}
+
+/**
+ * Clears the screen to black and calls the active state for drawing
  */
 void Game::draw() {
-    _window.setActive();
-    _window.clear(sf::Color::Black);
-    for (auto i : _states)
-        i->draw(this->_window);
-    _window.display();
+    window.setActive();
+    window.clear(sf::Color::Black);
+    _states.back()->draw(*this);
+    window.display();
 }
 
 /**
  * Checks if game is still running
- * @params: none
  * @return: true if game is running, false if not
  */
 bool Game::isRunning() const {
@@ -96,8 +80,6 @@ bool Game::isRunning() const {
 
 /**
  * Sets the game to quit
- * @params: none
- * @return: none
  */
 void Game::quit() {
     _running = false;

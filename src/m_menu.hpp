@@ -4,6 +4,8 @@
 #include <vector>
 #include "gstate.hpp"
 #include "m_option.hpp"
+// include all gamestates you want to move or swap into
+#include "playstate.hpp"
 
 #define OPTNUM 2 //number of options in menu
 
@@ -25,31 +27,53 @@ public:
         _options.push_back(newOption);
     }
 
+    void pause() {
+        ;
+    }
+
+    void resume() {
+        ;
+    }
+
     /**
      * Selects the active item according to user input
      * @params: reference to sf::Event
      * @return: none
      */
-    void handleEvents(sf::Event &event) {
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Up) {//Moves selection up
-                if (_selected != 0) {
-                    _options[_selected]->setUnselected();
-                    --_selected;
-                    _options[_selected]->setSelected();
-                }
+    void handleEvents(Game& game) {
+        sf::Event event;
+        while (game.window.pollEvent(event)) {
+            // Check if window is closed
+            if (event.type == sf::Event::Closed) {
+                game.quit();
+                return;
             }
-            if (event.key.code == sf::Keyboard::Down) {//Moves selection down
-                if (_selected != OPTNUM - 1) {
-                    _options[_selected]->setUnselected();
-                    ++_selected;
-                    _options[_selected]->setSelected();
+
+            // Check keypresses
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Up) {//Moves selection up
+                    if (_selected != 0) {
+                        _options[_selected]->setUnselected();
+                        --_selected;
+                        _options[_selected]->setSelected();
+                    }
+                }
+                if (event.key.code == sf::Keyboard::Down) {//Moves selection down
+                    if (_selected != OPTNUM - 1) {
+                        _options[_selected]->setUnselected();
+                        ++_selected;
+                        _options[_selected]->setSelected();
+                    }
+                }
+                if (event.key.code == sf::Keyboard::Return) {
+                    game.moveToState(std::make_shared<PlayState>() );
+                    return;
                 }
             }
         }
     }
 
-    void update() {
+    void update(Game& game) {
         ;
     }
 
@@ -58,10 +82,9 @@ public:
      * @params: reference to active render window
      * @return: none
      */
-    void draw(sf::RenderWindow &window)
-    {
+    void draw(Game& game) {
             for (auto i : _options)
-                window.draw(i->getSprite());
+                game.window.draw(i->getSprite());
     }
 
     bool newSelected() {

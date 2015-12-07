@@ -22,35 +22,54 @@ public:
             _running = true;
             _player2.finishTurn();
         }
+
+    void pause() {
+        ;
+    }
+
+    void resume() {
+        ;
+    }
+
     /**
      * Handles SFML events like keypresses, releases
      * @param event Gets a reference to a SF event as parameter
      */
-    void handleEvents(sf::Event &event) {
-        if (!_ammo.shot()) {
-            if (event.type == sf::Event::KeyPressed) {
-                // Using switch rather than if in case of future keypress events
-                switch (event.key.code) {
-                    case sf::Keyboard::Space:
-                        if (!_charging) {
-                            _charge.restart();
-                            _charging = true;
-                        }
-                        break;
-                    default:
-                        break;
-                }
+    void handleEvents(Game& game) {
+        sf::Event event;
+        while (game.window.pollEvent(event) ) {
+            // Check if window is closed
+            if (event.type == sf::Event::Closed) {
+                game.quit();
+                return;
             }
-            if (event.type == sf::Event::KeyReleased) {
-                if (event.key.code == sf::Keyboard::Space) {
-                    _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
-                    _charging = false;
+
+            
+            if (!_ammo.shot()) {
+                if (event.type == sf::Event::KeyPressed) {
+                    // Using switch rather than if in case of future keypress events
+                    switch (event.key.code) {
+                        case sf::Keyboard::Space:
+                            if (!_charging) {
+                                _charge.restart();
+                                _charging = true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                if (event.type == sf::Event::KeyReleased) {
+                    if (event.key.code == sf::Keyboard::Space) {
+                        _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
+                        _charging = false;
+                    }
                 }
             }
         }
     }
 
-    void update() {
+    void update(Game& game) {
         Player &currentPlayer = getCurrentPlayer();
         sf::Time currentUpdate = _clock.getElapsedTime();
         int dT = currentUpdate.asMilliseconds() - _prevUpdate.asMilliseconds();
@@ -133,18 +152,17 @@ public:
         }
     }
 
-    void draw(sf::RenderWindow &window)
-    {
-        window.clear(sf::Color::Black);
-        _map.draw(window);
+    void draw(Game& game) {
+        game.window.clear(sf::Color::Black);
+        _map.draw(game.window);
         if (_ammo.shot())
-            window.draw(_ammo.getSprite());
+            game.window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
-        _player1.draw(window);
-        _player2.draw(window);
+        _player1.draw(game.window);
+        _player2.draw(game.window);
         if (_charging)
-            _hud.drawPower(window);
-        _hud.drawWind(window);
+            _hud.drawPower(game.window);
+        _hud.drawWind(game.window);
     }
 
     void checkGravity(int dT) {
