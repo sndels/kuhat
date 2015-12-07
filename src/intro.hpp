@@ -1,6 +1,10 @@
 #ifndef INTRO_H
 #define INTRO_H
 
+#include <fstream>  // File IO
+#include <stdlib.h> // rand()
+#include <time.h>   // for seeding rand
+#include <iostream> // cout
 #include "gstate.hpp"
 #include "m_option.hpp"
 // include all gamestates you want to move or swap into
@@ -24,8 +28,7 @@ public:
         _slogan.setFont(_aileron_bold_italic);
         _slogan.setCharacterSize(50);
         _slogan.setColor(sf::Color::Black);
-        _slogan.setString("Jee!");
-        _slogan.setPosition(1280/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
+        _newSlogan();
     }
 
     void pause() {
@@ -74,6 +77,36 @@ public:
     }
 
 private:
+
+    /**
+     * Updates the displayed slogan.
+     * Gets a random line from slogans.txt and positions it correctly.
+     */
+    void _newSlogan() {
+        std::ifstream inFile("resource/slogans.txt");
+        int numLines = 0;
+        int chosenLine = 0;
+        std::string string = "";
+        // Count the number of slogans in file
+        while ( std::getline(inFile, string) ) {
+            ++numLines;
+        }
+        // Choose random line
+        srand(time(nullptr));
+        chosenLine = rand() % (numLines + 1);
+        // Clear the eof flag and move cursor to start of file
+        inFile.clear();
+        inFile.seekg(0, std::ios::beg);
+        // Read until chosenLine
+        for (int i = 0; i <=chosenLine; i++) {
+            std::getline(inFile, string);
+        }
+        // Update the line to _slogan
+        _slogan.setString(string);
+        // Update the _slogan position, center and 150px from bottom
+        _slogan.setPosition(1280/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
+    }
+
 
     sf::Sprite _logoSprite;
     sf::Texture _logoTexture;
