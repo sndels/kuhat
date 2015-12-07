@@ -1,5 +1,6 @@
 #include "game.hpp"
 // Include all gamestates
+#include "intro.hpp"
 #include "m_menu.hpp"
 //#include "playstate.hpp"
 
@@ -11,7 +12,7 @@
 Game::Game(sf::RenderWindow &window) : window(window) {
     _running = true;
     _states.clear();
-    this->moveToState(std::make_shared<MainMenu>() );
+    this->moveToState(std::make_shared<Intro>() );
 
 }
 
