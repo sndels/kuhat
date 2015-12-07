@@ -20,10 +20,11 @@ public:
      * Initializes the character(s), sets up default ammo counts and sets the turn
      * as not finished
      */
-    Player(int characters, int charX = 500, int charY = 75) : _weapon(), _chars(characters) {
+    Player(int characters, int charX = 500, int charY = 75, int team = 1) : _weapon(), _chars(characters) {
+        _team = team;
         _finished = false, _aim = 90;
         for (int i = 0; i < _chars; i++) {
-            _chararr.push_back(Character("resource/sprites/diykuha.png", charX+i*100, 0, true));
+            _chararr.push_back(Character("resource/sprites/diykuha.png", charX+i*100, 0, true, team));
         }
         _current = 0;
     }
@@ -106,6 +107,7 @@ private:
     bool _finished;
     float _aim;
     int _chars;
+    int _team;
 };
 
 #endif

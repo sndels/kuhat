@@ -13,12 +13,12 @@
 #define CHARSPEED 0.1
 #define CHARGRAV 0.2
 #define MAXCLIMB -10
-#define CHARS 10
+#define CHARS 4
 
 class PlayState : public GState
 {
 public:
-    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100), _player2(CHARS, 0, 0), _map(mapSeed), _hud("resource/sprites/gradient.png"), _charging(false) {
+    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100, 1), _player2(CHARS, 600, 100, 2), _map(mapSeed), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
             _player2.finishTurn();
         }
@@ -119,6 +119,7 @@ public:
                 if(checkCollision(_ammo, _player1.getCharacter(i)) ||
                    checkCollision(_ammo, _player2.getCharacter(i))){
                     std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                    _map.addHole(_ammo.getX(), _ammo.getY());
                     _ammo.destroy();
                     endTurn();
                 }

@@ -15,7 +15,7 @@
 class Character
 {
 public:
-    Character (std::string t, int x, int y, bool turn = false) {
+    Character (std::string t, int x, int y, bool turn = false, int team = 1) {
         _texture.loadFromFile(t);
         sf::Image temp;
         temp.loadFromFile(t);
@@ -33,6 +33,19 @@ public:
             _mask.push_back(v);
         }
         _sprite.setTexture(_texture);
+        switch (team) {
+            case 1:
+                break;
+            case 2:
+                _sprite.setColor(sf::Color::Red);
+                break;
+            case 3:
+                _sprite.setColor(sf::Color::Magenta);
+                break;
+            case 4:
+                _sprite.setColor(sf::Color::Green);
+                break;
+        }
         _sprite.setPosition(x, y);
         _isFlipped = false; // Character is drawn facing right.
         _Grip.x = 17;
