@@ -44,8 +44,8 @@ public:
                 return;
             }
 
-            
-            if (!_ammo.shot()) {
+                //Commented out for shotgun testing
+                /*if (!_ammo.shot()) {
                 if (event.type == sf::Event::KeyPressed) {
                     // Using switch rather than if in case of future keypress events
                     switch (event.key.code) {
@@ -65,6 +65,17 @@ public:
                         _charging = false;
                     }
                 }
+            }*/
+            if(!getCurrentPlayer().getWeapon().shot()){
+               if (event.type == sf::Event::KeyPressed) {
+                    switch (event.key.code) {
+                        case sf::Keyboard::Space:
+                            getCurrentPlayer().getWeapon().fire();
+                            break;
+                        default:
+                            break;
+                    }
+                } 
             }
         }
     }
@@ -149,6 +160,15 @@ public:
                 _ammo.destroy();
                 endTurn();
             }
+
+        }
+        //Testing shotgun collision for characters
+        if(getCurrentPlayer().getWeapon().shot()){
+            for (int i = 0; i < CHARS; i++) {
+               if(getCurrentPlayer().getWeapon().shotgunCollision(_player1.getCharacter(i))) std::cout<<"Shotgun hit player 1 char"<<std::endl;
+               if(getCurrentPlayer().getWeapon().shotgunCollision(_player2.getCharacter(i))) std::cout<<"Shotgun hit player 2 char"<<std::endl;
+            }
+            endTurn();
         }
     }
 
@@ -157,6 +177,9 @@ public:
         _map.draw(game.window);
         if (_ammo.shot())
             game.window.draw(_ammo.getSprite());
+        //Draw shotguns shooting trajectory for debugging
+        if (!getCurrentPlayer().getWeapon().shot())
+            game.window.draw(getCurrentPlayer().getWeapon().getTrajectory());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
         _player1.draw(game.window);
         _player2.draw(game.window);

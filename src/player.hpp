@@ -4,6 +4,7 @@
 #include <memory>
 #include "character.hpp"
 #include "weapon.hpp"
+#include "shotgun.hpp"
 #include "bazooka.hpp"
 #include <iostream>
 #include <vector>
@@ -44,7 +45,11 @@ public:
         _weapon.rotate(_aim);
     }
 
-    Bazooka getWeapon() const {
+    /*Bazooka getWeapon() const {
+        return _weapon;
+    }*/
+
+    Shotgun& getWeapon(){
         return _weapon;
     }
 
@@ -103,7 +108,8 @@ private:
     std::vector<Character> _chararr;
     //Character _character;
     int _current;
-    Bazooka _weapon;
+    //Bazooka _weapon;
+    Shotgun _weapon;
     bool _finished;
     float _aim;
     int _chars;
