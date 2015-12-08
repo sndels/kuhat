@@ -29,6 +29,7 @@ void Game::swapActiveState(std::shared_ptr<GState> state) {
         this->goToPreviousState();
         this->moveToState(state);
     }
+    // Shouldn't happen but in case there is no active state to swap FROM
     else {
         this->moveToState(state);
     }
@@ -39,6 +40,8 @@ void Game::swapActiveState(std::shared_ptr<GState> state) {
  * @param state GState to be pushed to vector.
  */
 void Game::moveToState(std::shared_ptr<GState> state) {
+    // Pause the current active state if there is one
+    if (!_states.empty() ) _states.back()->pause();
     _states.push_back(state);
 }
 
@@ -48,6 +51,8 @@ void Game::moveToState(std::shared_ptr<GState> state) {
 void Game::goToPreviousState() {
     if (!_states.empty()) {
         _states.pop_back();
+        // Resume the new active state if there is one
+        if (!_states.empty() ) _states.back()->resume();
     }
 }
 
