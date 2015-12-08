@@ -5,6 +5,7 @@
 #define GRAVITY 900
 
 #include <SFML/Graphics.hpp>
+#include "particles.hpp"
 
 /// A virtual Projectile class for different projectile types to inherit from.
 class Projectile
@@ -46,6 +47,14 @@ public:
      * Destroys the projectile
      */
     virtual void destroy() {
+        _shot=false;
+    }
+    /**
+     * Destroys the projectile and genereates particle explosion
+     * @param particles the particle system from playstate
+     */
+    virtual void destroy(ParticleSystem &particles) {
+        particles.setEmitter(sf::Vector2f(getX(), getY()));
         _shot=false;
     }
 

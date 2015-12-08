@@ -1,3 +1,6 @@
+#ifndef PARTICLES_H
+#define PARTICLES_H
+
 #include <SFML/Graphics.hpp>
 #include "map.hpp"
 #include <cmath>
@@ -83,3 +86,5 @@ private:
     sf::Time m_lifetime;
     sf::Vector2f m_emitter;
 };
+
+#endif

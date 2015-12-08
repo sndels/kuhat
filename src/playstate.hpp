@@ -144,15 +144,14 @@ public:
                    checkCollision(_ammo, _player2.getCharacter(i)).x){
                     std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                     _map.addHole(_ammo.getX(), _ammo.getY());
-                    _ammo.destroy();
+                    _ammo.destroy(_particles);
                     endTurn();
                 }
             }
             if (checkCollision(_ammo, _map).x) {
                 std::cout<<"Terrain hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                 _map.addHole(_ammo.getX(), _ammo.getY());
-                _particles.setEmitter(sf::Vector2f(_ammo.getX(), _ammo.getY()));
-                _ammo.destroy();
+                _ammo.destroy(_particles);
                 endTurn();
             }
         }
