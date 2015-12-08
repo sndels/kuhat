@@ -31,10 +31,19 @@ public:
 		game.goToPreviousState();
 	}
 
+    /**
+     * Returns info if the state expects the lower state to be drawn also
+     * @return True if lower state should be drawn aswell.
+     */
+    bool drawLower() {
+        return _drawLower;
+    }
+
     bool isRunning() const {return _running;}
     void quit() {_running = false;}
 protected:
     bool _running;
+    bool _drawLower = false;
 };
 
 #endif
