@@ -12,7 +12,7 @@
  * @return            boolean true if there is a collision, false if not
  */
 template<typename T, typename V>
-bool checkCollision(T const& moving, V const& stationary, float dX = 0.0, float dY = 0.0) {
+sf::Vector2f checkCollision(T const& moving, V const& stationary, float dX = 0.0, float dY = 0.0) {
     //Get necessary rects
     sf::FloatRect intersection;
     sf::FloatRect movingBounds = moving.getSprite().getGlobalBounds();
@@ -27,10 +27,10 @@ bool checkCollision(T const& moving, V const& stationary, float dX = 0.0, float 
                 //Check if both objects have an opaque pixel in the spot
                 if (moving.doesCollide(i - movingBounds.left,j - movingBounds.top) &&
                     stationary.doesCollide(i - stationaryBounds.left,j - stationaryBounds.top))
-                    return true;
+                    return sf::Vector2f(i,j);
             }
         }
     }
-    return false;
+    return sf::Vector2f(0,0);
 }
 #endif

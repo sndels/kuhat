@@ -6,6 +6,7 @@
 #include "map.hpp"
 #include "hud.hpp"
 #include "collision.hpp"
+#include "particles.hpp"
 #include <cmath>
 #include <vector>
 #include <iostream>
@@ -18,7 +19,7 @@
 class PlayState : public GState
 {
 public:
-    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100, 1), _player2(CHARS, 600, 100, 2), _map(mapSeed), _hud("resource/sprites/gradient.png"), _charging(false) {
+    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100, 1), _player2(CHARS, 600, 100, 2), _map(mapSeed), _particles(1000), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
             _player2.finishTurn();
         }
@@ -44,7 +45,7 @@ public:
                 return;
             }
 
-            
+
             if (!_ammo.shot()) {
                 if (event.type == sf::Event::KeyPressed) {
                     // Using switch rather than if in case of future keypress events
@@ -76,12 +77,12 @@ public:
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
             for (int dX = 0; dX < dT * CHARSPEED; ++dX) {
                 //Try moving for every dX
-                if (!checkCollision(currentPlayer.getCharacter(), _map, -1))
+                if (!checkCollision(currentPlayer.getCharacter(), _map, -1).x)
                         currentPlayer.moveActive(-1,0);
                 else {//If there is a collision, try climbing
                     for (int dY = 0; dY > MAXCLIMB; --dY) {
                         ++dX;//Slow down on steep hills
-                        if (!checkCollision(currentPlayer.getCharacter(), _map, -1, dY)) {
+                        if (!checkCollision(currentPlayer.getCharacter(), _map, -1, dY).x) {
                             currentPlayer.moveActive(-1,dY);
                             break;
                         }
@@ -91,12 +92,12 @@ public:
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
             for (int dX = 0; dX < dT * CHARSPEED; ++dX) {
-                if (!checkCollision(currentPlayer.getCharacter(), _map, 1))
+                if (!checkCollision(currentPlayer.getCharacter(), _map, 1).x)
                         currentPlayer.moveActive(1,0);
                 else {//If there is a collision, try climbing
                     for (int dY = 0; dY > MAXCLIMB; --dY) {
                         ++dX;//Slow down on steep hills
-                        if (!checkCollision(currentPlayer.getCharacter(), _map, 1, dY)) {
+                        if (!checkCollision(currentPlayer.getCharacter(), _map, 1, dY).x) {
                             currentPlayer.moveActive(1,dY);
                             break;
                         }
@@ -126,6 +127,7 @@ public:
             endTurn();
         }
         handleCollision();
+        _particles.update(currentUpdate);
         _prevUpdate = currentUpdate;
     }
 
@@ -135,48 +137,51 @@ public:
     void handleCollision(){
         if(_ammo.shot()){
             for (int i = 0; i < CHARS; i++) {
-                if(checkCollision(_ammo, _player1.getCharacter(i)) ||
-                   checkCollision(_ammo, _player2.getCharacter(i))){
+                if(checkCollision(_ammo, _player1.getCharacter(i)).x ||
+                   checkCollision(_ammo, _player2.getCharacter(i)).x){
                     std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                     _map.addHole(_ammo.getX(), _ammo.getY());
                     _ammo.destroy();
                     endTurn();
                 }
             }
-            if (checkCollision(_ammo, _map)) {
+            sf::Vector2f hit;
+            if ((hit = checkCollision(_ammo, _map)).x) {
                 std::cout<<"Terrain hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                 _map.addHole(_ammo.getX(), _ammo.getY());
+                _particles.setEmitter(hit);
                 _ammo.destroy();
                 endTurn();
             }
         }
     }
 
-    void draw(Game& game) {
-        game.window.clear(sf::Color::Black);
-        _map.draw(game.window);
+    virtual void draw(sf::RenderWindow &window) {
+        window.clear(sf::Color::Black);
+        _particles.draw(window);
+        _map.draw(window);
         if (_ammo.shot())
-            game.window.draw(_ammo.getSprite());
+            window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
-        _player1.draw(game.window);
-        _player2.draw(game.window);
+        _player1.draw(window);
+        _player2.draw(window);
         if (_charging)
-            _hud.drawPower(game.window);
-        _hud.drawWind(game.window);
+            _hud.drawPower(window);
+        _hud.drawWind(window);
     }
 
     void checkGravity(int dT) {
         //"Gravity" to keep active character on the ground
         for (int i = 0; i < CHARS; i++) {
             for (int dY = 0; dY < dT * CHARGRAV; ++dY){
-                if (!checkCollision(_player1.getCharacter(i), _map, 0, 1)) {
+                if (!checkCollision(_player1.getCharacter(i), _map, 0, 1).x) {
                     _player1.moveActive(0,1, i);
                 } else break;
             }
         }
         for (int i = 0; i < CHARS; i++) {
             for (int dY = 0; dY < dT * CHARGRAV; ++dY){
-                if (!checkCollision(_player2.getCharacter(i), _map, 0, 1)) {
+                if (!checkCollision(_player2.getCharacter(i), _map, 0, 1).x) {
                     _player2.moveActive(0,1, i);
                 } else break;
             }
@@ -230,6 +235,7 @@ private:
     Player _player2;
     int _wind;
     Map _map;
+    ParticleSystem _particles;
     Hud _hud;
     sf::Clock _clock;
     sf::Time _prevUpdate;

@@ -66,7 +66,7 @@ void Game::update() {
 void Game::draw() {
     window.setActive();
     window.clear(sf::Color::Black);
-    _states.back()->draw(*this);
+    _states.back()->draw(window);
     window.display();
 }
 
