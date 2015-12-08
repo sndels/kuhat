@@ -15,14 +15,18 @@
 #define CHARSPEED 0.1
 #define CHARGRAV 0.2
 #define MAXCLIMB -10
+#define PLAYERS 2
 #define CHARS 4
 
 class PlayState : public GState
 {
 public:
-    PlayState(Game& game, std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100, 1), _player2(CHARS, 600, 100, 2), _map(mapSeed), _particles(500), _hud("resource/sprites/gradient.png"), _charging(false) {
+    PlayState(Game& game, std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _map(mapSeed), _particles(500), _hud("resource/sprites/gradient.png"), _charging(false) {
+            for (int i = 0; i < PLAYERS; i++) {
+                _players.push_back(Player(CHARS, 100 + 500*i, 100, i));
+                if (i > 0) _players[i].finishTurn();
+            }
             _running = true;
-            _player2.finishTurn();
         }
 
     void pause() {
@@ -139,13 +143,14 @@ public:
      */
     void handleCollision(){
         if(_ammo.shot()){
-            for (int i = 0; i < CHARS; i++) {
-                if(checkCollision(_ammo, _player1.getCharacter(i)).x ||
-                   checkCollision(_ammo, _player2.getCharacter(i)).x){
-                    std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
-                    _map.addHole(_ammo.getX(), _ammo.getY());
-                    _ammo.destroy(_particles);
-                    endTurn();
+            for (auto& player : _players) {
+                for (int i = 0; i < CHARS; i++) {
+                    if(checkCollision(_ammo, player.getCharacter(i)).x){
+                        std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                        _map.addHole(_ammo.getX(), _ammo.getY());
+                        _ammo.destroy(_particles);
+                        endTurn();
+                    }
                 }
             }
             if (checkCollision(_ammo, _map).x) {
@@ -163,8 +168,9 @@ public:
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
-        _player1.draw(window);
-        _player2.draw(window);
+        for (auto player : _players) {
+            player.draw(window);
+        }
         if (_charging)
             _hud.drawPower(window);
         _hud.drawWind(window);
@@ -172,21 +178,15 @@ public:
 
     void checkGravity(int dT) {
         //"Gravity" to keep active character on the ground
-        for (int i = 0; i < CHARS; i++) {
-            for (int dY = 0; dY < dT * CHARGRAV; ++dY){
-                if (!checkCollision(_player1.getCharacter(i), _map, 0, 1).x) {
-                    _player1.moveActive(0,1, i);
-                } else break;
+        for (auto& player : _players) {
+            for (int i = 0; i < CHARS; i++) {
+                for (int dY = 0; dY < dT * CHARGRAV; ++dY){
+                    if (!checkCollision(player.getCharacter(i), _map, 0, 1).x) {
+                        player.moveActive(0,1, i);
+                    } else break;
+                }
             }
         }
-        for (int i = 0; i < CHARS; i++) {
-            for (int dY = 0; dY < dT * CHARGRAV; ++dY){
-                if (!checkCollision(_player2.getCharacter(i), _map, 0, 1).x) {
-                    _player2.moveActive(0,1, i);
-                } else break;
-            }
-        }
-
     }
 private:
     /**
@@ -204,35 +204,38 @@ private:
      */
     void endTurn() {
         checkBounds();
-        if (! _player1.isFinished()) {
-            _player1.finishTurn();
-            _player2.beginTurn();
-        } else {
-            _player1.beginTurn();
-            _player2.finishTurn();
+        for (unsigned int i = 0; i < _players.size(); i++) {
+            if (! _players[i].isFinished()) {
+                _players[i].finishTurn();
+                if (i+1 < _players.size())
+                    _players[i+1].beginTurn();
+                else
+                    _players[0].beginTurn();
+                break;
+            }
         }
         _wind = std::rand() % 200 - 100;
         _hud.setWind(_wind);
         std::cout << "Turn ended, wind has changed to " << _wind << std::endl;
     }
     Player& getCurrentPlayer() {
-        return _player1.isFinished() ? _player2 : _player1;
+        for (auto& player : _players) {
+            if (!player.isFinished()) return player;
+        }
+        return _players[0];
     }
 
     void checkBounds() {
-        for (int i = 0; i < CHARS; i++) {
-            if (!_player1.getCharacter(i).onScreen()) _player1.getCharacter(i).kill();
+        for (auto& player : _players) {
+            for (int i = 0; i < CHARS; i++) {
+                if (!player.getCharacter(i).onScreen())
+                    player.getCharacter(i).kill();
+            }
         }
-        for (int i = 0; i < CHARS; i++) {
-            if (!_player2.getCharacter(i).onScreen()) _player2.getCharacter(i).kill();
-
-        }
-
     }
 
     BazookaAmmo _ammo;
-    Player _player1;
-    Player _player2;
+    std::vector<Player> _players;
     int _wind;
     Map _map;
     ParticleSystem _particles;

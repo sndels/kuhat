@@ -20,7 +20,7 @@ public:
      * Initializes the character(s), sets up default ammo counts and sets the turn
      * as not finished
      */
-    Player(int characters, int charX = 500, int charY = 75, int team = 1) : _weapon(), _chars(characters) {
+    Player(int characters, int charX = 500, int charY = 75, int team = 0) : _weapon(), _chars(characters) {
         _team = team;
         _finished = false, _aim = 90;
         for (int i = 0; i < _chars; i++) {

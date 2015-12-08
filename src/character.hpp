@@ -15,7 +15,7 @@
 class Character
 {
 public:
-    Character (std::string t, int x, int y, bool turn = false, int team = 1) {
+    Character (std::string t, int x, int y, bool turn = false, int team = 0) {
         _texture.loadFromFile(t);
         sf::Image temp;
         temp.loadFromFile(t);
@@ -34,15 +34,15 @@ public:
         }
         _sprite.setTexture(_texture);
         switch (team) {
-            case 1:
+            case 0:
                 break;
-            case 2:
+            case 1:
                 _sprite.setColor(sf::Color::Red);
                 break;
-            case 3:
+            case 2:
                 _sprite.setColor(sf::Color::Magenta);
                 break;
-            case 4:
+            case 3:
                 _sprite.setColor(sf::Color::Green);
                 break;
         }
