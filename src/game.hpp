@@ -31,10 +31,12 @@ public:
     bool isRunning() const;
     void quit();
 
-    sf::RenderWindow window;
-    Settings settings;
+    Settings& settings();
 
 private:
+    sf::RenderWindow _window;
+    Settings _settings;
+
     sf::Vector2u _currentResolution;
     bool _running;
     std::vector<std::shared_ptr<GState>> _states;

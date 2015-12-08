@@ -100,3 +100,11 @@ bool Game::isRunning() const {
 void Game::quit() {
     _running = false;
 }
+
+/**
+ * Used to get reference to game settings.
+ * @return Ref to game resstings
+ */
+Settings& Game::settings() {
+    return _settings;
+}
