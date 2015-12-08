@@ -10,8 +10,8 @@
  * @return: none
  */
 Game::Game() {
-    window.create(sf::VideoMode(settings.getResolution().x, settings.getResolution().y), "Kuhat");
-    _currentResolution = settings.getResolution();
+    window.create(sf::VideoMode(_settings.getResolution().x, _settings.getResolution().y), "Kuhat");
+    _currentResolution = _settings.getResolution();
     window.setVerticalSyncEnabled(true);
     // window.setKeyRepeatEnabled(false);
     _running = true;
@@ -75,10 +75,10 @@ void Game::update() {
  */
 void Game::draw() {
     // Recreate the game window if resolution setting has changed
-    if (_currentResolution != settings.getResolution() ) {
-        window.create(sf::VideoMode(settings.getResolution().x, settings.getResolution().y), "Kuhat");
+    if (_currentResolution != _settings.getResolution() ) {
+        window.create(sf::VideoMode(_settings.getResolution().x, _settings.getResolution().y), "Kuhat");
         window.setVerticalSyncEnabled(true);
-        _currentResolution = settings.getResolution();
+        _currentResolution = _settings.getResolution();
     }
     window.setActive();
     window.clear(sf::Color::Black);

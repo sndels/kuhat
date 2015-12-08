@@ -20,7 +20,7 @@ public:
             std::cout << "Logo texture failed to load from file." << std::endl;
         }
         _logoSprite.setTexture(_logoTexture);
-        _logoSprite.setPosition(game.settings.getResolution().x/2 - _logoSprite.getGlobalBounds().width/2, 100);
+        _logoSprite.setPosition(game.settings().getResolution().x/2 - _logoSprite.getGlobalBounds().width/2, 100);
     }
 
     void pause() {
