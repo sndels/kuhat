@@ -30,7 +30,7 @@ public:
         _slogan.setFont(_aileron_bold_italic);
         _slogan.setCharacterSize(50);
         _slogan.setColor(sf::Color::Black);
-        _newSlogan();
+        _newSlogan(game);
     }
 
     void pause() {
@@ -66,7 +66,7 @@ public:
     void update(Game& game) {
         // Update the slogan every 5 seconds
         if ((_clock.getElapsedTime().asMilliseconds() - _lastSloganUpdate.asMilliseconds() ) >= 5000) {
-            _newSlogan();
+            _newSlogan(game);
         }
     }
 
@@ -85,8 +85,9 @@ private:
     /**
      * Updates the displayed slogan.
      * Gets a random line from slogans.txt and positions it correctly.
+     * @param game Reference to game-engine.
      */
-    void _newSlogan() {
+    void _newSlogan(Game& game) {
         std::ifstream inFile("resource/slogans.txt");
         int numLines = 0;
         int chosenLine = 0;
@@ -108,7 +109,7 @@ private:
         // Update the line to _slogan
         _slogan.setString(string);
         // Update the _slogan position, center and 150px from bottom
-        _slogan.setPosition(1280/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
+        _slogan.setPosition(game.settings.getResolution().x/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
         // Update the timestamp
         _lastSloganUpdate = _clock.getElapsedTime();
     }
