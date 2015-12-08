@@ -15,14 +15,14 @@ public:
     m_lifetime(sf::seconds(2)),
     m_emitter(0, 0)
     {
-        for (auto i = 0; i < m_vertices.getVertexCount(); ++i)
+        for (unsigned int i = 0; i < m_vertices.getVertexCount(); ++i)
             m_vertices[i].color = sf::Color(156,126,106);
     }
 
     void setEmitter(sf::Vector2f position)
     {
         m_emitter = position;
-        for (auto i = 0; i < m_particles.size(); ++i) {
+        for (unsigned int i = 0; i < m_particles.size(); ++i) {
             resetParticle(i);
         }
     }
