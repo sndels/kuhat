@@ -74,10 +74,10 @@ public:
      * Draw
      * @param game Reference to game-engine
      */
-    void draw(Game& game) {
-        game.window.clear(sf::Color::White);
-        game.window.draw(_logoSprite);
-        game.window.draw(_slogan);
+    void draw(sf::RenderWindow& window) {
+        window.clear(sf::Color::White);
+        window.draw(_logoSprite);
+        window.draw(_slogan);
     }
 
 private:

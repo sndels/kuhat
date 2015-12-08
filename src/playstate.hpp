@@ -157,17 +157,17 @@ public:
         }
     }
 
-    void draw(Game& game) {
-        game.window.clear(sf::Color::Black);
-        _map.draw(game.window);
+    void draw(sf::RenderWindow& window) {
+        window.clear(sf::Color::Black);
+        _map.draw(window);
         if (_ammo.shot())
-            game.window.draw(_ammo.getSprite());
+            window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
-        _player1.draw(game.window);
-        _player2.draw(game.window);
+        _player1.draw(window);
+        _player2.draw(window);
         if (_charging)
-            _hud.drawPower(game.window);
-        _hud.drawWind(game.window);
+            _hud.drawPower(window);
+        _hud.drawWind(window);
     }
 
     void checkGravity(int dT) {

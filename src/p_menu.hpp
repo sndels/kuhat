@@ -64,10 +64,10 @@ public:
      * @params: reference to active render window
      * @return: none
      */
-    void draw(Game& game) {
+    void draw(sf::RenderWindow& window) {
         // Draw the caller screen
-        _caller.draw(game);
-        game.window.draw(_logoSprite);
+        _caller.draw(window);
+        window.draw(_logoSprite);
     }
 
 private:

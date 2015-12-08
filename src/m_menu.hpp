@@ -82,9 +82,9 @@ public:
      * @params: reference to active render window
      * @return: none
      */
-    void draw(Game& game) {
+    void draw(sf::RenderWindow& window) {
             for (auto i : _options)
-                game.window.draw(i->getSprite());
+                window.draw(i->getSprite());
     }
 
     bool newSelected() {

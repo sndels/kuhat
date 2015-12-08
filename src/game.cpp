@@ -82,7 +82,7 @@ void Game::draw() {
     }
     window.setActive();
     window.clear(sf::Color::Black);
-    _states.back()->draw(*this);
+    _states.back()->draw(_window);
     window.display();
 }
 
