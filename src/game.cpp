@@ -1,3 +1,4 @@
+#include <list>
 #include "game.hpp"
 // Include all gamestates
 #include "intro.hpp"
@@ -83,9 +84,21 @@ void Game::draw() {
         _window.setVerticalSyncEnabled(true);
         _currentResolution = _settings.getResolution();
     }
+    // Clear screen to black and draw active and requested lower states
     _window.setActive();
     _window.clear(sf::Color::Black);
-    _states.back()->draw(_window);
+    // Collect a list of states to draw
+    std::list<std::shared_ptr<GState>> list;
+    for (auto iterator = _states.rbegin(); iterator != _states.rend(); ++iterator) {
+        list.push_front(*iterator);
+        // Break loop if we don't need to draw any lower states
+        if (!((*iterator)->drawLower()) ) break;
+    }
+    // Draw states in the collected list
+    for (auto iterator = list.begin(); iterator != list.end(); ++iterator) {
+        (*iterator)->draw(_window);
+    }
+
     _window.display();
 }
 
