@@ -15,7 +15,7 @@ public:
      * @param width
      * @param height
      */
-    void setResolution(unsigned int& width, unsigned int& height) {
+    void setResolution(unsigned int width, unsigned int height) {
         _resolution.x = width;
         _resolution.y = height;
     }

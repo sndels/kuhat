@@ -32,9 +32,10 @@ public:
     void quit();
 
     sf::RenderWindow window;
+    Settings settings;
 
 private:
-    Settings _settings;
+    sf::Vector2u _currentResolution;
     bool _running;
     std::vector<std::shared_ptr<GState>> _states;
 };
