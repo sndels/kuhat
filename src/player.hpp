@@ -65,9 +65,9 @@ public:
     }
 
     void draw(sf::RenderWindow &window) {
-        for (int i = 0; i < _chars; i++) {
-            if (getCharacter(i).isAlive())
-                window.draw(_chararr[i].getSprite());
+        for (auto c : _chararr) {
+            if (c.isAlive())
+                window.draw(c.getSprite());
         }
         if (!_finished) {
             window.draw(_weapon.getSprite());
