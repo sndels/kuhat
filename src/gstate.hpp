@@ -35,7 +35,7 @@ public:
      * Returns info if the state expects the lower state to be drawn also
      * @return True if lower state should be drawn aswell.
      */
-    bool drawLower() {
+    bool drawLower() const {
         return _drawLower;
     }
 
