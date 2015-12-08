@@ -6,6 +6,7 @@
 #include "map.hpp"
 #include "hud.hpp"
 #include "collision.hpp"
+#include "p_menu.hpp"
 #include <cmath>
 #include <vector>
 #include <iostream>
@@ -44,7 +45,11 @@ public:
                 return;
             }
 
-            
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::M) game.moveToState(std::make_shared<PauseMenu>(game, *this));
+            }
+
+
             if (!_ammo.shot()) {
                 if (event.type == sf::Event::KeyPressed) {
                     // Using switch rather than if in case of future keypress events
