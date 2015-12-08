@@ -145,6 +145,7 @@ public:
         if(_ammo.shot()){
             for (auto& player : _players) {
                 for (int i = 0; i < CHARS; i++) {
+                    if(_ammo.getAirTime().asMilliseconds() < 5) continue;
                     if(checkCollision(_ammo, player.getCharacter(i)).x){
                         std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                         _map.addHole(_ammo.getX(), _ammo.getY());
