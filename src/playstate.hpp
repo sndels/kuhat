@@ -45,7 +45,7 @@ public:
         }
 
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::M) game.moveToState(std::make_shared<PauseMenu>(game, *this));
+            if (event.key.code == sf::Keyboard::M) game.moveToState(std::make_shared<PauseMenu>(game));
         }
 
 

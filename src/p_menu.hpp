@@ -14,7 +14,8 @@ public:
      * @params: none
      * @return: none
      */
-    PauseMenu(Game& game, GState& caller) : _caller(caller) {
+    PauseMenu(Game& game) {
+        _drawLower = true;
         // Logo
         if (!_logoTexture.loadFromFile("resource/sprites/logo.png") ) {
             std::cout << "Logo texture failed to load from file." << std::endl;
@@ -57,21 +58,17 @@ public:
     }
 
     /**
-     * Draws all menu items
-     * @params: reference to active render window
-     * @return: none
+     * Draws the state
+     * @param window [description]
      */
     void draw(sf::RenderWindow& window) {
-        // Draw the caller screen
-        _caller.draw(window);
+        // _drawLower is true, so the lower state is drawn on the background
         window.draw(_logoSprite);
     }
 
 private:
     sf::Sprite _logoSprite;
     sf::Texture _logoTexture;
-
-    GState& _caller;
 };
 
 #endif
