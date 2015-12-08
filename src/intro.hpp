@@ -14,7 +14,7 @@ class Intro : public GState
 {
 public:
 
-    Intro() {
+    Intro(Game& game) {
         // Start the clock
         _clock.restart();
         // Logo
@@ -58,7 +58,7 @@ public:
             if (event.type == sf::Event::KeyPressed) {
                 // Q quits the game, all other keys swap to mainmenu
                 if (event.key.code == sf::Keyboard::Q) game.quit();
-                else game.swapActiveState(std::make_shared<MainMenu>() );
+                else game.swapActiveState(std::make_shared<MainMenu>(game) );
             }
         }
     }

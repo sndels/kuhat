@@ -16,7 +16,7 @@ Game::Game() {
     // window.setKeyRepeatEnabled(false);
     _running = true;
     _states.clear();
-    this->moveToState(std::make_shared<Intro>() );
+    this->moveToState(std::make_shared<Intro>(*this) );
 
 }
 

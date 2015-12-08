@@ -17,7 +17,7 @@ public:
      * @params: none
      * @return: none
      */
-    MainMenu() {
+    MainMenu(Game& game) {
         _running = true;
         std::shared_ptr<Option> newOption = std::make_shared<Option>("resource/sprites/NewGame.png", 0);
         _options.push_back(newOption);
@@ -66,7 +66,7 @@ public:
                     }
                 }
                 if (event.key.code == sf::Keyboard::Return) {
-                    game.moveToState(std::make_shared<PlayState>() );
+                    game.moveToState(std::make_shared<PlayState>(game) );
                     return;
                 }
             }
