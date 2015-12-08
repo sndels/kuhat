@@ -42,24 +42,22 @@ public:
     }
 
     /**
-     * Handle events.
-     * @param game Reference to the game-engine.
+     * Event handling
+     * @param game  Ref to game-engine
+     * @param event Ref to the event
      */
-    void handleEvents(Game& game) {
-        sf::Event event;
-        while (game.window.pollEvent(event)) {
-            // Check if window is closed
-            if (event.type == sf::Event::Closed) {
-                game.quit();
-                return;
-            }
+    void handleEvents(Game& game, sf::Event& event) {
+        // Check if window is closed
+        if (event.type == sf::Event::Closed) {
+            game.quit();
+            return;
+        }
 
-            // Check keypresses
-            if (event.type == sf::Event::KeyPressed) {
-                // Q quits the game, all other keys swap to mainmenu
-                if (event.key.code == sf::Keyboard::Q) game.quit();
-                else game.swapActiveState(std::make_shared<MainMenu>(game) );
-            }
+        // Check keypresses
+        if (event.type == sf::Event::KeyPressed) {
+            // Q quits the game, all other keys swap to mainmenu
+            if (event.key.code == sf::Keyboard::Q) game.quit();
+            else game.swapActiveState(std::make_shared<MainMenu>(game) );
         }
     }
 

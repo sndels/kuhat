@@ -36,39 +36,36 @@ public:
     }
 
     /**
-     * Selects the active item according to user input
-     * @params: reference to sf::Event
-     * @return: none
+     * Event handling
+     * @param game  Ref to game-engine
+     * @param event Ref to the event
      */
-    void handleEvents(Game& game) {
-        sf::Event event;
-        while (game.window.pollEvent(event)) {
-            // Check if window is closed
-            if (event.type == sf::Event::Closed) {
-                game.quit();
-                return;
-            }
+    void handleEvents(Game& game, sf::Event& event) {
+        // Check if window is closed
+        if (event.type == sf::Event::Closed) {
+            game.quit();
+            return;
+        }
 
-            // Check keypresses
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Up) {//Moves selection up
-                    if (_selected != 0) {
-                        _options[_selected]->setUnselected();
-                        --_selected;
-                        _options[_selected]->setSelected();
-                    }
+        // Check keypresses
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Up) {//Moves selection up
+                if (_selected != 0) {
+                    _options[_selected]->setUnselected();
+                    --_selected;
+                    _options[_selected]->setSelected();
                 }
-                if (event.key.code == sf::Keyboard::Down) {//Moves selection down
-                    if (_selected != OPTNUM - 1) {
-                        _options[_selected]->setUnselected();
-                        ++_selected;
-                        _options[_selected]->setSelected();
-                    }
+            }
+            if (event.key.code == sf::Keyboard::Down) {//Moves selection down
+                if (_selected != OPTNUM - 1) {
+                    _options[_selected]->setUnselected();
+                    ++_selected;
+                    _options[_selected]->setSelected();
                 }
-                if (event.key.code == sf::Keyboard::Return) {
-                    game.moveToState(std::make_shared<PlayState>(game) );
-                    return;
-                }
+            }
+            if (event.key.code == sf::Keyboard::Return) {
+                game.moveToState(std::make_shared<PlayState>(game) );
+                return;
             }
         }
     }

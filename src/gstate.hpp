@@ -15,7 +15,7 @@ public:
     virtual void pause() = 0;
     virtual void resume() = 0;
 
-    virtual void handleEvents(Game& game) = 0;
+    virtual void handleEvents(Game& game, sf::Event& event) = 0;
     virtual void update(Game& game) = 0;
     virtual void draw(sf::RenderWindow& window) = 0;
 

@@ -33,42 +33,40 @@ public:
     }
 
     /**
-     * Handles SFML events like keypresses, releases
-     * @param event Gets a reference to a SF event as parameter
+     * Event handling
+     * @param game  Ref to game-engine
+     * @param event Ref to the event
      */
-    void handleEvents(Game& game) {
-        sf::Event event;
-        while (game.window.pollEvent(event) ) {
-            // Check if window is closed
-            if (event.type == sf::Event::Closed) {
-                game.quit();
-                return;
-            }
+    void handleEvents(Game& game, sf::Event& event) {
+        // Check if window is closed
+        if (event.type == sf::Event::Closed) {
+            game.quit();
+            return;
+        }
 
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::M) game.moveToState(std::make_shared<PauseMenu>(game, *this));
+        }
+
+
+        if (!_ammo.shot()) {
             if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::M) game.moveToState(std::make_shared<PauseMenu>(game, *this));
-            }
-
-
-            if (!_ammo.shot()) {
-                if (event.type == sf::Event::KeyPressed) {
-                    // Using switch rather than if in case of future keypress events
-                    switch (event.key.code) {
-                        case sf::Keyboard::Space:
-                            if (!_charging) {
-                                _charge.restart();
-                                _charging = true;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
+                // Using switch rather than if in case of future keypress events
+                switch (event.key.code) {
+                    case sf::Keyboard::Space:
+                        if (!_charging) {
+                            _charge.restart();
+                            _charging = true;
+                        }
+                        break;
+                    default:
+                        break;
                 }
-                if (event.type == sf::Event::KeyReleased) {
-                    if (event.key.code == sf::Keyboard::Space) {
-                        _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
-                        _charging = false;
-                    }
+            }
+            if (event.type == sf::Event::KeyReleased) {
+                if (event.key.code == sf::Keyboard::Space) {
+                    _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
+                    _charging = false;
                 }
             }
         }

@@ -57,10 +57,13 @@ void Game::goToPreviousState() {
 }
 
 /**
- * Calls the active state for event handling
+ * Get window events and call the active state to handle them
  */
 void Game::handleEvents() {
-    _states.back()->handleEvents(*this);
+    sf::Event event;
+    while (_window.pollEvent(event) ) {
+        _states.back()->handleEvents(*this, event);
+    }
 }
 
 /**
