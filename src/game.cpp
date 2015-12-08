@@ -9,7 +9,10 @@
  * @params: active render window
  * @return: none
  */
-Game::Game(sf::RenderWindow &window) : window(window) {
+Game::Game() {
+    window.create(sf::VideoMode(1280, 720), "Kuhat");
+    window.setVerticalSyncEnabled(true);
+    // window.setKeyRepeatEnabled(false);
     _running = true;
     _states.clear();
     this->moveToState(std::make_shared<Intro>() );

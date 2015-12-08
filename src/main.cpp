@@ -7,15 +7,11 @@
  */
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML window");
-    window.setVerticalSyncEnabled(true);
-    // window.setKeyRepeatEnabled(false);
-    Game game(window);
+    Game game;
     while (game.isRunning()) {
         game.handleEvents();
         game.update();
         game.draw();
     }
-    window.close();
     return 0;
 }
