@@ -1,5 +1,9 @@
 #include <SFML/Graphics.hpp>
+#include "map.hpp"
 #include <cmath>
+
+#define FALLSPEED 0.2
+#define BOUNCEDAMP -0.6
 
 class ParticleSystem
 {
@@ -8,17 +12,22 @@ public:
     ParticleSystem(unsigned int count) :
     m_particles(count),
     m_vertices(sf::Points, count),
-    m_lifetime(sf::seconds(3)),
+    m_lifetime(sf::seconds(2)),
     m_emitter(0, 0)
     {
+        for (auto i = 0; i < m_vertices.getVertexCount(); ++i)
+            m_vertices[i].color = sf::Color(206,196,176);
     }
 
     void setEmitter(sf::Vector2f position)
     {
         m_emitter = position;
+        for (auto i = 0; i < m_particles.size(); ++i) {
+            resetParticle(i);
+        }
     }
 
-    void update(sf::Time elapsed)
+    void update(sf::Time elapsed, Map &map)
     {
         for (std::size_t i = 0; i < m_particles.size(); ++i)
         {
@@ -26,16 +35,20 @@ public:
             Particle& p = m_particles[i];
             p.lifetime -= elapsed;
 
-            // if the particle is dead, respawn it
-            if (p.lifetime <= sf::Time::Zero)
-                resetParticle(i);
-
             // update the position of the corresponding vertex
             m_vertices[i].position += p.velocity * elapsed.asSeconds();
 
+            //Handle "gravity"
+            p.velocity.y += elapsed.asMilliseconds() * FALLSPEED;
+
             // update the alpha (transparency) of the particle according to its lifetime
-            float ratio = p.lifetime.asSeconds() / m_lifetime.asSeconds();
-            m_vertices[i].color.a = static_cast<sf::Uint8>(ratio * 255);
+            if (p.lifetime.asSeconds() < 0)
+                m_vertices[i].color.a = 0;
+            //Handle collisions with the map
+            if (map.doesCollide(m_vertices[i].position.x, m_vertices[i].position.y)) {
+                p.velocity.x *= BOUNCEDAMP;
+                p.velocity.y *= BOUNCEDAMP;
+            }
         }
     }
 
@@ -62,6 +75,7 @@ private:
 
         // reset the position of the corresponding vertex
         m_vertices[index].position = m_emitter;
+        m_vertices[index].color.a = 255;
     }
 
     std::vector<Particle> m_particles;

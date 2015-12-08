@@ -19,7 +19,7 @@
 class PlayState : public GState
 {
 public:
-    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100, 1), _player2(CHARS, 600, 100, 2), _map(mapSeed), _particles(1000), _hud("resource/sprites/gradient.png"), _charging(false) {
+    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100, 1), _player2(CHARS, 600, 100, 2), _map(mapSeed), _particles(100), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
             _player2.finishTurn();
         }
@@ -127,7 +127,7 @@ public:
             endTurn();
         }
         handleCollision();
-        _particles.update(currentUpdate);
+        _particles.update(currentUpdate - _prevUpdate, _map);
         _prevUpdate = currentUpdate;
     }
 
@@ -145,29 +145,28 @@ public:
                     endTurn();
                 }
             }
-            sf::Vector2f hit;
-            if ((hit = checkCollision(_ammo, _map)).x) {
+            if (checkCollision(_ammo, _map).x) {
                 std::cout<<"Terrain hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                 _map.addHole(_ammo.getX(), _ammo.getY());
-                _particles.setEmitter(hit);
+                _particles.setEmitter(sf::Vector2f(_ammo.getX(), _ammo.getY()));
                 _ammo.destroy();
                 endTurn();
             }
         }
     }
 
-    virtual void draw(sf::RenderWindow &window) {
-        window.clear(sf::Color::Black);
-        _particles.draw(window);
-        _map.draw(window);
+    virtual void draw(Game &game) {
+        game.window.clear(sf::Color::Black);
+        _particles.draw(game.window);
+        _map.draw(game.window);
         if (_ammo.shot())
-            window.draw(_ammo.getSprite());
+            game.window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
-        _player1.draw(window);
-        _player2.draw(window);
+        _player1.draw(game.window);
+        _player2.draw(game.window);
         if (_charging)
-            _hud.drawPower(window);
-        _hud.drawWind(window);
+            _hud.drawPower(game.window);
+        _hud.drawWind(game.window);
     }
 
     void checkGravity(int dT) {
