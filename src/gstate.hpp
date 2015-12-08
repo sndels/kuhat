@@ -15,9 +15,9 @@ public:
     virtual void pause() = 0;
     virtual void resume() = 0;
 
-    virtual void handleEvents(Game& game) = 0;
+    virtual void handleEvents(Game& game, sf::Event& event) = 0;
     virtual void update(Game& game) = 0;
-    virtual void draw(Game& game) = 0;
+    virtual void draw(sf::RenderWindow& window) = 0;
 
     void moveToState(Game& game, std::shared_ptr<GState> state) {
 		game.moveToState(state);
@@ -31,10 +31,19 @@ public:
 		game.goToPreviousState();
 	}
 
+    /**
+     * Returns info if the state expects the lower state to be drawn also
+     * @return True if lower state should be drawn aswell.
+     */
+    bool drawLower() const {
+        return _drawLower;
+    }
+
     bool isRunning() const {return _running;}
     void quit() {_running = false;}
 protected:
     bool _running;
+    bool _drawLower = false;
 };
 
 #endif

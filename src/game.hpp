@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+#include "settings.hpp"
+
 class GState;
 
 /**
@@ -16,7 +18,7 @@ class GState;
 class Game
 {
 public:
-    Game(sf::RenderWindow &window);
+    Game();
 
     void swapActiveState(std::shared_ptr<GState> state);
     void moveToState(std::shared_ptr<GState> state);
@@ -29,9 +31,13 @@ public:
     bool isRunning() const;
     void quit();
 
-    sf::RenderWindow &window;
+    Settings& settings();
 
 private:
+    sf::RenderWindow _window;
+    Settings _settings;
+
+    sf::Vector2u _currentResolution;
     bool _running;
     std::vector<std::shared_ptr<GState>> _states;
 };

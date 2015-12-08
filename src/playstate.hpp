@@ -7,6 +7,7 @@
 #include "hud.hpp"
 #include "collision.hpp"
 #include "particles.hpp"
+#include "p_menu.hpp"
 #include <cmath>
 #include <vector>
 #include <iostream>
@@ -19,7 +20,7 @@
 class PlayState : public GState
 {
 public:
-    PlayState(std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100, 1), _player2(CHARS, 600, 100, 2), _map(mapSeed), _particles(500), _hud("resource/sprites/gradient.png"), _charging(false) {
+    PlayState(Game& game, std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _player1(CHARS, 100,100, 1), _player2(CHARS, 600, 100, 2), _map(mapSeed), _particles(500), _hud("resource/sprites/gradient.png"), _charging(false) {
             _running = true;
             _player2.finishTurn();
         }
@@ -33,38 +34,40 @@ public:
     }
 
     /**
-     * Handles SFML events like keypresses, releases
-     * @param event Gets a reference to a SF event as parameter
+     * Event handling
+     * @param game  Ref to game-engine
+     * @param event Ref to the event
      */
-    void handleEvents(Game& game) {
-        sf::Event event;
-        while (game.window.pollEvent(event) ) {
-            // Check if window is closed
-            if (event.type == sf::Event::Closed) {
-                game.quit();
-                return;
-            }
+    void handleEvents(Game& game, sf::Event& event) {
+        // Check if window is closed
+        if (event.type == sf::Event::Closed) {
+            game.quit();
+            return;
+        }
+
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::P) game.moveToState(std::make_shared<PauseMenu>(game));
+        }
 
 
-            if (!_ammo.shot()) {
-                if (event.type == sf::Event::KeyPressed) {
-                    // Using switch rather than if in case of future keypress events
-                    switch (event.key.code) {
-                        case sf::Keyboard::Space:
-                            if (!_charging) {
-                                _charge.restart();
-                                _charging = true;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
+        if (!_ammo.shot()) {
+            if (event.type == sf::Event::KeyPressed) {
+                // Using switch rather than if in case of future keypress events
+                switch (event.key.code) {
+                    case sf::Keyboard::Space:
+                        if (!_charging) {
+                            _charge.restart();
+                            _charging = true;
+                        }
+                        break;
+                    default:
+                        break;
                 }
-                if (event.type == sf::Event::KeyReleased) {
-                    if (event.key.code == sf::Keyboard::Space) {
-                        _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
-                        _charging = false;
-                    }
+            }
+            if (event.type == sf::Event::KeyReleased) {
+                if (event.key.code == sf::Keyboard::Space) {
+                    _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
+                    _charging = false;
                 }
             }
         }
@@ -155,18 +158,17 @@ public:
         }
     }
 
-    virtual void draw(Game &game) {
-        game.window.clear(sf::Color::Black);
-        _particles.draw(game.window);
-        _map.draw(game.window);
+    void draw(sf::RenderWindow& window) {
+        _particles.draw(window);
+        _map.draw(window);
         if (_ammo.shot())
-            game.window.draw(_ammo.getSprite());
+            window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
-        _player1.draw(game.window);
-        _player2.draw(game.window);
+        _player1.draw(window);
+        _player2.draw(window);
         if (_charging)
-            _hud.drawPower(game.window);
-        _hud.drawWind(game.window);
+            _hud.drawPower(window);
+        _hud.drawWind(window);
     }
 
     void checkGravity(int dT) {
