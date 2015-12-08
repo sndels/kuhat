@@ -22,7 +22,7 @@ public:
             std::cout << "Logo texture failed to load from file." << std::endl;
         }
         _logoSprite.setTexture(_logoTexture);
-        _logoSprite.setPosition(1280/2 - _logoSprite.getGlobalBounds().width/2, 100);
+        _logoSprite.setPosition(game.settings.getResolution().x/2 - _logoSprite.getGlobalBounds().width/2, 100);
         // Slogan
         if (!_aileron_bold_italic.loadFromFile("resource/fonts/aileron/Aileron-BoldItalic.otf") ) {
             std::cout << "Slogan font failed to load from file." << std::endl;
