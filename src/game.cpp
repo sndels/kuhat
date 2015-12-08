@@ -10,7 +10,7 @@
  * @return: none
  */
 Game::Game() {
-    window.create(sf::VideoMode(1280, 720), "Kuhat");
+    window.create(sf::VideoMode(_settings.getResolution().x, _settings.getResolution().y), "Kuhat");
     window.setVerticalSyncEnabled(true);
     // window.setKeyRepeatEnabled(false);
     _running = true;

@@ -7,6 +7,8 @@
 
 #include <iostream>
 
+#include "settings.hpp"
+
 class GState;
 
 /**
@@ -32,6 +34,7 @@ public:
     sf::RenderWindow window;
 
 private:
+    Settings _settings;
     bool _running;
     std::vector<std::shared_ptr<GState>> _states;
 };
