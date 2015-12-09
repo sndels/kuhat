@@ -15,7 +15,7 @@
 class Character
 {
 public:
-    Character (std::string t, int x, int y, bool turn = false, int team = 0) {
+    Character (std::string t, int x, int y, bool turn = false, int team = 0, int health = 100) {
         _texture.loadFromFile(t);
         sf::Image temp;
         temp.loadFromFile(t);
@@ -51,6 +51,7 @@ public:
         _Grip.x = 17;
         _Grip.y = 15;
         if (turn == true) flip(); // Spawn the character facing left.
+        _health = health;
         _alive = true;
     }
 
@@ -140,6 +141,13 @@ public:
             || x < 0) return false;
         return true;
     }
+    void reduceHealth(int damage) {
+        _health -= damage;
+        if (_health <= 0) {
+            kill();
+            std::cout << "Character dead!" << std::endl;
+        }
+    }
 
 
 private:
@@ -148,6 +156,7 @@ private:
     std::vector<std::vector<bool> > _mask;
     bool _isFlipped;
     bool _alive;
+    int _health;
 
     // Grip position i.e. The point on character where weapon origin is placed.
     // Defined as pixel offset from top left.

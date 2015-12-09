@@ -148,6 +148,7 @@ public:
                     if(_ammo.getAirTime().asMilliseconds() < 5) continue;
                     if(checkCollision(_ammo, player.getCharacter(i)).x){
                         std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                        doDamage();
                         _map.addHole(_ammo.getX(), _ammo.getY());
                         _ammo.destroy(_particles);
                         endTurn();
@@ -156,9 +157,24 @@ public:
             }
             if (checkCollision(_ammo, _map).x) {
                 std::cout<<"Terrain hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                doDamage();
                 _map.addHole(_ammo.getX(), _ammo.getY());
                 _ammo.destroy(_particles);
                 endTurn();
+            }
+        }
+    }
+
+    void doDamage() {
+        int dist;
+        for (auto& player : _players) {
+            for (int i = 0; i < CHARS; i++) {
+                dist = getDistance(player.getCharacter(i).getSprite().getPosition().x,
+                    player.getCharacter(i).getSprite().getPosition().y, _ammo.getX(), _ammo.getY());
+                if (dist < HOLERADIUS) {
+                    player.getCharacter(i).reduceHealth(50 * dist/HOLERADIUS);
+                    std::cout << "Character " << i << " took " <<  50 * dist/HOLERADIUS << " damage!" << std::endl;
+                }
             }
         }
     }
@@ -233,6 +249,10 @@ private:
                     player.getCharacter(i).kill();
             }
         }
+    }
+
+    int getDistance(int x1, int y1, int x2, int y2) {
+        return std::sqrt(std::pow(x1-x2, 2) + std::pow(y1-y2, 2));
     }
 
     BazookaAmmo _ammo;
