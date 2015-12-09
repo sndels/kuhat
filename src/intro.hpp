@@ -1,6 +1,9 @@
 #ifndef INTRO_H
 #define INTRO_H
 
+// minIni ini-parser lib
+#include "../resource/libs/minIni/minIni.h"
+
 #include <fstream>  // File IO
 #include <stdlib.h> // rand()
 #include <time.h>   // for seeding rand
@@ -15,6 +18,9 @@ class Intro : public GState
 public:
 
     Intro(Game& game) {
+        _resolution.x = _settings.getl("", "resolution.x", 1280);
+        _resolution.y = _settings.getl("", "resolution.y", 720);
+
         // Start the clock
         _clock.restart();
         // Logo
@@ -22,7 +28,7 @@ public:
             std::cout << "Logo texture failed to load from file." << std::endl;
         }
         _logoSprite.setTexture(_logoTexture);
-        _logoSprite.setPosition(game.settings().getResolution().x/2 - _logoSprite.getGlobalBounds().width/2, 100);
+        _logoSprite.setPosition(_resolution.x/2 - _logoSprite.getGlobalBounds().width/2, 100);
         // Slogan
         if (!_aileron_bold_italic.loadFromFile("resource/fonts/aileron/Aileron-BoldItalic.otf") ) {
             std::cout << "Slogan font failed to load from file." << std::endl;
@@ -107,12 +113,13 @@ private:
         // Update the line to _slogan
         _slogan.setString(string);
         // Update the _slogan position, center and 150px from bottom
-        _slogan.setPosition(game.settings().getResolution().x/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
+        _slogan.setPosition(_resolution.x/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
         // Update the timestamp
         _lastSloganUpdate = _clock.getElapsedTime();
     }
 
-
+    minIni _settings = minIni("settings.ini");
+    sf::Vector2i _resolution;
     sf::Sprite _logoSprite;
     sf::Texture _logoTexture;
     sf::Text _slogan;

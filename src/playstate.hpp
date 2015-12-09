@@ -1,6 +1,9 @@
 #ifndef PLAY_H
 #define PLAY_H
 
+// minIni ini-parser lib
+#include "../resource/libs/minIni/minIni.h"
+
 #include "gstate.hpp"
 #include "player.hpp"
 #include "map.hpp"
@@ -15,19 +18,20 @@
 #define CHARSPEED 0.1
 #define CHARGRAV 0.2
 #define MAXCLIMB -10
-#define PLAYERS 2
-#define CHARS 4
 
 class PlayState : public GState
 {
 public:
     PlayState(Game& game, std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _map(mapSeed), _particles(500), _hud("resource/sprites/gradient.png"), _charging(false) {
-            for (int i = 0; i < PLAYERS; i++) {
-                _players.push_back(Player(CHARS, 100 + 500*i, 100, i));
-                if (i > 0) _players[i].finishTurn();
-            }
-            _running = true;
+        _numPlayers = _settings.getl("", "numPlayers", 2);
+        _numChars = _settings.getl("", "numChars", 4);
+
+        for (int i = 0; i < _numPlayers; i++) {
+            _players.push_back(Player(_numChars, 100 + 500*i, 100, i));
+            if (i > 0) _players[i].finishTurn();
         }
+        _running = true;
+    }
 
     void pause() {
         ;
@@ -144,7 +148,7 @@ public:
     void handleCollision(){
         if(_ammo.shot()){
             for (auto& player : _players) {
-                for (int i = 0; i < CHARS; i++) {
+                for (int i = 0; i < _numChars; i++) {
                     if(_ammo.getAirTime().asMilliseconds() < 5) continue;
                     if(checkCollision(_ammo, player.getCharacter(i)).x){
                         std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
@@ -180,7 +184,7 @@ public:
     void checkGravity(int dT) {
         //"Gravity" to keep active character on the ground
         for (auto& player : _players) {
-            for (int i = 0; i < CHARS; i++) {
+            for (int i = 0; i < _numChars; i++) {
                 for (int dY = 0; dY < dT * CHARGRAV; ++dY){
                     if (!checkCollision(player.getCharacter(i), _map, 0, 1).x) {
                         player.moveActive(0,1, i);
@@ -228,12 +232,16 @@ private:
 
     void checkBounds() {
         for (auto& player : _players) {
-            for (int i = 0; i < CHARS; i++) {
+            for (int i = 0; i < _numChars; i++) {
                 if (!player.getCharacter(i).onScreen())
                     player.getCharacter(i).kill();
             }
         }
     }
+
+    minIni _settings = minIni("settings.ini");
+    int _numPlayers;
+    int _numChars;
 
     BazookaAmmo _ammo;
     std::vector<Player> _players;

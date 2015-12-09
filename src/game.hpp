@@ -1,13 +1,14 @@
 #ifndef GAME_H
 #define GAME_H
 
+// minIni ini-parser lib
+#include "../resource/libs/minIni/minIni.h"
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
 
 #include <iostream>
-
-#include "settings.hpp"
 
 class GState;
 
@@ -31,13 +32,12 @@ public:
     bool isRunning() const;
     void quit();
 
-    Settings& settings();
-
 private:
     sf::RenderWindow _window;
-    Settings _settings;
+    minIni _settings = minIni("settings.ini");
+    sf::Vector2i _resolution;
 
-    sf::Vector2u _currentResolution;
+    sf::Vector2i _currentResolution;
     bool _running;
     std::vector<std::shared_ptr<GState>> _states;
 };
