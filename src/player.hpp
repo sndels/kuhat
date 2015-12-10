@@ -26,7 +26,9 @@ public:
     */
     Player(int characters, int charX = 500, int charY = 75, int team = 0) : _weapon(), _chars(characters) {
         _team = team;
-        _finished = false, _aim = 90;
+        _finished = false;
+        _allDead = false;
+        _aim = 90;
         int spawnX, spawnY;
         for (int i = 0; i < _chars; i++) {
             spawnX = 20+std::rand()%1260;
@@ -100,6 +102,14 @@ public:
     }
 
     /**
+     * Checks if all characters are dead
+     * @return all dead or not
+     */
+    bool areAllDead() {
+        return _allDead;
+    }
+
+    /**
      * Checks if the player has ended his turn
      * @return: true if turn has ended, false if not
      */
@@ -114,15 +124,15 @@ public:
         _finished = false;
     }
     /**
-     * Ends the player's turn
+     * Ends the player's turn and flags allDead if so
      */
     void finishTurn() {
         int deadcount = -1;
         do {
             nextCharacter();
             if(deadcount++>=_chars) {
-                std::cout << "all ded" <<std::endl;
-                exit(0);
+                _allDead = true;
+                break;
             }
         } while (!getCharacter().isAlive());
         _finished = true;
@@ -134,6 +144,7 @@ private:
     int _current;
     Bazooka _weapon;
     bool _finished;
+    bool _allDead;
     float _aim;
     int _chars;
     int _team;
