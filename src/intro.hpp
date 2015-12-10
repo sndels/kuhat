@@ -4,6 +4,7 @@
 // minIni ini-parser lib
 #include "../resource/libs/minIni/minIni.h"
 
+#include <SFML/Audio.hpp>
 #include <fstream>  // File IO
 #include <stdlib.h> // rand()
 #include <time.h>   // for seeding rand
@@ -43,6 +44,11 @@ public:
         _slogan.setCharacterSize(50);
         _slogan.setColor(sf::Color::Black);
         _newSlogan(game);
+        if(!_bgMusic.openFromFile("resource/audio/bg.ogg")) {
+            std::cout << "Couldn't load BG music" << std::endl;
+        }
+        _bgMusic.setLoop(true);
+        _bgMusic.play();
     }
 
     /**
@@ -141,6 +147,7 @@ private:
     sf::Font _aileron_bold_italic;
     sf::Clock _clock;
     sf::Time _lastSloganUpdate;
+    sf::Music _bgMusic;
 };
 
 #endif
