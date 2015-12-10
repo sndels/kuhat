@@ -1,10 +1,11 @@
 #ifndef MAP_H
 #define MAP_H
 
-#define MAPPATH "resource/map.png"
-#define MAPX 1280
-#define MAPY 720
+// minIni ini-parser lib
+#include "../resource/libs/minIni/minIni.h"
+
 #define HOLERADIUS 40
+#define MAPPATH "resource/map.png"
 
 #include "map_generator.hpp"
 #include <cmath>
@@ -12,12 +13,14 @@
 class Map {
 public:
     Map(std::string const& seed) : _holeMask(HOLERADIUS) {
+        _resolution.x = _settings.getl("", "resolution.x", 1280);
+        _resolution.y = _settings.getl("", "resolution.y", 720);
         _holeMask.setFillColor(sf::Color::Transparent);
         _holeMask.setOrigin(HOLERADIUS, HOLERADIUS);
         generateMap(seed, MAPPATH);
         _texture.loadFromFile(MAPPATH);
         _sprite.setTexture(_texture);
-        _render.create(MAPX,MAPY);
+        _render.create(_resolution.x, _resolution.y);
         _render.draw(_sprite);
         _render.display();
         sf::Image temp;
@@ -59,7 +62,7 @@ public:
         for (int i = centerX - HOLERADIUS; i <= centerX + HOLERADIUS; ++i) {
             for (int j = centerY - HOLERADIUS; j <= centerY + HOLERADIUS; ++j) {
                 if (sqrt((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY)) < HOLERADIUS) {
-                    if ((i >= 0) && (i < MAPX) && (j >= 0) && (j < MAPY))
+                    if ((i >= 0) && (i < _resolution.x) && (j >= 0) && (j < _resolution.y))
                         _mask[i][j] = false;
                 }
             }
@@ -67,6 +70,9 @@ public:
     }
 
 private:
+    minIni _settings = minIni("settings.ini");
+    sf::Vector2i _resolution;
+
     sf::Texture _texture;
     sf::RenderTexture _render;
     std::vector<std::vector<bool> > _mask;

@@ -1,14 +1,15 @@
 #ifndef MAP_GENERATION_H
 #define MAP_GENERATION_H
 
+// minIni ini-parser lib
+#include "../resource/libs/minIni/minIni.h"
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
 #include "../resource/libs/spline.hpp"
 #include "xorshift.hpp"
 
-#define MAPWIDTH 1280
-#define MAPHEIGHT 720
 #define DISPLACEMENT 250
 #define ROUGHNESS 0.5
 #define SURFACEDEPTH 6 //Depth of surface color
@@ -56,14 +57,17 @@ std::vector<double> generateHeights(std::string const& seed, int width, int cons
  * @return     zero if generated succesfully, -1 for error
  */
 void generateMap(std::string const& seed, std::string const& mapPath) {
+    minIni _settings = minIni("settings.ini");
+    int _mapWidth = _settings.getl("", "resolution.x", 1280);
+    int _mapHeight = _settings.getl("", "resolution.y", 720);
     //Get randomized height coordinates
-    std::vector<double> heights = generateHeights(seed, MAPWIDTH, MAPHEIGHT,
+    std::vector<double> heights = generateHeights(seed, _mapWidth, _mapHeight,
                                          DISPLACEMENT, ROUGHNESS);
     //Get amount of heights generated
     int steps = heights.size();
     //Create x-coordinates to pair with heights
     std::vector<double> xCoords;
-    for (int i = 0; i <= MAPWIDTH; i += MAPWIDTH / (steps - 1))
+    for (int i = 0; i <= _mapWidth; i += _mapWidth / (steps - 1))
         xCoords.push_back(i);
     //Set up the spline-lib interpolation
     tk::spline s;
@@ -71,15 +75,15 @@ void generateMap(std::string const& seed, std::string const& mapPath) {
     sf::Image mapTexture;
     mapTexture.loadFromFile(MAPTEXTURE);
     sf::Image map;
-    map.create(MAPWIDTH, MAPHEIGHT, sf::Color::Transparent);
+    map.create(_mapWidth, _mapHeight, sf::Color::Transparent);
     double height;
     std::vector<std::vector<bool> > mask;
     std::vector<bool> temp;
     //Loop over the map width, draw the map
-    for (auto i = 0; i < MAPWIDTH; ++i) {
+    for (auto i = 0; i < _mapWidth; ++i) {
         height = s(i);
         temp.clear();
-        for (auto j = height; j < MAPHEIGHT; ++j) {
+        for (auto j = height; j < _mapHeight; ++j) {
             if (j > height + SURFACEDEPTH)
                 map.setPixel(i, j, mapTexture.getPixel(i, j));
             else

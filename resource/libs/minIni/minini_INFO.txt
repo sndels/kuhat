@@ -1,0 +1,9 @@
+minIni - a minimal INI file parser
+
+License:
+Apache License, version 2.0, plus an exception clause to explicitly permit static linking of the library to commercial applications.
+http://www.opensource.org/licenses/apache2.0.php
+http://www.compuphase.com/minini.htm#APACHE_EXCEPTION
+
+From:
+http://www.compuphase.com/minini.htm

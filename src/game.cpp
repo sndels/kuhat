@@ -1,4 +1,8 @@
 #include <list>
+
+// minIni ini-parser lib
+#include "../resource/libs/minIni/minIni.h"
+
 #include "game.hpp"
 // Include all gamestates
 #include "intro.hpp"
@@ -11,14 +15,15 @@
  * @return: none
  */
 Game::Game() {
-    _window.create(sf::VideoMode(_settings.getResolution().x, _settings.getResolution().y), "Kuhat");
-    _currentResolution = _settings.getResolution();
+    _resolution.x = _settings.getl("", "resolution.x", 1280);
+    _resolution.y = _settings.getl("", "resolution.y", 720);
+    _window.create(sf::VideoMode(_resolution.x, _resolution.y), "Kuhat");
+    _currentResolution = _resolution;
     _window.setVerticalSyncEnabled(true);
     // window.setKeyRepeatEnabled(false);
     _running = true;
     _states.clear();
     this->moveToState(std::make_shared<Intro>(*this) );
-
 }
 
 /**
@@ -79,10 +84,11 @@ void Game::update() {
  */
 void Game::draw() {
     // Recreate the game window if resolution setting has changed
-    if (_currentResolution != _settings.getResolution() ) {
-        _window.create(sf::VideoMode(_settings.getResolution().x, _settings.getResolution().y), "Kuhat");
+    if (_currentResolution.x != _settings.getl("", "resolution.x", 1280) || _currentResolution.y != _settings.getl("", "resolution.y", 720) ) {
+        _window.create(sf::VideoMode(_settings.getl("", "resolution.x", 1280), _settings.getl("", "resolution.y", 720)), "Kuhat");
         _window.setVerticalSyncEnabled(true);
-        _currentResolution = _settings.getResolution();
+        _currentResolution.x = _settings.getl("", "resolution.x", 1280);
+        _currentResolution.y = _settings.getl("", "resolution.y", 720);
     }
     // Clear screen to black and draw active and requested lower states
     _window.setActive();
@@ -120,12 +126,4 @@ bool Game::isRunning() const {
  */
 void Game::quit() {
     _running = false;
-}
-
-/**
- * Used to get reference to game settings.
- * @return Ref to game resstings
- */
-Settings& Game::settings() {
-    return _settings;
 }

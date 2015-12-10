@@ -1,6 +1,9 @@
 #ifndef P_MENU_H
 #define P_MENU_H
 
+// minIni ini-parser lib
+#include "../resource/libs/minIni/minIni.h"
+
 #include <vector>
 #include "gstate.hpp"
 #include "m_option.hpp"
@@ -15,13 +18,16 @@ public:
      * @return: none
      */
     PauseMenu(Game& game) {
+        _resolution.x = _settings.getl("", "resolution.x", 1280);
+        _resolution.y = _settings.getl("", "resolution.y", 720);
+
         _drawLower = true;
         // Logo
         if (!_logoTexture.loadFromFile("resource/sprites/logo.png") ) {
             std::cout << "Logo texture failed to load from file." << std::endl;
         }
         _logoSprite.setTexture(_logoTexture);
-        _logoSprite.setPosition(game.settings().getResolution().x/2 - _logoSprite.getGlobalBounds().width/2, 100);
+        _logoSprite.setPosition(_resolution.x/2 - _logoSprite.getGlobalBounds().width/2, 100);
     }
 
     void pause() {
@@ -67,6 +73,8 @@ public:
     }
 
 private:
+    minIni _settings = minIni("settings.ini");
+    sf::Vector2i _resolution;
     sf::Sprite _logoSprite;
     sf::Texture _logoTexture;
 };
