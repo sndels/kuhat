@@ -5,6 +5,7 @@
 #include "projectile.hpp"
 #include <vector>
 #include <cmath>
+#define VELOCITY 2000;
 
 class ShotgunAmmo: public Projectile
 {
@@ -16,6 +17,7 @@ public:
      * Flight parameters are set to zero and changed on fire.
      */
     ShotgunAmmo () {
+        _velocity = VELOCITY;
         _location = sf::Vector2f(0,0);
         _angle = 0;
         _shot = false;
@@ -40,13 +42,22 @@ public:
         }
     };
 
-    
+    void fire(sf::Vector2f location, float angle) {
+        _location = location;
+        _angle = angle;
+        _airtime.restart();
+        _shot = true;
+    }
 
     bool onScreen() const {
         if (getY() > 720 || getX() > 1280 || getX() < 0 || getY() < 0)
             return false;
         else return true;
     }
+
+    /**
+     * @return ammo horizontal coordinate
+     */
 
     float getX() const {
         return _location.x - std::cos((180-_angle)*PI/180) * _velocity * getAirTime().asSeconds();

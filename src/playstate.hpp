@@ -65,30 +65,47 @@ public:
             if (event.key.code == sf::Keyboard::Num2) getCurrentPlayer().changeWeapon(1);
         }
 
-
-        if (!_ammo.shot()) {
-            if (event.type == sf::Event::KeyPressed) {
-                // Using switch rather than if in case of future keypress events
-                switch (event.key.code) {
-                    case sf::Keyboard::Space:
-                        if (!_charging) {
-                            _charge.restart();
-                            _charging = true;
+        switch (getCurrentPlayer().getWeaponId()){
+            case 0:
+                if (!_ammo.shot()) {
+                    if (event.type == sf::Event::KeyPressed) {
+                        // Using switch rather than if in case of future keypress events
+                        switch (event.key.code) {
+                            case sf::Keyboard::Space:
+                                if (!_charging) {
+                                    _charge.restart();
+                                    _charging = true;
+                                }
+                                break;
+                            default:
+                                break;
                         }
-                        break;
-                    default:
-                        break;
+                    }
+                    if (event.type == sf::Event::KeyReleased) {
+                        if (event.key.code == sf::Keyboard::Space) {
+                            _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
+                            _charging = false;
+                        }
+                    }
                 }
-            }
-            if (event.type == sf::Event::KeyReleased) {
-                if (event.key.code == sf::Keyboard::Space) {
-                    _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
-                    _charging = false;
+                break;
+            case 1:
+                if (!_slug.shot()){
+                   if (event.type == sf::Event::KeyPressed) {
+                        // Using switch rather than if in case of future keypress events
+                        switch (event.key.code) {
+                            case sf::Keyboard::Space:
+                            _slug.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
+                                break;
+                            default:
+                                break;
+                        }
+                    } 
                 }
-            }
+            default:
+                break;
         }
     }
-
     void update(Game& game) {
         Player &currentPlayer = getCurrentPlayer();
         sf::Time currentUpdate = _clock.getElapsedTime();
@@ -133,6 +150,7 @@ public:
         if (!currentPlayer.getCharacter().isAlive()) endTurn();
         checkGravity(dT);
         _ammo.updateLocation();
+        _slug.updateLocation();
         if (_charging) {
             _hud.setState(_charge.getElapsedTime().asSeconds());
             if (_charge.getElapsedTime().asSeconds() > 1.5f) {
@@ -143,6 +161,11 @@ public:
         if (_ammo.shot() && !_ammo.onScreen()) {
             std::cout << "Ammo is off the screen" << std::endl;
             _ammo.destroy();
+            endTurn();
+        }
+        if (_slug.shot() && !_slug.onScreen()) {
+            std::cout << "Ammo is off the screen" << std::endl;
+            _slug.destroy();
             endTurn();
         }
         handleCollision();
@@ -173,6 +196,26 @@ public:
                 endTurn();
             }
         }
+        if(_slug.shot()){
+            for (auto player : _players) {
+                for (int i = 0; i < _numChars; i++) {
+                    if(_slug.getAirTime().asMilliseconds() < 5) continue;
+                    if(checkCollision(_slug, player->getCharacter(i)).x){
+                        std::cout<<"Character hit at coordinates X:"<<_slug.getX()<<" Y:"<<_slug.getY()<<std::endl;
+                        _map.addHole(_slug.getX(), _slug.getY());
+                        _slug.destroy(_particles);
+                        endTurn();
+                    }
+                }
+            }
+            if (checkCollision(_slug, _map).x) {
+                std::cout<<"Terrain hit at coordinates X:"<<_slug.getX()<<" Y:"<<_slug.getY()<<std::endl;
+                _map.addHole(_slug.getX(), _slug.getY());
+                _slug.destroy(_particles);
+                endTurn();
+            }
+        }
+
     }
 
     void draw(sf::RenderWindow& window) {
@@ -180,6 +223,8 @@ public:
         _map.draw(window);
         if (_ammo.shot())
             window.draw(_ammo.getSprite());
+        if (_slug.shot())
+            window.draw(_slug.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
         for (auto player : _players) {
             player->draw(window);
@@ -253,6 +298,7 @@ private:
     float _charSpeed;
 
     BazookaAmmo _ammo;
+    ShotgunAmmo _slug;
     std::vector<std::shared_ptr<Player>> _players;
     int _wind;
     Map _map;

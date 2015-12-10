@@ -27,8 +27,8 @@ public:
         for (int i = 0; i < _chars; i++) {
             _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", charX+i*100, 0, true, team));
         }
-        _weaponarr.push_back(std::make_shared<Bazooka>(Bazooka()));
-        _weaponarr.push_back(std::make_shared<Shotgun>(Shotgun()));
+        _weaponarr.push_back(std::make_shared<Bazooka>());
+        _weaponarr.push_back(std::make_shared<Shotgun>());
         _current = 0;
         _weaponnum = 0;
     }
@@ -48,7 +48,7 @@ public:
         _weaponarr[_weaponnum]->rotate(_aim);
     }
 
-    Weapon getWeapon() const {
+    Weapon& getWeapon() const {
         return *(_weaponarr[_weaponnum]);
     }
 
@@ -63,8 +63,9 @@ public:
      * Switch over to next character
      */
     void nextCharacter() {
-        if (_current < _chars-1)
+        if (_current < _chars-1){
             _current++;
+        }
         else _current = 0;
     }
 
@@ -74,6 +75,8 @@ public:
                 window.draw(c->getSprite());
         }
         if (!_finished) {
+            _weaponarr[_weaponnum]->updateLocation(getCharacter());
+            //_weaponarr[_weaponnum]->rotate(_aim);
             window.draw(_weaponarr[_weaponnum]->getSprite());
         }
     }
@@ -106,6 +109,11 @@ public:
     void changeWeapon(int i){
         _weaponnum = i;
         _weaponarr[_weaponnum]->updateLocation(getCharacter());
+        _weaponarr[_weaponnum]->rotate(_aim);
+    }
+
+    int getWeaponId(){
+        return _weaponnum;
     }
 
 private:
