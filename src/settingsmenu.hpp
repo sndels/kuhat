@@ -15,22 +15,20 @@ public:
         _resolution.x = _settings.getl("", "resolution.x", 1280);
         _resolution.y = _settings.getl("", "resolution.y", 720);
 
-        // Logo
-        if (!_logoTexture.loadFromFile("resource/sprites/logo.png") ) {
-            std::cout << "Logo texture failed to load from file." << std::endl;
-        }
-        _logoTexture.setSmooth(true);
-        _logoSprite.setTexture(_logoTexture);
-        _logoSprite.setPosition(_resolution.x/2 - _logoSprite.getGlobalBounds().width/2, 100);
         // Slogan
         if (!_aileron_bold_italic.loadFromFile("resource/fonts/aileron/Aileron-BoldItalic.otf") ) {
             std::cout << "Slogan font failed to load from file." << std::endl;
         }
-        _slogan.setFont(_aileron_bold_italic);
-        _slogan.setCharacterSize(50);
-        _slogan.setColor(sf::Color::Black);
-        _slogan.setString("Settings");
-        _slogan.setPosition(_resolution.x/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
+        _title.setFont(_aileron_bold_italic);
+        _title.setCharacterSize(50);
+        _title.setColor(sf::Color::Black);
+        _title.setString(_settings.gets("", "resolution.x", "1280"));
+        _title.setPosition(_resolution.x/2 - _title.getGlobalBounds().width/2, 100);
+        _options.push_back(std::make_shared<sf::Text>(_title));
+        _title.setString("jee");
+        _title.move(0,100);
+        _options.push_back(std::make_shared<sf::Text>(_title));
+
     }
 
     void pause() {
@@ -71,16 +69,18 @@ public:
     void draw(sf::RenderWindow& window) {
         window.clear(sf::Color::White);
         window.draw(_logoSprite);
-        window.draw(_slogan);
+        for (auto o : _options) window.draw(*o);
     }
 
 private:
 
     minIni _settings = minIni("settings.ini");
     sf::Vector2i _resolution;
+
+    std::vector<std::shared_ptr<sf::Text>> _options;
     sf::Sprite _logoSprite;
     sf::Texture _logoTexture;
-    sf::Text _slogan;
+    sf::Text _title;
     sf::Font _aileron_bold_italic;
 };
 
