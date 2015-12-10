@@ -15,8 +15,6 @@ public:
         _resolution.x = _settings.getl("", "resolution.x", 1280);
         _resolution.y = _settings.getl("", "resolution.y", 720);
 
-        // Start the clock
-        _clock.restart();
         // Logo
         if (!_logoTexture.loadFromFile("resource/sprites/logo.png") ) {
             std::cout << "Logo texture failed to load from file." << std::endl;
@@ -31,7 +29,8 @@ public:
         _slogan.setFont(_aileron_bold_italic);
         _slogan.setCharacterSize(50);
         _slogan.setColor(sf::Color::Black);
-        _newSlogan(game);
+        _slogan.setString("Settings");
+        _slogan.setPosition(_resolution.x/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
     }
 
     void pause() {
@@ -59,12 +58,6 @@ public:
             // Esc goes back
             if (event.key.code == sf::Keyboard::Escape) game.goToPreviousState();
         }
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Left) _logoSprite.rotate(1);
-        }
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Right) _logoSprite.rotate(1);
-        }
     }
 
     void update(Game& game) {
@@ -78,41 +71,10 @@ public:
     void draw(sf::RenderWindow& window) {
         window.clear(sf::Color::White);
         window.draw(_logoSprite);
+        window.draw(_slogan);
     }
 
 private:
-
-    /**
-     * Updates the displayed slogan.
-     * Gets a random line from slogans.txt and positions it correctly.
-     * @param game Reference to game-engine.
-     */
-    void _newSlogan(Game& game) {
-        std::ifstream inFile("resource/slogans.txt");
-        int numLines = 0;
-        int chosenLine = 0;
-        std::string string = "";
-        // Count the number of slogans in file
-        while ( std::getline(inFile, string) ) {
-            ++numLines;
-        }
-        // Choose random line
-        srand(time(nullptr));
-        chosenLine = rand() % (numLines + 1);
-        // Clear the eof flag and move cursor to start of file
-        inFile.clear();
-        inFile.seekg(0, std::ios::beg);
-        // Read until chosenLine
-        for (int i = 0; i <=chosenLine; i++) {
-            std::getline(inFile, string);
-        }
-        // Update the line to _slogan
-        _slogan.setString(string);
-        // Update the _slogan position, center and 150px from bottom
-        _slogan.setPosition(_resolution.x/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
-        // Update the timestamp
-        _lastSloganUpdate = _clock.getElapsedTime();
-    }
 
     minIni _settings = minIni("settings.ini");
     sf::Vector2i _resolution;
@@ -120,8 +82,6 @@ private:
     sf::Texture _logoTexture;
     sf::Text _slogan;
     sf::Font _aileron_bold_italic;
-    sf::Clock _clock;
-    sf::Time _lastSloganUpdate;
 };
 
 #endif
