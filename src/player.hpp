@@ -5,6 +5,8 @@
 #include "character.hpp"
 #include "weapon.hpp"
 #include "bazooka.hpp"
+#include "shotgun.hpp"
+#include "punch.hpp"
 #include <iostream>
 #include <vector>
 
@@ -17,14 +19,14 @@ class Player
 {
 public:
     /**
-    * Constructor sets up characters, default ammo counts and sets the turn
-    * as not finished
-    * @param characters number of characters
-    * @param charX
-    * @param charY      [description]
-    * @param team       number of the team
-    */
-    Player(int characters, int charX = 500, int charY = 75, int team = 0) : _weapon(), _chars(characters) {
+     * Constructor sets up characters, default ammo counts and sets the turn
+     * as not finished
+     * @param characters number of characters
+     * @param charX
+     * @param charY      [description]
+     * @param team       number of the team
+     */
+    Player(int characters, int charX = 500, int charY = 75, int team = 0) : _chars(characters) {
         _team = team;
         _finished = false, _aim = 90;
         int spawnX, spawnY;
@@ -33,7 +35,11 @@ public:
             spawnY = 0;
             _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", spawnX, spawnY, spawnX>640?true:false, team));
         }
+        _weaponarr.push_back(std::make_shared<Bazooka>());
+        _weaponarr.push_back(std::make_shared<Shotgun>());
+        _weaponarr.push_back(std::make_shared<Punch>());
         _current = 0;
+        _weaponnum = 0;
     }
 
     /**
@@ -45,7 +51,7 @@ public:
     void moveActive(float x, float y, int charnum = -1) {
         if (charnum < 0) charnum = _current;
         _chararr[charnum]->move(x,y);
-        _weapon.updateLocation(getCharacter());
+        _weaponarr[_weaponnum]->updateLocation(getCharacter());
     }
 
     /**
@@ -58,11 +64,11 @@ public:
         if (_aim < 0 ) _aim = 0;
         else if (_aim > 180 ) _aim = 180;
 
-        _weapon.rotate(_aim);
+        _weaponarr[_weaponnum]->rotate(_aim);
     }
 
-    Bazooka getWeapon() const {
-        return _weapon;
+    Weapon& getWeapon() const {
+        return *(_weaponarr[_weaponnum]);
     }
 
     Character& getCharacter(int i = -1) {
@@ -77,8 +83,9 @@ public:
      * Switch over to next character
      */
     void nextCharacter() {
-        if (_current < _chars-1)
+        if (_current < _chars-1){
             _current++;
+        }
         else _current = 0;
     }
 
@@ -94,8 +101,8 @@ public:
             }
         }
         if (!_finished) {
-            _weapon.updateLocation(getCharacter());
-            window.draw(_weapon.getSprite());
+            _weaponarr[_weaponnum]->updateLocation(getCharacter());
+            window.draw(_weaponarr[_weaponnum]->getSprite());
         }
     }
 
@@ -128,15 +135,36 @@ public:
         _finished = true;
     }
 
+    /**
+     * Changes player weapon
+     * @param integer which is given by user as an input
+     */
+    void changeWeapon(int i){
+        _weaponnum = i;
+        _weaponarr[_weaponnum]->updateLocation(getCharacter());
+        _weaponarr[_weaponnum]->rotate(_aim);
+    }
+
+    /**
+     * Returns the index of the currently equipped weapon.
+     * 0 for bazooka, 1 for shotgun and 2 for punch.
+     * @return integer which is the weapon id
+     */
+    int getWeaponId(){
+        return _weaponnum;
+    }
+
 private:
     std::vector<std::shared_ptr<Character>> _chararr;
+    std::vector<std::shared_ptr<Weapon>> _weaponarr;
     //Character _character;
     int _current;
-    Bazooka _weapon;
+    //Bazooka _weapon;
     bool _finished;
     float _aim;
     int _chars;
     int _team;
+    int _weaponnum;
 };
 
 #endif

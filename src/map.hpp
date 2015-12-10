@@ -79,21 +79,23 @@ public:
      * @param centerY y-coordinate for hole center
      * @param radius radius for the hole
      */
-    void addHole(int centerX, int centerY) {
+    void addHole(int centerX, int centerY, float radius = HOLERADIUS) {
         //Move the hole mask and draw the hole
         _holeMask.move(centerX - _holeMask.getPosition().x, centerY - _holeMask.getPosition().y);
+        _holeMask.setScale(radius/HOLERADIUS,radius/HOLERADIUS);
         _render.draw(_holeMask, sf::BlendMultiply);
         _render.display();
         _sprite.setTexture(_render.getTexture());
         //Update the map mask
-        for (int i = centerX - HOLERADIUS; i <= centerX + HOLERADIUS; ++i) {
-            for (int j = centerY - HOLERADIUS; j <= centerY + HOLERADIUS; ++j) {
-                if (sqrt((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY)) < HOLERADIUS) {
+        for (int i = centerX - radius; i <= centerX + radius; ++i) {
+            for (int j = centerY - radius; j <= centerY + radius; ++j) {
+                if (sqrt((i - centerX) * (i - centerX) + (j - centerY) * (j - centerY)) < radius) {
                     if ((i >= 0) && (i < _resolution.x) && (j >= 0) && (j < _resolution.y))
                         _mask[i][j] = false;
                 }
             }
         }
+        _holeMask.setScale(HOLERADIUS/radius,HOLERADIUS/radius);
     }
 
 private:

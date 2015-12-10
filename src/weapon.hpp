@@ -111,6 +111,10 @@ public:
         _isFlipped ^= 1;
     }
 
+    virtual void punch(){};
+    virtual bool punchCollision(Character& character){return false;};
+    virtual bool punchStatus(){return false;};
+
 protected:
     sf::Texture _texture;
     sf::Sprite _sprite;
