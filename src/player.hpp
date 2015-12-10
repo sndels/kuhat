@@ -30,6 +30,7 @@ public:
         _weaponarr.push_back(std::make_shared<Bazooka>(Bazooka()));
         _weaponarr.push_back(std::make_shared<Shotgun>(Shotgun()));
         _current = 0;
+        _weaponnum = 0;
     }
 
     void moveActive(float x, float y, int charnum = -1) {
@@ -104,9 +105,9 @@ public:
 
     void changeWeapon(int i){
         _weaponnum = i;
-        _weaponarr[_weaponnum].updateLocation(getCharacter());
+        _weaponarr[_weaponnum]->updateLocation(getCharacter());
     }
-    
+
 private:
     std::vector<std::shared_ptr<Character>> _chararr;
     std::vector<std::shared_ptr<Weapon>> _weaponarr;
