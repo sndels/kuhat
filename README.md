@@ -1,10 +1,9 @@
-### This is an example readme for the project.
+### Kuhat
 
-This repository contains three subdirectories:
+Kuhat ('Zanders') is a multiplayer 2D-shooter for 2-4 players. Each player controls a team of zanders with the goal of annihilating the other teams and being the last team standing.
 
-* plan/ for the plan 
-* doc/  for the final documentation
-* src/  for all the source code
+Each zander is equiped with a bazooka, a shotgun and his fists - wait - do fish have fists!? The game is played in turns.
 
-You can write a short summary of your project into this file.
-This file is read by the gitlab and is shown on the repository's front page.
+Each turn the player takes control of one of his trusted zanders and tries to take down his enemies. The player can move around, choose a weapon and then take the shot.
+
+
