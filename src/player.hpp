@@ -70,6 +70,7 @@ public:
                 window.draw(c->getSprite());
         }
         if (!_finished) {
+            _weapon.updateLocation(getCharacter());
             window.draw(_weapon.getSprite());
         }
     }
