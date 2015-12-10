@@ -3,9 +3,15 @@
 
 #include <SFML/Graphics.hpp>
 
+/**
+ * Class for the wind and shot power indicators
+ */
 class Hud
 {
 public:
+    /**
+     * Constructor sets indicators and their positions
+     */
     Hud(std::string s) {
         _gradient.loadFromFile(s);
         _spritePower.setTexture(_gradient);
@@ -25,9 +31,17 @@ public:
         _rotated = false;
     }
 
+    /**
+     * Sets charge amount
+     * @param tCharge how much power has been charged
+     */
     void setState(float tCharge) {
         _spritePower.setTextureRect(sf::IntRect(0,0, tCharge * 500, _spritePower.getTextureRect().height));
     }
+    /**
+     * Sets wind amount
+     * @param wind wind speed
+     */
     void setWind(int wind) {
         _spriteWind.setTextureRect(sf::IntRect(0,0, 3 * wind, _spriteWind.getTextureRect().height));
         if ((wind < 0 && !_rotated) || (wind > 0 && _rotated)) {
@@ -37,9 +51,17 @@ public:
 
     }
 
+    /**
+     * Draws the shot power indicator
+     * @param window render window
+     */
     void drawPower(sf::RenderWindow &window) const {
         window.draw(_spritePower);
     }
+    /**
+     * Draws the wind indicator
+     * @param window render window
+     */
     void drawWind(sf::RenderWindow &window) const {
         window.draw(_r);
         window.draw(_spriteWind);

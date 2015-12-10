@@ -15,6 +15,7 @@ public:
     Weapon() { };
 
     /**
+     * Returns the weapon sprite
      * @return The weapons sprite.
      */
     virtual const sf::Sprite& getSprite() {
@@ -22,6 +23,7 @@ public:
     }
 
     /**
+     * Rotates the weapon for the given amount
      * @param angle Degrees to rotate the sprite.
      */
     virtual void rotate(float angle) {
@@ -30,6 +32,10 @@ public:
         if (_isFlipped) _sprite.setRotation(-_sprite.getRotation() );
     }
 
+    /**
+     * Returns the current rotation of the weapon
+     * @return rotation as float
+     */
     virtual float getAim() const{
         if (_isFlipped) {
             float rotation = _sprite.getRotation() -180;
@@ -87,10 +93,6 @@ public:
 
     /**
      * Flips the weapon horizontally.
-     *
-     * NOTE: Currently flipping is done by reversing the sprites texture. Which
-     * means that the same texture can't be used for many sprites to save memory,
-     * because they will all be flipped.
      */
     void flip() {
         if (!_isFlipped) {

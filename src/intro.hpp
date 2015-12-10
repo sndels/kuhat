@@ -13,10 +13,16 @@
 // include all gamestates you want to move or swap into
 #include "m_menu.hpp"
 
+/**
+ * Game state for the intro screen
+ */
 class Intro : public GState
 {
 public:
 
+    /**
+     * Constructor sets logo and a randomized slogan
+     */
     Intro(Game& game) {
         _resolution.x = _settings.getl("", "resolution.x", 1280);
         _resolution.y = _settings.getl("", "resolution.y", 720);
@@ -39,10 +45,16 @@ public:
         _newSlogan(game);
     }
 
+    /**
+     * Empty pause as the intro won't be paused
+     */
     void pause() {
         ;
     }
 
+    /**
+     * Empty resume as the intro won't be paused
+     */
     void resume() {
         ;
     }
@@ -67,8 +79,11 @@ public:
         }
     }
 
+    /**
+     * Updates the slogan every 5 seconds
+     * @param game [description]
+     */
     void update(Game& game) {
-        // Update the slogan every 5 seconds
         if ((_clock.getElapsedTime().asMilliseconds() - _lastSloganUpdate.asMilliseconds() ) >= 5000) {
             _newSlogan(game);
         }

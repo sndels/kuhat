@@ -11,8 +11,7 @@
 
 /**
  * Inits the MainMenu instance and pushes it to the GState-vector
- * @params: active render window
- * @return: none
+ * @param render window
  */
 Game::Game() {
     _resolution.x = _settings.getl("", "resolution.x", 1280);
@@ -108,7 +107,7 @@ void Game::draw() {
 
 /**
  * Checks if game is still running
- * @return: true if game is running, false if not
+ * @return boolean running or not
  */
 bool Game::isRunning() const {
     return _running;

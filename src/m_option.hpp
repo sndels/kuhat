@@ -15,9 +15,8 @@ class Option {
 public:
     /**
      * Sets the given file as texture and sets the sprite to "unselected"
-     * @params: path for texture
-     * @params: position in list
-     * @return: none
+     * @param path for texture
+     * @param position in list
      */
     Option(std::string texture, int position) {
         _texture.loadFromFile(texture);
@@ -28,8 +27,6 @@ public:
 
     /**
      * Sets the sprite as "selected"
-     * @params: none
-     * @return: none
      */
     void setSelected() {
         _sprite.setTextureRect(sf::IntRect(OPTWIDTH, 0, OPTWIDTH * 2, OPTHEIGHT));
@@ -37,8 +34,6 @@ public:
 
     /**
      * Sets the sprite as "unselected"
-     * @params: none
-     * @return: none
      */
     void setUnselected() {
         _sprite.setTextureRect(sf::IntRect(0, 0, OPTWIDTH, OPTHEIGHT));
@@ -46,8 +41,7 @@ public:
 
     /**
      * Returns the option sprite
-     * @params: none
-     * @return: sprite
+     * @return the option sprite
      */
     sf::Sprite getSprite() {
         return _sprite;
