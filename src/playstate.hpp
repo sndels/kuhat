@@ -31,6 +31,10 @@ public:
             if (i > 0) _players[i]->finishTurn();
         }
         _running = true;
+        // Skip to round two to fix first shot problems
+        for (int i = 0; i < _numPlayers; ++i) {
+            endTurn();
+        }
     }
 
     void pause() {
