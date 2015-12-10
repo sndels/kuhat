@@ -10,7 +10,7 @@
 #include "hud.hpp"
 #include "collision.hpp"
 #include "particles.hpp"
-#include "p_menu.hpp"
+#include "gameover.hpp"
 #include <cmath>
 #include <vector>
 #include <iostream>
@@ -58,7 +58,7 @@ public:
         }
 
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::P) game.moveToState(std::make_shared<PauseMenu>(game));
+            if (event.key.code == sf::Keyboard::P) game.moveToState(std::make_shared<GameOver>(game, 1));
         }
 
 
