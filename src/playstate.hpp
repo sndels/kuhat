@@ -31,6 +31,10 @@ public:
             if (i > 0) _players[i]->finishTurn();
         }
         _running = true;
+        // Skip to round two to fix first shot problems
+        for (int i = 0; i < _numPlayers; ++i) {
+            endTurn();
+        }
     }
 
     void pause() {
@@ -171,6 +175,7 @@ public:
             endTurn();
         }
         handleCollision();
+        updateHealthBars();
         _particles.update(currentUpdate - _prevUpdate, _map);
         _prevUpdate = currentUpdate;
     }
@@ -185,6 +190,8 @@ public:
                     if(_ammo.getAirTime().asMilliseconds() < 5) continue;
                     if(checkCollision(_ammo, player->getCharacter(i)).x){
                         std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                        player->getCharacter(i).reduceHealth(25);
+                        doDamage();
                         _map.addHole(_ammo.getX(), _ammo.getY());
                         _ammo.destroy(_particles);
                         endTurn();
@@ -193,6 +200,7 @@ public:
             }
             if (checkCollision(_ammo, _map).x) {
                 std::cout<<"Terrain hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                doDamage();
                 _map.addHole(_ammo.getX(), _ammo.getY());
                 _ammo.destroy(_particles);
                 endTurn();
@@ -204,7 +212,9 @@ public:
                     if(_slug.getAirTime().asMilliseconds() < 5) continue;
                     if(checkCollision(_slug, player->getCharacter(i)).x){
                         std::cout<<"Character hit at coordinates X:"<<_slug.getX()<<" Y:"<<_slug.getY()<<std::endl;
-                        _map.addHole(_slug.getX(), _slug.getY());
+                        player->getCharacter(i).reduceHealth(15);
+                        doDamage(20,20);
+                        _map.addHole(_slug.getX(), _slug.getY(), 20);
                         _slug.destroy(_particles);
                         endTurn();
                     }
@@ -212,12 +222,27 @@ public:
             }
             if (checkCollision(_slug, _map).x) {
                 std::cout<<"Terrain hit at coordinates X:"<<_slug.getX()<<" Y:"<<_slug.getY()<<std::endl;
-                _map.addHole(_slug.getX(), _slug.getY());
+                doDamage(20,20);
+                _map.addHole(_slug.getX(), _slug.getY(), 20);
                 _slug.destroy(_particles);
                 endTurn();
             }
         }
 
+    }
+
+    void doDamage(int dmg = 25, float radius = 40) {
+        int dist;
+        for (auto& player : _players) {
+            for (int i = 0; i < _numChars; i++) {
+                dist = getDistance(player->getCharacter(i).getSprite().getPosition().x,
+                    player->getCharacter(i).getSprite().getPosition().y, _ammo.getX(), _ammo.getY());
+                if (dist < radius) {
+                    player->getCharacter(i).reduceHealth(dmg);
+                    std::cout << "Character " << i << " took " <<  dmg << " damage!" << std::endl;
+                }
+            }
+        }
     }
 
     void draw(sf::RenderWindow& window) {
@@ -292,6 +317,19 @@ private:
                     player->getCharacter(i).kill();
             }
         }
+    }
+
+    void updateHealthBars() {
+        for (auto& player : _players) {
+            for (int i = 0; i < _numChars; i++) {
+                player->getCharacter(i).updateBar();
+            }
+        }
+    }
+
+
+    int getDistance(int x1, int y1, int x2, int y2) {
+        return std::sqrt(std::pow(x1-x2, 2) + std::pow(y1-y2, 2));
     }
 
     minIni _settings = minIni("settings.ini");

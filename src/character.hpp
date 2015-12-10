@@ -15,7 +15,7 @@
 class Character
 {
 public:
-    Character (std::string t, int x, int y, bool turn = false, int team = 0) {
+    Character (std::string t, int x, int y, bool turn = false, int team = 0, int health = 100) {
         _texture.loadFromFile(t);
         sf::Image temp;
         temp.loadFromFile(t);
@@ -47,16 +47,25 @@ public:
                 break;
         }
         _sprite.setPosition(x, y);
+        _sprite.setOrigin(temp.getSize().x/2, temp.getSize().y/2);
         _isFlipped = false; // Character is drawn facing right.
         _Grip.x = 17;
         _Grip.y = 15;
         if (turn == true) flip(); // Spawn the character facing left.
+        _health = health;
+        _maxhealth = health;
         _alive = true;
+        _healthBar.setSize(sf::Vector2f(30,5));
+        _healthBar.setFillColor(sf::Color::Green);
     }
 
 
     const sf::Sprite& getSprite() const {
         return _sprite;
+    }
+
+    const sf::RectangleShape& getBar() const{
+        return _healthBar;
     }
 
     sf::Vector2f getGripLocation() const {
@@ -140,6 +149,25 @@ public:
             || x < 0) return false;
         return true;
     }
+    void reduceHealth(int damage) {
+        _health -= damage;
+        if (_health <= 0) {
+            kill();
+            std::cout << "Character dead!" << std::endl;
+        } else {
+            if (_health < 50) {
+                _healthBar.setFillColor(sf::Color::Yellow);
+            }
+            if (_health < 20) {
+                _healthBar.setFillColor(sf::Color::Red);
+            }
+        }
+    }
+
+    void updateBar() {
+        _healthBar.setSize(sf::Vector2f(30*_health/_maxhealth,5));
+        _healthBar.setPosition(_sprite.getPosition().x -15, _sprite.getPosition().y -30);
+    }
 
 
 private:
@@ -148,6 +176,9 @@ private:
     std::vector<std::vector<bool> > _mask;
     bool _isFlipped;
     bool _alive;
+    int _maxhealth;
+    int _health;
+    sf::RectangleShape _healthBar;
 
     // Grip position i.e. The point on character where weapon origin is placed.
     // Defined as pixel offset from top left.
