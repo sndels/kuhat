@@ -29,14 +29,14 @@ public:
         // Title
         text.setCharacterSize(_resolution.y * 0.07 );
         text.setColor(sf::Color::Black);
-        text.setString("Settings:");
-        text.setPosition(_resolution.x/2 - text.getGlobalBounds().width/2, _resolution.y * 0.10);
+        text.setString("Settings");
+        text.setPosition(_resolution.x/2 - text.getGlobalBounds().width/2, _resolution.y * 0.03);
         _options.push_back(std::make_shared<sf::Text>(text));
         // Option names
         std::string name;
         name = "Resolution X: ";
         text.setString(name);
-        text.setPosition(_resolution.y * 0.07, _resolution.y * 0.28);
+        text.setPosition(_resolution.y * 0.07, _resolution.y * 0.14);
         _options.push_back(std::make_shared<sf::Text>(text));
         name = "Resolution Y: ";
         text.setString(name);
@@ -57,7 +57,7 @@ public:
         // Option values
         name = "resolution.x";
         text.setString(std::to_string(_resolution.x));
-        text.setPosition(_resolution.x * 0.7, _resolution.y * 0.28);
+        text.setPosition(_resolution.x * 0.7, _resolution.y * 0.14);
         _values.insert(std::pair<std::string, std::shared_ptr<sf::Text>>(name, std::make_shared<sf::Text>(text)));
         name = "resolution.y";
         text.setString(std::to_string(_resolution.y));
@@ -74,6 +74,12 @@ public:
         name = "charSpeed";
         text.setString(std::to_string(_settings.getf("", name, 0.1)));
         text.move(0, _resolution.y * 0.14);
+        _values.insert(std::pair<std::string, std::shared_ptr<sf::Text>>(name, std::make_shared<sf::Text>(text)));
+
+        // Apply & Restart
+        name = "Apply & Restart Game";
+        text.setString(name);
+        text.setPosition(_resolution.x/2 - text.getGlobalBounds().width/2, _resolution.y * 0.84);
         _values.insert(std::pair<std::string, std::shared_ptr<sf::Text>>(name, std::make_shared<sf::Text>(text)));
 
     }
