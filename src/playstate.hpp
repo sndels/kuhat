@@ -85,6 +85,7 @@ public:
                         if (event.key.code == sf::Keyboard::Space) {
                             _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
                             _charging = false;
+                            _charge.restart();
                         }
                     }
                 }
@@ -94,8 +95,8 @@ public:
                    if (event.type == sf::Event::KeyPressed) {
                         // Using switch rather than if in case of future keypress events
                         switch (event.key.code) {
-                            case sf::Keyboard::Space:
-                            _slug.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
+                            case sf::Keyboard::LAlt:
+                                _slug.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
                                 break;
                             default:
                                 break;
@@ -156,6 +157,7 @@ public:
             if (_charge.getElapsedTime().asSeconds() > 1.5f) {
                 _ammo.fire(currentPlayer.getWeapon().getMuzzleLocation(), currentPlayer.getWeapon().getAim(), getVelocity(), _wind);
                 _charging = false;
+                _charge.restart();
             }
         }
         if (_ammo.shot() && !_ammo.onScreen()) {
