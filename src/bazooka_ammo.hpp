@@ -6,13 +6,15 @@
 #include <vector>
 #include <cmath>
 
+/**
+ * Class for the bazooka projectile.
+ * Inherits basics and functionality from projectile-class.
+ */
 class BazookaAmmo: public Projectile
 {
 public:
     /**
-     * BazookaAmmo constructor
-     *
-     * Initializes a new ammo. Sets location and sprite.
+     * Constructor sets location, sprite and collision mask.
      * Flight parameters are set to zero and changed on fire.
      */
     BazookaAmmo () {

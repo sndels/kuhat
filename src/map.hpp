@@ -10,8 +10,15 @@
 #include "map_generator.hpp"
 #include <cmath>
 
+/**
+ * Class for the terrain
+ */
 class Map {
 public:
+    /**
+     * Constructor sets the resolution, generates map from seed, makes the
+     * collision mask for terrain and inits the hole mask
+     */
     Map(std::string const& seed) : _holeMask(HOLERADIUS) {
         _resolution.x = _settings.getl("", "resolution.x", 1280);
         _resolution.y = _settings.getl("", "resolution.y", 720);
@@ -38,20 +45,40 @@ public:
         }
     }
 
+    /**
+     * Draws the terrain
+     * @param window render window
+     */
     void draw(sf::RenderWindow &window) const {
         window.draw(_sprite);
     }
 
+    /**
+     * Returns the terrain sprite
+     * @return the terrain sprite
+     */
     sf::Sprite getSprite() const {
         return _sprite;
     }
 
+    /**
+     * Checks if given coordinates are solid in collision mask
+     * @param  x x-coordinate of the point to be checked
+     * @param  y y-coordinate of the point to be checked
+     * @return   boolean hit or not
+     */
     bool doesCollide(unsigned int x, unsigned int y) const {
         if ((x < _mask.size()) && (y < _mask[x].size()))
             return _mask[x][y];
         return false;
     }
 
+    /**
+     * Adds a hole to the map texture and bit mask
+     * @param centerX x-coordinate for hole center
+     * @param centerY y-coordinate for hole center
+     * @param radius radius for the hole
+     */
     void addHole(int centerX, int centerY, float radius = HOLERADIUS) {
         //Move the hole mask and draw the hole
         _holeMask.move(centerX - _holeMask.getPosition().x, centerY - _holeMask.getPosition().y);

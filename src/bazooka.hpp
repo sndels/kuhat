@@ -13,10 +13,7 @@ class Bazooka: public Weapon
 {
 public:
     /**
-     * Bazooka constructor.
-     *
-     * Initializes the bazooka sprite. Sets smoothing, origin, location and scaling.
-     * @param weaponHolder Character holding the weapon.
+     * Constructor sets the bazooka sprite. Sets smoothing, origin, location and scaling.
      */
     Bazooka() {
         _texture.loadFromFile("resource/sprites/diysinko.png");

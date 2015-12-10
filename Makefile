@@ -1,6 +1,6 @@
 CC=g++
 CPPFLAGS=-g -Wall -std=c++11
-LDLIBS=-lsfml-system -lsfml-window -lsfml-graphics
+LDLIBS=-lsfml-system -lsfml-window -lsfml-graphics -lsfml-audio
 SRCDIR=src
 OBJDIR=obj
 OBJECTS=$(OBJDIR)/main.o $(OBJDIR)/game.o $(OBJDIR)/minIni.o

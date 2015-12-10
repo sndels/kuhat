@@ -31,6 +31,7 @@ public:
 
     bool isRunning() const;
     void quit();
+    void restart();
 
 private:
     sf::RenderWindow _window;

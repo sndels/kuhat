@@ -17,7 +17,6 @@
 
 /**
  * Returns randomized heights
- *
  * Uses midpoint displacement with given parameters and xorshift to generate
  * randomized height values for the desired map width
  *
@@ -50,7 +49,6 @@ std::vector<double> generateHeights(std::string const& seed, int width, int cons
 
 /**
  * Map generator -function
- *
  * Generates map from seed and saves it to a .png -file
  *
  * @param seed seed for the prng

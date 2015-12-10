@@ -19,14 +19,21 @@ class Player
 {
 public:
     /**
-     * Initializes the character(s), sets up default ammo counts and sets the turn
+     * Constructor sets up characters, default ammo counts and sets the turn
      * as not finished
+     * @param characters number of characters
+     * @param charX
+     * @param charY      [description]
+     * @param team       number of the team
      */
     Player(int characters, int charX = 500, int charY = 75, int team = 0) : _chars(characters) {
         _team = team;
         _finished = false, _aim = 90;
+        int spawnX, spawnY;
         for (int i = 0; i < _chars; i++) {
-            _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", charX+i*100, 0, true, team));
+            spawnX = 20+std::rand()%1260;
+            spawnY = 0;
+            _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", spawnX, spawnY, spawnX>640?true:false, team));
         }
         _weaponarr.push_back(std::make_shared<Bazooka>());
         _weaponarr.push_back(std::make_shared<Shotgun>());
@@ -35,12 +42,22 @@ public:
         _weaponnum = 0;
     }
 
+    /**
+     * Moves the active character
+     * @param x       destination x-coordinate
+     * @param y       destination y-coordinate
+     * @param charnum number of the character
+     */
     void moveActive(float x, float y, int charnum = -1) {
         if (charnum < 0) charnum = _current;
         _chararr[charnum]->move(x,y);
         _weaponarr[_weaponnum]->updateLocation(getCharacter());
     }
 
+    /**
+     * Rotates the weapon
+     * @param deg rotation amount
+     */
     void rotateWeapon(float deg) {
         _aim += deg;
         // Limit _aim to 0-180 range.
@@ -61,6 +78,7 @@ public:
         else return *(_chararr[_current]);
         // throw error?
     }
+
     /**
      * Switch over to next character
      */
@@ -71,6 +89,10 @@ public:
         else _current = 0;
     }
 
+    /**
+     * Draws the characters and healths
+     * @param window render window
+     */
     void draw(sf::RenderWindow &window) {
         for (auto c : _chararr) {
             if (c->isAlive()) {
@@ -91,6 +113,10 @@ public:
     bool isFinished() const {
         return _finished;
     }
+
+    /**
+     * Begins the player's turn
+     */
     void beginTurn() {
         _finished = false;
     }

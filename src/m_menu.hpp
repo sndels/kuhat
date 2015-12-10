@@ -9,13 +9,15 @@
 
 #define OPTNUM 2 //number of options in menu
 
+/**
+ * Game state for the main menu
+ */
 class MainMenu : public GState
 {
 public:
     /**
      * Initializes all menu items and sets class state to running
-     * @params: none
-     * @return: none
+     * @param game  Ref to game-engine
      */
     MainMenu(Game& game) {
         _running = true;
@@ -27,10 +29,16 @@ public:
         _options.push_back(newOption);
     }
 
+    /**
+     * Empty pause as the menu won't be paused
+     */
     void pause() {
         ;
     }
 
+    /**
+     * Empty resume as the menu won't be paused
+     */
     void resume() {
         ;
     }
@@ -76,14 +84,17 @@ public:
 
     /**
      * Draws all menu items
-     * @params: reference to active render window
-     * @return: none
+     * @params Ref to render window
      */
     void draw(sf::RenderWindow& window) {
             for (auto i : _options)
                 window.draw(i->getSprite());
     }
 
+    /**
+     * Checks if new game is selected
+     * @return boolean new game selected or not
+     */
     bool newSelected() {
         if (_selected == 0)
             return true;

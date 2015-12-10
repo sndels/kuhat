@@ -9,13 +9,15 @@
 #include "m_option.hpp"
 // include all gamestates you want to move or swap into
 
+/**
+ * Class for the pause menu
+ */
 class PauseMenu : public GState
 {
 public:
     /**
      * Initializes all menu items and sets class state to running
-     * @params: none
-     * @return: none
+     * @param active game instance
      */
     PauseMenu(Game& game) {
         _resolution.x = _settings.getl("", "resolution.x", 1280);
@@ -59,6 +61,10 @@ public:
         }
     }
 
+    /**
+     * Empty as no updates are needed for the pause menu
+     * @param game  Ref to game-engine
+     */
     void update(Game& game) {
         ;
     }

@@ -61,7 +61,6 @@ public:
         float XMax;
         float XMin;
    	    sf::Vector2f line_start = getMuzzleLocation();
-        std::cout<<"X :"<<line_start.x<<" Y: "<<line_start.y<<std::endl;
         sf::Vector2f line_end;
         if(_isFlipped){
             line_end.x = line_start.x - RANGE;

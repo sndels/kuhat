@@ -9,7 +9,7 @@
  * @param  stationary the stationary object
  * @param  dX         how much the moving object is going to move on x-axis
  * @param  dY         how much the moving object is going to move on y-axis
- * @return            boolean true if there is a collision, false if not
+ * @return            boolean collision or not
  */
 template<typename T, typename V>
 sf::Vector2f checkCollision(T const& moving, V const& stationary, float dX = 0.0, float dY = 0.0) {

@@ -7,13 +7,16 @@
 #include <SFML/Graphics.hpp>
 #include "particles.hpp"
 
-/// A virtual Projectile class for different projectile types to inherit from.
+/**
+ * A virtual Projectile class for different projectile types to inherit from.
+ */
 class Projectile
 {
 public:
     Projectile() {}
 
     /**
+     * Returns the ammo sprite
      * @return the ammo sprite
      */
     virtual const sf::Sprite& getSprite() const {
@@ -21,6 +24,7 @@ public:
     }
 
     /**
+     * Returns the air time
      * @return the time since firing
      */
     virtual sf::Time getAirTime() const {
@@ -37,7 +41,8 @@ public:
     }
 
     /**
-     * @return Whether ammo has been shot
+     * Returns whether ammo has been shot
+     * @return shot or not
      */
     virtual bool shot() const {
         return _shot;
@@ -74,6 +79,7 @@ public:
     }
 
     /**
+     * Returns horizontal coordinates
      * @return ammo horizontal coordinate
      */
     virtual float getX() const {
@@ -82,9 +88,9 @@ public:
 
 
     /**
+     * Returns vertical coordinates
      * @return ammo vertical coordinate
      */
-
     virtual float getY() const {
         return _location.y + std::sin((180-_angle)*PI/180) *_velocity * getAirTime().asSeconds() + 0.5 * GRAVITY * std::pow(getAirTime().asSeconds(), 2);
     }
@@ -116,19 +122,23 @@ public:
 
 protected:
 
-      float getWind() const {
-          return std::pow(getAirTime().asSeconds(), 3) * _wind;
-      }
+    /**
+     * Returns the wind's effect on the projectile
+     * @return wind effect
+     */
+    float getWind() const {
+      return std::pow(getAirTime().asSeconds(), 3) * _wind;
+    }
 
-      sf::Vector2f _location;
-      float _angle;
-      int _velocity;
-      int _wind;
-      sf::Clock _airtime;
-      sf::Texture _texture;
-      sf::Sprite _sprite;
-      bool _shot;
-      std::vector<std::vector<bool> > _mask;
+    sf::Vector2f _location;
+    float _angle;
+    int _velocity;
+    int _wind;
+    sf::Clock _airtime;
+    sf::Texture _texture;
+    sf::Sprite _sprite;
+    bool _shot;
+    std::vector<std::vector<bool> > _mask;
 };
 
 #endif
