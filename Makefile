@@ -1,5 +1,5 @@
 CC=g++
-CPPFLAGS=-O2 -g -Wall -std=c++11
+CPPFLAGS=-g -Wall -std=c++11
 LDLIBS=-lsfml-system -lsfml-window -lsfml-graphics
 SRCDIR=src
 OBJDIR=obj
