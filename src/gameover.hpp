@@ -87,7 +87,7 @@ public:
             }
             // Return for restart
             if (event.key.code == sf::Keyboard::Return) {
-                game.quit();
+                game.restart();
                 return;
             }
         }

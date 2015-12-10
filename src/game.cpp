@@ -83,13 +83,6 @@ void Game::update() {
  * Clears the screen to black and calls the active state for drawing
  */
 void Game::draw() {
-    // Recreate the game window if resolution setting has changed
-    if (_currentResolution.x != _settings.getl("", "resolution.x", 1280) || _currentResolution.y != _settings.getl("", "resolution.y", 720) ) {
-        _window.create(sf::VideoMode(_settings.getl("", "resolution.x", 1280), _settings.getl("", "resolution.y", 720)), "Kuhat");
-        _window.setVerticalSyncEnabled(true);
-        _currentResolution.x = _settings.getl("", "resolution.x", 1280);
-        _currentResolution.y = _settings.getl("", "resolution.y", 720);
-    }
     // Clear screen to black and draw active and requested lower states
     _window.setActive();
     _window.clear(sf::Color::Black);
@@ -126,4 +119,12 @@ bool Game::isRunning() const {
  */
 void Game::quit() {
     _running = false;
+}
+
+/**
+ * Restarts the game
+ */
+void Game::restart() {
+    _states.clear();
+    moveToState(std::make_shared<Intro>(*this) );
 }
