@@ -5,6 +5,7 @@
 #include "character.hpp"
 #include "weapon.hpp"
 #include "bazooka.hpp"
+#include "shotgun.hpp"
 #include <iostream>
 #include <vector>
 
@@ -20,19 +21,21 @@ public:
      * Initializes the character(s), sets up default ammo counts and sets the turn
      * as not finished
      */
-    Player(int characters, int charX = 500, int charY = 75, int team = 0) : _weapon(), _chars(characters) {
+    Player(int characters, int charX = 500, int charY = 75, int team = 0) : _chars(characters) {
         _team = team;
         _finished = false, _aim = 90;
         for (int i = 0; i < _chars; i++) {
             _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", charX+i*100, 0, true, team));
         }
+        _weaponarr.push_back(std::make_shared<Bazooka>(Bazooka()));
+        _weaponarr.push_back(std::make_shared<Shotgun>(Shotgun()));
         _current = 0;
     }
 
     void moveActive(float x, float y, int charnum = -1) {
         if (charnum < 0) charnum = _current;
         _chararr[charnum]->move(x,y);
-        _weapon.updateLocation(getCharacter());
+        _weaponarr[_weaponnum]->updateLocation(getCharacter());
     }
 
     void rotateWeapon(float deg) {
@@ -41,11 +44,11 @@ public:
         if (_aim < 0 ) _aim = 0;
         else if (_aim > 180 ) _aim = 180;
 
-        _weapon.rotate(_aim);
+        _weaponarr[_weaponnum]->rotate(_aim);
     }
 
-    Bazooka getWeapon() const {
-        return _weapon;
+    Weapon getWeapon() const {
+        return *(_weaponarr[_weaponnum]);
     }
 
     Character& getCharacter(int i = -1) {
@@ -70,7 +73,7 @@ public:
                 window.draw(c->getSprite());
         }
         if (!_finished) {
-            window.draw(_weapon.getSprite());
+            window.draw(_weaponarr[_weaponnum]->getSprite());
         }
     }
 
@@ -99,15 +102,22 @@ public:
         _finished = true;
     }
 
+    void changeWeapon(int i){
+        _weaponnum = i;
+        _weaponarr[_weaponnum].updateLocation(getCharacter());
+    }
+    
 private:
     std::vector<std::shared_ptr<Character>> _chararr;
+    std::vector<std::shared_ptr<Weapon>> _weaponarr;
     //Character _character;
     int _current;
-    Bazooka _weapon;
+    //Bazooka _weapon;
     bool _finished;
     float _aim;
     int _chars;
     int _team;
+    int _weaponnum;
 };
 
 #endif

@@ -57,6 +57,14 @@ public:
             if (event.key.code == sf::Keyboard::P) game.moveToState(std::make_shared<PauseMenu>(game));
         }
 
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Num1) getCurrentPlayer().changeWeapon(0);
+        }
+        
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Num2) getCurrentPlayer().changeWeapon(1);
+        }
+
 
         if (!_ammo.shot()) {
             if (event.type == sf::Event::KeyPressed) {
