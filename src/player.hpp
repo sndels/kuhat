@@ -17,9 +17,13 @@ class Player
 {
 public:
     /**
-     * Initializes the character(s), sets up default ammo counts and sets the turn
-     * as not finished
-     */
+    * Constructor sets up characters, default ammo counts and sets the turn
+    * as not finished
+    * @param characters number of characters
+    * @param charX
+    * @param charY      [description]
+    * @param team       number of the team
+    */
     Player(int characters, int charX = 500, int charY = 75, int team = 0) : _weapon(), _chars(characters) {
         _team = team;
         _finished = false, _aim = 90;
@@ -29,12 +33,22 @@ public:
         _current = 0;
     }
 
+    /**
+     * Moves the active character
+     * @param x       destination x-coordinate
+     * @param y       destination y-coordinate
+     * @param charnum number of the character
+     */
     void moveActive(float x, float y, int charnum = -1) {
         if (charnum < 0) charnum = _current;
         _chararr[charnum]->move(x,y);
         _weapon.updateLocation(getCharacter());
     }
 
+    /**
+     * Rotates the weapon
+     * @param deg rotation amount
+     */
     void rotateWeapon(float deg) {
         _aim += deg;
         // Limit _aim to 0-180 range.
@@ -55,6 +69,7 @@ public:
         else return *(_chararr[_current]);
         // throw error?
     }
+
     /**
      * Switch over to next character
      */
@@ -64,6 +79,10 @@ public:
         else _current = 0;
     }
 
+    /**
+     * Draws the characters and healths
+     * @param window render window
+     */
     void draw(sf::RenderWindow &window) {
         for (auto c : _chararr) {
             if (c->isAlive())
@@ -82,6 +101,10 @@ public:
     bool isFinished() const {
         return _finished;
     }
+
+    /**
+     * Begins the player's turn
+     */
     void beginTurn() {
         _finished = false;
     }

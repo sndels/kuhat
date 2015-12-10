@@ -18,10 +18,18 @@
 #define CHARGRAV 0.2
 #define MAXCLIMB -10
 
+/**
+ * Class for the playstate
+ */
 class PlayState : public GState
 {
 public:
-    PlayState(Game& game, std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _map(mapSeed), _particles(500), _hud("resource/sprites/gradient.png"), _charging(false) {
+    /**
+     * Constructor generates terrain and spawns characters
+     * @param game    active game instance
+     * @param mapSeed seed for map generation
+     */
+    PlayState(Game& game, std::string const& mapSeed = "Get random map") : _ammo(), _map(mapSeed), _particles(500), _hud("resource/sprites/gradient.png"), _charging(false) {
         _numPlayers = _settings.getl("", "numPlayers", 2);
         _numChars = _settings.getl("", "numChars", 4);
         _charSpeed = _settings.getf("", "charSpeed", 0.1);
@@ -41,8 +49,11 @@ public:
         ;
     }
 
+    /**
+     * Sets the logical clock to current time to prevent skipping
+     */
     void resume() {
-        ;
+        _prevUpdate = _clock.getElapsedTime();
     }
 
     /**
@@ -85,6 +96,10 @@ public:
         }
     }
 
+    /**
+     * Updates the state
+     * @param game  Ref to game-engine
+     */
     void update(Game& game) {
         Player &currentPlayer = getCurrentPlayer();
         sf::Time currentUpdate = _clock.getElapsedTime();
@@ -171,6 +186,10 @@ public:
         }
     }
 
+    /**
+     * Draw the state
+     * @param render window
+     */
     void draw(sf::RenderWindow& window) {
         _particles.draw(window);
         _map.draw(window);
@@ -185,6 +204,10 @@ public:
         _hud.drawWind(window);
     }
 
+    /**
+     * Drops characters to the ground
+     * @param dT change in time
+     */
     void checkGravity(int dT) {
         //"Gravity" to keep active character on the ground
         for (auto player : _players) {
@@ -227,6 +250,10 @@ private:
         _hud.setWind(_wind);
         std::cout << "Turn ended, wind has changed to " << _wind << std::endl;
     }
+    /**
+     * Returns the current player
+     * @return current player
+     */
     Player& getCurrentPlayer() {
         for (auto player : _players) {
             if (!player->isFinished()) return *(player);
@@ -234,6 +261,9 @@ private:
         return *(_players[0]);
     }
 
+    /**
+     * Loops over characters to kill ones out of bounds
+     */
     void checkBounds() {
         for (auto player : _players) {
             for (int i = 0; i < _numChars; i++) {

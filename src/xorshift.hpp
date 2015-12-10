@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <string>
+#include <cstdlib>
 
 //Filter for random(), in this case sets the value to range [0,2]
 #define FILTER (double) 0x7FFFFFFFFFFFFFFF
@@ -15,12 +16,17 @@
 class Xorshift {
 public:
     /**
-     * Constructor seeds from the given string by adding the char values together
+     * Constructor seeds the generator from rand() if default seed
+     * or by adding up the given string.
      * @param seed seed string
      */
     Xorshift(std::string const &seed) {
+
         _seed = 0;
-        for (auto i : seed)
+        if (seed == "Get random map")
+            _seed += rand();
+        else
+            for (auto i : seed)
             _seed += i;
     }
 
@@ -36,15 +42,6 @@ public:
         return _seed * UINT64_C(2685821657736338717) / FILTER - 1;
     }
 
-    /**
-     * Reseed from the given string by adding the char values together
-     * @param seed new seed string
-     */
-    void reseed(std::string const &seed) {
-        _seed = 0;
-        for (auto i : seed)
-            _seed += i;
-    }
 private:
     uint64_t _seed;
 };
