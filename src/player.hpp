@@ -66,8 +66,10 @@ public:
 
     void draw(sf::RenderWindow &window) {
         for (auto c : _chararr) {
-            if (c->isAlive())
+            if (c->isAlive()) {
                 window.draw(c->getSprite());
+                window.draw(c->getBar());
+            }
         }
         if (!_finished) {
             _weapon.updateLocation(getCharacter());

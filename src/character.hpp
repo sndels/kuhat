@@ -52,12 +52,19 @@ public:
         _Grip.y = 15;
         if (turn == true) flip(); // Spawn the character facing left.
         _health = health;
+        _maxhealth = health;
         _alive = true;
+        _healthBar.setSize(sf::Vector2f(30,5));
+        _healthBar.setFillColor(sf::Color::Green);
     }
 
 
     const sf::Sprite& getSprite() const {
         return _sprite;
+    }
+
+    const sf::RectangleShape& getBar() const{
+        return _healthBar;
     }
 
     sf::Vector2f getGripLocation() const {
@@ -146,7 +153,19 @@ public:
         if (_health <= 0) {
             kill();
             std::cout << "Character dead!" << std::endl;
+        } else {
+            if (_health < 50) {
+                _healthBar.setFillColor(sf::Color::Yellow);
+            }
+            if (_health < 20) {
+                _healthBar.setFillColor(sf::Color::Red);
+            }
         }
+    }
+
+    void updateBar() {
+        _healthBar.setSize(sf::Vector2f(30*_health/_maxhealth,5));
+        _healthBar.setPosition(_sprite.getPosition().x, _sprite.getPosition().y -20);
     }
 
 
@@ -156,7 +175,9 @@ private:
     std::vector<std::vector<bool> > _mask;
     bool _isFlipped;
     bool _alive;
+    int _maxhealth;
     int _health;
+    sf::RectangleShape _healthBar;
 
     // Grip position i.e. The point on character where weapon origin is placed.
     // Defined as pixel offset from top left.

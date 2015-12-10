@@ -142,6 +142,7 @@ public:
             endTurn();
         }
         handleCollision();
+        updateHealthBars();
         _particles.update(currentUpdate - _prevUpdate, _map);
         _prevUpdate = currentUpdate;
     }
@@ -156,6 +157,7 @@ public:
                     if(_ammo.getAirTime().asMilliseconds() < 5) continue;
                     if(checkCollision(_ammo, player->getCharacter(i)).x){
                         std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
+                        player->getCharacter(i).reduceHealth(25);
                         doDamage();
                         _map.addHole(_ammo.getX(), _ammo.getY());
                         _ammo.destroy(_particles);
@@ -173,15 +175,15 @@ public:
         }
     }
 
-    void doDamage() {
+    void doDamage(int dmg = -1) {
         int dist;
         for (auto& player : _players) {
             for (int i = 0; i < _numChars; i++) {
                 dist = getDistance(player->getCharacter(i).getSprite().getPosition().x,
                     player->getCharacter(i).getSprite().getPosition().y, _ammo.getX(), _ammo.getY());
                 if (dist < HOLERADIUS) {
-                    player->getCharacter(i).reduceHealth(50 * dist/HOLERADIUS);
-                    std::cout << "Character " << i << " took " <<  50 * dist/HOLERADIUS << " damage!" << std::endl;
+                    player->getCharacter(i).reduceHealth(25);
+                    std::cout << "Character " << i << " took " <<  25 << " damage!" << std::endl;
                 }
             }
         }
@@ -255,6 +257,14 @@ private:
             for (int i = 0; i < _numChars; i++) {
                 if (!player->getCharacter(i).onScreen())
                     player->getCharacter(i).kill();
+            }
+        }
+    }
+
+    void updateHealthBars() {
+        for (auto& player : _players) {
+            for (int i = 0; i < _numChars; i++) {
+                player->getCharacter(i).updateBar();
             }
         }
     }
