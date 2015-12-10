@@ -27,8 +27,11 @@ public:
     Player(int characters, int charX = 500, int charY = 75, int team = 0) : _weapon(), _chars(characters) {
         _team = team;
         _finished = false, _aim = 90;
+        int spawnX, spawnY;
         for (int i = 0; i < _chars; i++) {
-            _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", 20+std::rand()%1260, 0, true, team));
+            spawnX = 20+std::rand()%1260;
+            spawnY = 0;
+            _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", spawnX, spawnY, spawnX>640?true:false, team));
         }
         _current = 0;
     }
