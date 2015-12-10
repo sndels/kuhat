@@ -28,7 +28,7 @@ public:
         _team = team;
         _finished = false, _aim = 90;
         for (int i = 0; i < _chars; i++) {
-            _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", charX+i*100, 0, true, team));
+            _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", 20+std::rand()%1260, 0, true, team));
         }
         _current = 0;
     }
