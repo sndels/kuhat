@@ -27,8 +27,8 @@ public:
         _numChars = _settings.getl("", "numChars", 4);
 
         for (int i = 0; i < _numPlayers; i++) {
-            _players.push_back(Player(_numChars, 100 + 500*i, 100, i));
-            if (i > 0) _players[i].finishTurn();
+            _players.push_back(std::make_shared<Player>(_numChars, 100 + 500*i, 100, i));
+            if (i > 0) _players[i]->finishTurn();
         }
         _running = true;
     }
@@ -147,10 +147,10 @@ public:
      */
     void handleCollision(){
         if(_ammo.shot()){
-            for (auto& player : _players) {
+            for (auto player : _players) {
                 for (int i = 0; i < _numChars; i++) {
                     if(_ammo.getAirTime().asMilliseconds() < 5) continue;
-                    if(checkCollision(_ammo, player.getCharacter(i)).x){
+                    if(checkCollision(_ammo, player->getCharacter(i)).x){
                         std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                         _map.addHole(_ammo.getX(), _ammo.getY());
                         _ammo.destroy(_particles);
@@ -174,7 +174,7 @@ public:
             window.draw(_ammo.getSprite());
         // Draw player after ammo, so that ammo is spawned inside (behind) the barrel.
         for (auto player : _players) {
-            player.draw(window);
+            player->draw(window);
         }
         if (_charging)
             _hud.drawPower(window);
@@ -183,11 +183,11 @@ public:
 
     void checkGravity(int dT) {
         //"Gravity" to keep active character on the ground
-        for (auto& player : _players) {
+        for (auto player : _players) {
             for (int i = 0; i < _numChars; i++) {
                 for (int dY = 0; dY < dT * CHARGRAV; ++dY){
-                    if (!checkCollision(player.getCharacter(i), _map, 0, 1).x) {
-                        player.moveActive(0,1, i);
+                    if (!checkCollision(player->getCharacter(i), _map, 0, 1).x) {
+                        player->moveActive(0,1, i);
                     } else break;
                 }
             }
@@ -210,12 +210,12 @@ private:
     void endTurn() {
         checkBounds();
         for (unsigned int i = 0; i < _players.size(); i++) {
-            if (! _players[i].isFinished()) {
-                _players[i].finishTurn();
+            if (! _players[i]->isFinished()) {
+                _players[i]->finishTurn();
                 if (i+1 < _players.size())
-                    _players[i+1].beginTurn();
+                    _players[i+1]->beginTurn();
                 else
-                    _players[0].beginTurn();
+                    _players[0]->beginTurn();
                 break;
             }
         }
@@ -224,17 +224,17 @@ private:
         std::cout << "Turn ended, wind has changed to " << _wind << std::endl;
     }
     Player& getCurrentPlayer() {
-        for (auto& player : _players) {
-            if (!player.isFinished()) return player;
+        for (auto player : _players) {
+            if (!player->isFinished()) return *(player);
         }
-        return _players[0];
+        return *(_players[0]);
     }
 
     void checkBounds() {
-        for (auto& player : _players) {
+        for (auto player : _players) {
             for (int i = 0; i < _numChars; i++) {
-                if (!player.getCharacter(i).onScreen())
-                    player.getCharacter(i).kill();
+                if (!player->getCharacter(i).onScreen())
+                    player->getCharacter(i).kill();
             }
         }
     }
@@ -244,7 +244,7 @@ private:
     int _numChars;
 
     BazookaAmmo _ammo;
-    std::vector<Player> _players;
+    std::vector<std::shared_ptr<Player>> _players;
     int _wind;
     Map _map;
     ParticleSystem _particles;
