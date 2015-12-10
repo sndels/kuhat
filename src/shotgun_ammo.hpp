@@ -13,7 +13,7 @@ public:
     /**
      * ShotgunAmmo constructor
      *
-     * Initializes a new ammo. Sets location and sprite.
+     * Initializes a new ammo. Sets location, sprite and velocity.
      * Flight parameters are set to zero and changed on fire.
      */
     ShotgunAmmo () {
@@ -42,6 +42,12 @@ public:
         }
     };
 
+    /**
+     * Fires the projectile, disregards wind and velocity
+     * @param location Current weapon location
+     * @param Weapon angle
+     *
+     */
     void fire(sf::Vector2f location, float angle) {
         _location = location;
         _angle = angle;
@@ -49,6 +55,11 @@ public:
         _shot = true;
     }
 
+    /**
+     * Checks if the ammo has left the screen. NOTE: with shotgun going above the screen
+     * counts as leaving the screen.
+     * @return Whether ammo is still on screen.
+     */
     bool onScreen() const {
         if (getY() > 720 || getX() > 1280 || getX() < 0 || getY() < 0)
             return false;
@@ -56,6 +67,7 @@ public:
     }
 
     /**
+     * Is not affected by wind
      * @return ammo horizontal coordinate
      */
 
@@ -65,6 +77,7 @@ public:
 
 
     /**
+     * Is not affected by gravity
      * @return ammo vertical coordinate
      */
 

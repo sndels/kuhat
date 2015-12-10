@@ -6,6 +6,7 @@
 #include "weapon.hpp"
 #include "bazooka.hpp"
 #include "shotgun.hpp"
+#include "punch.hpp"
 #include <iostream>
 #include <vector>
 
@@ -29,6 +30,7 @@ public:
         }
         _weaponarr.push_back(std::make_shared<Bazooka>());
         _weaponarr.push_back(std::make_shared<Shotgun>());
+        _weaponarr.push_back(std::make_shared<Punch>());
         _current = 0;
         _weaponnum = 0;
     }
@@ -107,12 +109,21 @@ public:
         _finished = true;
     }
 
+    /**
+     * Changes player weapon
+     * @param integer which is given by user as an input
+     */
     void changeWeapon(int i){
         _weaponnum = i;
         _weaponarr[_weaponnum]->updateLocation(getCharacter());
         _weaponarr[_weaponnum]->rotate(_aim);
     }
 
+    /**
+     * Returns the index of the currently equipped weapon.
+     * 0 for bazooka, 1 for shotgun and 2 for punch.
+     * @return integer which is the weapon id
+     */
     int getWeaponId(){
         return _weaponnum;
     }

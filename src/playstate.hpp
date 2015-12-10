@@ -69,6 +69,10 @@ public:
             if (event.key.code == sf::Keyboard::Num2) getCurrentPlayer().changeWeapon(1);
         }
 
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Num3) getCurrentPlayer().changeWeapon(2);
+        }
+
         switch (getCurrentPlayer().getWeaponId()){
             case 0:
                 if (!_ammo.shot()) {
@@ -97,7 +101,6 @@ public:
             case 1:
                 if (!_slug.shot()){
                    if (event.type == sf::Event::KeyPressed) {
-                        // Using switch rather than if in case of future keypress events
                         switch (event.key.code) {
                             case sf::Keyboard::LAlt:
                                 _slug.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
@@ -105,8 +108,19 @@ public:
                             default:
                                 break;
                         }
-                    } 
+                    }
                 }
+            case 2:
+                if (event.type == sf::Event::KeyPressed) {
+                        switch (event.key.code) {
+                            case sf::Keyboard::LControl:
+                                getCurrentPlayer().getWeapon().punch();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                break;
             default:
                 break;
         }
@@ -228,7 +242,17 @@ public:
                 endTurn();
             }
         }
-
+        if(getCurrentPlayer().getWeapon().punchStatus()){
+            for (auto player : _players) {
+                for (int i = 0; i < _numChars; i++) {
+                    if(getCurrentPlayer().getWeapon().punchCollision(player->getCharacter(i))){
+                        player->getCharacter(i).reduceHealth(50);
+                        std::cout << "Character "<< i <<" got punched for 50 damage!"<< std::endl;
+                    }
+                }
+            }
+            endTurn();
+        }
     }
 
     void doDamage(int dmg = 25, float radius = 40) {
