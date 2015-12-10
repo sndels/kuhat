@@ -24,14 +24,14 @@ public:
         _team = team;
         _finished = false, _aim = 90;
         for (int i = 0; i < _chars; i++) {
-            _chararr.push_back(Character("resource/sprites/diykuha.png", charX+i*100, 0, true, team));
+            _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", charX+i*100, 0, true, team));
         }
         _current = 0;
     }
 
     void moveActive(float x, float y, int charnum = -1) {
         if (charnum < 0) charnum = _current;
-        _chararr[charnum].move(x,y);
+        _chararr[charnum]->move(x,y);
         _weapon.updateLocation(getCharacter());
     }
 
@@ -50,9 +50,9 @@ public:
 
     Character& getCharacter(int i = -1) {
         if (i < _chars && i >= 0) {
-            return _chararr[i];
+            return *(_chararr[i]);
         }
-        else return _chararr[_current];
+        else return *(_chararr[_current]);
         // throw error?
     }
     /**
@@ -66,8 +66,8 @@ public:
 
     void draw(sf::RenderWindow &window) {
         for (auto c : _chararr) {
-            if (c.isAlive())
-                window.draw(c.getSprite());
+            if (c->isAlive())
+                window.draw(c->getSprite());
         }
         if (!_finished) {
             window.draw(_weapon.getSprite());
@@ -100,7 +100,7 @@ public:
     }
 
 private:
-    std::vector<Character> _chararr;
+    std::vector<std::shared_ptr<Character>> _chararr;
     //Character _character;
     int _current;
     Bazooka _weapon;
