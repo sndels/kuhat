@@ -47,6 +47,7 @@ public:
                 break;
         }
         _sprite.setPosition(x, y);
+        _sprite.setOrigin(temp.getSize().x/2, temp.getSize().y/2);
         _isFlipped = false; // Character is drawn facing right.
         _Grip.x = 17;
         _Grip.y = 15;
@@ -165,7 +166,7 @@ public:
 
     void updateBar() {
         _healthBar.setSize(sf::Vector2f(30*_health/_maxhealth,5));
-        _healthBar.setPosition(_sprite.getPosition().x, _sprite.getPosition().y -20);
+        _healthBar.setPosition(_sprite.getPosition().x -15, _sprite.getPosition().y -30);
     }
 
 
