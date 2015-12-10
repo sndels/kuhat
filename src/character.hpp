@@ -200,10 +200,10 @@ public:
             kill();
             std::cout << "Character dead!" << std::endl;
         } else {
-            if (_health < 50) {
+            if (_health <= 50) {
                 _healthBar.setFillColor(sf::Color::Yellow);
             }
-            if (_health < 20) {
+            if (_health <= 25) {
                 _healthBar.setFillColor(sf::Color::Red);
             }
         }
