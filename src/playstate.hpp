@@ -15,7 +15,6 @@
 #include <vector>
 #include <iostream>
 
-#define CHARSPEED 0.1
 #define CHARGRAV 0.2
 #define MAXCLIMB -10
 
@@ -25,6 +24,7 @@ public:
     PlayState(Game& game, std::string const& mapSeed = "Default seedphsgsdfgsdfgsdfghrase") : _ammo(), _map(mapSeed), _particles(500), _hud("resource/sprites/gradient.png"), _charging(false) {
         _numPlayers = _settings.getl("", "numPlayers", 2);
         _numChars = _settings.getl("", "numChars", 4);
+        _charSpeed = _settings.getf("", "charSpeed", 0.1);
 
         for (int i = 0; i < _numPlayers; i++) {
             _players.push_back(std::make_shared<Player>(_numChars, 100 + 500*i, 100, i));
@@ -86,7 +86,7 @@ public:
         sf::Time currentUpdate = _clock.getElapsedTime();
         int dT = currentUpdate.asMilliseconds() - _prevUpdate.asMilliseconds();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            for (int dX = 0; dX < dT * CHARSPEED; ++dX) {
+            for (int dX = 0; dX < dT * _charSpeed; ++dX) {
                 //Try moving for every dX
                 if (!checkCollision(currentPlayer.getCharacter(), _map, -1).x)
                         currentPlayer.moveActive(-1,0);
@@ -102,7 +102,7 @@ public:
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            for (int dX = 0; dX < dT * CHARSPEED; ++dX) {
+            for (int dX = 0; dX < dT * _charSpeed; ++dX) {
                 if (!checkCollision(currentPlayer.getCharacter(), _map, 1).x)
                         currentPlayer.moveActive(1,0);
                 else {//If there is a collision, try climbing
@@ -242,6 +242,7 @@ private:
     minIni _settings = minIni("settings.ini");
     int _numPlayers;
     int _numChars;
+    float _charSpeed;
 
     BazookaAmmo _ammo;
     std::vector<std::shared_ptr<Player>> _players;
