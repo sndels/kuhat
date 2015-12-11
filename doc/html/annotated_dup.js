@@ -16,6 +16,10 @@ var annotated_dup =
     [ "Player", "classPlayer.html", "classPlayer" ],
     [ "PlayState", "classPlayState.html", "classPlayState" ],
     [ "Projectile", "classProjectile.html", "classProjectile" ],
+    [ "Punch", "classPunch.html", "classPunch" ],
+    [ "SettingsMenu", "classSettingsMenu.html", "classSettingsMenu" ],
+    [ "Shotgun", "classShotgun.html", "classShotgun" ],
+    [ "ShotgunAmmo", "classShotgunAmmo.html", "classShotgunAmmo" ],
     [ "Weapon", "classWeapon.html", "classWeapon" ],
     [ "Xorshift", "classXorshift.html", "classXorshift" ]
 ];

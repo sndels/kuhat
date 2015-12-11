@@ -132,9 +132,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6e73589c5f093cb82cd3c8fbe17b9f71"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCharacter.html#a6e73589c5f093cb82cd3c8fbe17b9f71">doesCollide</a> (unsigned int x, unsigned int y) const </td></tr>
 <tr class="memdesc:a6e73589c5f093cb82cd3c8fbe17b9f71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if given coordinates are solid in collision mask.  <a href="#a6e73589c5f093cb82cd3c8fbe17b9f71">More...</a><br /></td></tr>
 <tr class="separator:a6e73589c5f093cb82cd3c8fbe17b9f71"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba5a5f241bd373f8bf7abbafa0a93b6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCharacter.html#aba5a5f241bd373f8bf7abbafa0a93b6a">move</a> (float x, float y)</td></tr>
-<tr class="memdesc:aba5a5f241bd373f8bf7abbafa0a93b6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the character to given coordinates.  <a href="#aba5a5f241bd373f8bf7abbafa0a93b6a">More...</a><br /></td></tr>
-<tr class="separator:aba5a5f241bd373f8bf7abbafa0a93b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4c46ee80097ff50fae13c7eb8aedd77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCharacter.html#af4c46ee80097ff50fae13c7eb8aedd77">move</a> (float dX, int maxY, <a class="el" href="classMap.html">Map</a> &amp;map)</td></tr>
+<tr class="memdesc:af4c46ee80097ff50fae13c7eb8aedd77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the character to given coordinates and checks for collisions.  <a href="#af4c46ee80097ff50fae13c7eb8aedd77">More...</a><br /></td></tr>
+<tr class="separator:af4c46ee80097ff50fae13c7eb8aedd77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61d785058082ea233fb28281036ac2e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCharacter.html#a61d785058082ea233fb28281036ac2e5">drop</a> (float dY, <a class="el" href="classMap.html">Map</a> &amp;map)</td></tr>
+<tr class="memdesc:a61d785058082ea233fb28281036ac2e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drop the character to the ground.  <a href="#a61d785058082ea233fb28281036ac2e5">More...</a><br /></td></tr>
+<tr class="separator:a61d785058082ea233fb28281036ac2e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc998ac1632d210409a117f1904fb9ee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc998ac1632d210409a117f1904fb9ee"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCharacter.html#adc998ac1632d210409a117f1904fb9ee">flip</a> ()</td></tr>
 <tr class="memdesc:adc998ac1632d210409a117f1904fb9ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flips the character horizontally. <br /></td></tr>
@@ -273,6 +276,49 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a class="anchor" id="a61d785058082ea233fb28281036ac2e5"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Character::drop </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>dY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classMap.html">Map</a> &amp;&#160;</td>
+          <td class="paramname"><em>map</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Drop the character to the ground. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dY</td><td>max amoun to be dropped </td></tr>
+    <tr><td class="paramname">map</td><td>the terrain to check collisions </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="aa345964ade53ef5bbc3016ede4c22f15"></a>
 <div class="memitem">
 <div class="memproto">
@@ -377,7 +423,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
-<a class="anchor" id="aba5a5f241bd373f8bf7abbafa0a93b6a"></a>
+<a class="anchor" id="af4c46ee80097ff50fae13c7eb8aedd77"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -388,13 +434,19 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
           <td class="memname">void Character::move </td>
           <td>(</td>
           <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
+          <td class="paramname"><em>dX</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>maxY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classMap.html">Map</a> &amp;&#160;</td>
+          <td class="paramname"><em>map</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -409,11 +461,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </table>
 </div><div class="memdoc">
 
-<p>Moves the character to given coordinates. </p>
+<p>Moves the character to given coordinates and checks for collisions. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x</td><td>x-coordinate </td></tr>
-    <tr><td class="paramname">y</td><td>y-coordinate </td></tr>
+    <tr><td class="paramname">maxY</td><td>max climb value </td></tr>
+    <tr><td class="paramname">map</td><td>the terrain to check collisions </td></tr>
   </table>
   </dd>
 </dl>

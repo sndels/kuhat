@@ -6,5 +6,7 @@ var searchData=
   ['setunselected',['setUnselected',['../classOption.html#a7c71d2c67f8bb189d655383eb5e14832',1,'Option']]],
   ['setwind',['setWind',['../classHud.html#a0ad64de20b51bcc32c37437042424a1e',1,'Hud']]],
   ['shot',['shot',['../classProjectile.html#a839db63b29fe95b64bc0d930426a8402',1,'Projectile']]],
+  ['shotgun',['Shotgun',['../classShotgun.html#a0bedd04c4de6bcb4f4f513451615b446',1,'Shotgun']]],
+  ['shotgunammo',['ShotgunAmmo',['../classShotgunAmmo.html#a767ce4bcc5f98fd24f728a8812ca4232',1,'ShotgunAmmo']]],
   ['swapactivestate',['swapActiveState',['../classGame.html#ada2a9ddd02da507cd6ccfc226d99c128',1,'Game::swapActiveState()'],['../classGState.html#a030e6ecc6bf66271fa6458849b6ee2da',1,'GState::swapActiveState()']]]
 ];

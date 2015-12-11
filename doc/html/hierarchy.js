@@ -7,7 +7,8 @@ var hierarchy =
       [ "Intro", "classIntro.html", null ],
       [ "MainMenu", "classMainMenu.html", null ],
       [ "PauseMenu", "classPauseMenu.html", null ],
-      [ "PlayState", "classPlayState.html", null ]
+      [ "PlayState", "classPlayState.html", null ],
+      [ "SettingsMenu", "classSettingsMenu.html", null ]
     ] ],
     [ "Hud", "classHud.html", null ],
     [ "Map", "classMap.html", null ],
@@ -15,10 +16,13 @@ var hierarchy =
     [ "ParticleSystem", "classParticleSystem.html", null ],
     [ "Player", "classPlayer.html", null ],
     [ "Projectile", "classProjectile.html", [
-      [ "BazookaAmmo", "classBazookaAmmo.html", null ]
+      [ "BazookaAmmo", "classBazookaAmmo.html", null ],
+      [ "ShotgunAmmo", "classShotgunAmmo.html", null ]
     ] ],
     [ "Weapon", "classWeapon.html", [
-      [ "Bazooka", "classBazooka.html", null ]
+      [ "Bazooka", "classBazooka.html", null ],
+      [ "Punch", "classPunch.html", null ],
+      [ "Shotgun", "classShotgun.html", null ]
     ] ],
     [ "Xorshift", "classXorshift.html", null ]
 ];

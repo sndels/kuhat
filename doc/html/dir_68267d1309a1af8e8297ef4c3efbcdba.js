@@ -18,6 +18,10 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     [ "player.hpp", "player_8hpp_source.html", null ],
     [ "playstate.hpp", "playstate_8hpp_source.html", null ],
     [ "projectile.hpp", "projectile_8hpp_source.html", null ],
+    [ "punch.hpp", "punch_8hpp_source.html", null ],
+    [ "settingsmenu.hpp", "settingsmenu_8hpp_source.html", null ],
+    [ "shotgun.hpp", "shotgun_8hpp_source.html", null ],
+    [ "shotgun_ammo.hpp", "shotgun__ammo_8hpp_source.html", null ],
     [ "weapon.hpp", "weapon_8hpp_source.html", null ],
     [ "xorshift.hpp", "xorshift_8hpp_source.html", null ]
 ];

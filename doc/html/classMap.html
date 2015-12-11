@@ -133,14 +133,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae447f28f5c3006cecf2a783c340e3524"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMap.html#ae447f28f5c3006cecf2a783c340e3524">doesCollide</a> (unsigned int x, unsigned int y) const </td></tr>
 <tr class="memdesc:ae447f28f5c3006cecf2a783c340e3524"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if given coordinates are solid in collision mask.  <a href="#ae447f28f5c3006cecf2a783c340e3524">More...</a><br /></td></tr>
 <tr class="separator:ae447f28f5c3006cecf2a783c340e3524"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a869a60961448acaa95ad2c7d5aef6552"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMap.html#a869a60961448acaa95ad2c7d5aef6552">addHole</a> (int centerX, int centerY)</td></tr>
-<tr class="memdesc:a869a60961448acaa95ad2c7d5aef6552"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a hole to the map texture and bit mask.  <a href="#a869a60961448acaa95ad2c7d5aef6552">More...</a><br /></td></tr>
-<tr class="separator:a869a60961448acaa95ad2c7d5aef6552"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cc09629cdc2dbc9a6eab510db58d90b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMap.html#a9cc09629cdc2dbc9a6eab510db58d90b">addHole</a> (int centerX, int centerY, float radius=HOLERADIUS)</td></tr>
+<tr class="memdesc:a9cc09629cdc2dbc9a6eab510db58d90b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a hole to the map texture and bit mask.  <a href="#a9cc09629cdc2dbc9a6eab510db58d90b">More...</a><br /></td></tr>
+<tr class="separator:a9cc09629cdc2dbc9a6eab510db58d90b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class for the terrain. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a869a60961448acaa95ad2c7d5aef6552"></a>
+<a class="anchor" id="a9cc09629cdc2dbc9a6eab510db58d90b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -157,7 +157,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>centerY</em>&#160;</td>
+          <td class="paramname"><em>centerY</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>radius</em> = <code>HOLERADIUS</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

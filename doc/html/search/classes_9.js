@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['xorshift',['Xorshift',['../classXorshift.html',1,'']]]
+  ['weapon',['Weapon',['../classWeapon.html',1,'']]]
 ];

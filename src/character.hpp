@@ -136,7 +136,8 @@ public:
     /**
      * Moves the character to given coordinates and checks for collisions
      * @param x x-coordinate
-     * @param y y-coordinate
+     * @param maxY max climb value
+     * @param map the terrain to check collisions
      */
     void move(float dX, int maxY, Map &map) {
         // Change the sprite to face the x-axis moving direction.

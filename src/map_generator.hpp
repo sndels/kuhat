@@ -18,7 +18,8 @@
 /**
  * Returns randomized heights
  * Uses midpoint displacement with given parameters and xorshift to generate
- * randomized height values for the desired map width
+ * randomized height values for the desired map width. Also randomizes roughness
+ * and height differences.
  *
  * @param seed         seed for the prng
  * @param width        map width
@@ -30,6 +31,8 @@
 std::vector<double> generateHeights(std::string const& seed, int width, int const& height,
                             int displacement, float roughness) {
     Xorshift xors(seed);
+    displacement += xors.random() * 40;
+    roughness += xors.random() * 0.2;
     std::vector<double> heights;
     //Get start and end coordinates
     heights.push_back(height/2 + xors.random() * displacement);

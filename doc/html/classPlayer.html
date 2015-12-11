@@ -123,9 +123,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adf7e67d9db24a3928f11edab5fec96de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#adf7e67d9db24a3928f11edab5fec96de">Player</a> (int characters, int charX=500, int charY=75, int team=0)</td></tr>
 <tr class="memdesc:adf7e67d9db24a3928f11edab5fec96de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor sets up characters, default ammo counts and sets the turn as not finished.  <a href="#adf7e67d9db24a3928f11edab5fec96de">More...</a><br /></td></tr>
 <tr class="separator:adf7e67d9db24a3928f11edab5fec96de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5402d107bd1b4006d90ebfcfa95cd916"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a5402d107bd1b4006d90ebfcfa95cd916">moveActive</a> (float x, float y, int charnum=-1)</td></tr>
-<tr class="memdesc:a5402d107bd1b4006d90ebfcfa95cd916"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the active character.  <a href="#a5402d107bd1b4006d90ebfcfa95cd916">More...</a><br /></td></tr>
-<tr class="separator:a5402d107bd1b4006d90ebfcfa95cd916"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55217d9b16709500ca9ad0799e4bf2c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a55217d9b16709500ca9ad0799e4bf2c2">rotateWeapon</a> (float deg)</td></tr>
 <tr class="memdesc:a55217d9b16709500ca9ad0799e4bf2c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotates the weapon.  <a href="#a55217d9b16709500ca9ad0799e4bf2c2">More...</a><br /></td></tr>
 <tr class="separator:a55217d9b16709500ca9ad0799e4bf2c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -136,6 +133,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a70bbe0afb8ef88207288c9134ae80b6e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a70bbe0afb8ef88207288c9134ae80b6e">draw</a> (sf::RenderWindow &amp;window)</td></tr>
 <tr class="memdesc:a70bbe0afb8ef88207288c9134ae80b6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the characters and healths.  <a href="#a70bbe0afb8ef88207288c9134ae80b6e">More...</a><br /></td></tr>
 <tr class="separator:a70bbe0afb8ef88207288c9134ae80b6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0400a10c3eb08c8f788683a2edb2a5d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#ac0400a10c3eb08c8f788683a2edb2a5d">areAllDead</a> ()</td></tr>
+<tr class="memdesc:ac0400a10c3eb08c8f788683a2edb2a5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if all characters are dead.  <a href="#ac0400a10c3eb08c8f788683a2edb2a5d">More...</a><br /></td></tr>
+<tr class="separator:ac0400a10c3eb08c8f788683a2edb2a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86a20708c39276a26ae4702785c5a3b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a86a20708c39276a26ae4702785c5a3b4">isFinished</a> () const </td></tr>
 <tr class="memdesc:a86a20708c39276a26ae4702785c5a3b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the player has ended his turn.  <a href="#a86a20708c39276a26ae4702785c5a3b4">More...</a><br /></td></tr>
 <tr class="separator:a86a20708c39276a26ae4702785c5a3b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,8 +145,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:ae06b6afca4633ffb694f163b62d6db94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0743da6be4d890e00e810ff79ff96ca5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0743da6be4d890e00e810ff79ff96ca5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a0743da6be4d890e00e810ff79ff96ca5">finishTurn</a> ()</td></tr>
-<tr class="memdesc:a0743da6be4d890e00e810ff79ff96ca5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends the player's turn. <br /></td></tr>
+<tr class="memdesc:a0743da6be4d890e00e810ff79ff96ca5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends the player's turn and flags allDead if so. <br /></td></tr>
 <tr class="separator:a0743da6be4d890e00e810ff79ff96ca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a902a1159558bd2fb4cf7d31ac0902e49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a902a1159558bd2fb4cf7d31ac0902e49">changeWeapon</a> (int i)</td></tr>
+<tr class="memdesc:a902a1159558bd2fb4cf7d31ac0902e49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes player weapon.  <a href="#a902a1159558bd2fb4cf7d31ac0902e49">More...</a><br /></td></tr>
+<tr class="separator:a902a1159558bd2fb4cf7d31ac0902e49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9be8b61f4e6c0800cc5c506f6a6f483b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPlayer.html#a9be8b61f4e6c0800cc5c506f6a6f483b">getWeaponId</a> ()</td></tr>
+<tr class="memdesc:a9be8b61f4e6c0800cc5c506f6a6f483b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of the currently equipped weapon.  <a href="#a9be8b61f4e6c0800cc5c506f6a6f483b">More...</a><br /></td></tr>
+<tr class="separator:a9be8b61f4e6c0800cc5c506f6a6f483b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class which holds a players character(s) and ammo counts and handles turn logic. </p>
@@ -209,6 +215,64 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ac0400a10c3eb08c8f788683a2edb2a5d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Player::areAllDead </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if all characters are dead. </p>
+<dl class="section return"><dt>Returns</dt><dd>all dead or not </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a902a1159558bd2fb4cf7d31ac0902e49"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Player::changeWeapon </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Changes player weapon. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">integer</td><td>which is given by user as an input </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a70bbe0afb8ef88207288c9134ae80b6e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -241,6 +305,32 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a class="anchor" id="a9be8b61f4e6c0800cc5c506f6a6f483b"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Player::getWeaponId </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the index of the currently equipped weapon. </p>
+<p>0 for bazooka, 1 for shotgun and 2 for punch. </p><dl class="section return"><dt>Returns</dt><dd>integer which is the weapon id </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a86a20708c39276a26ae4702785c5a3b4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -264,56 +354,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 <p>Checks if the player has ended his turn. </p>
 <dl class="section return"><dt>Returns</dt><dd>: true if turn has ended, false if not </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a5402d107bd1b4006d90ebfcfa95cd916"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Player::moveActive </td>
-          <td>(</td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>charnum</em> = <code>-1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Moves the active character. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">x</td><td>destination x-coordinate </td></tr>
-    <tr><td class="paramname">y</td><td>destination y-coordinate </td></tr>
-    <tr><td class="paramname">charnum</td><td>number of the character </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
