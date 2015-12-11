@@ -133,7 +133,7 @@ public:
                 if (!_slug.shot()){
                    if (event.type == sf::Event::KeyPressed) {
                         switch (event.key.code) {
-                            case sf::Keyboard::LAlt:
+                            case sf::Keyboard::X:
                                 _shotgunFX.play();
                                 _slug.fireShotty(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
                                 break;
@@ -145,7 +145,7 @@ public:
             case 2:
                 if (event.type == sf::Event::KeyPressed) {
                         switch (event.key.code) {
-                            case sf::Keyboard::LControl:
+                            case sf::Keyboard::C:
                                 _punchFX.play();
                                 getCurrentPlayer().getWeapon().punch();
                                 break;
