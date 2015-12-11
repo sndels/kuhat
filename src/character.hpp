@@ -12,7 +12,6 @@
 #define TAILEND 12
 //How much overlap is allowed for Character sprites
 #define OVERLAP 2
-#define PUSHY 5
 
 /**
  * Class for playable character.
@@ -132,8 +131,8 @@ public:
 
     /**
      * Moves the character to given coordinates and checks for collisions
-     * @param x x-coordinate
-     * @param y y-coordinate
+     * @param x x-coordinate to be moved
+     * @param y maximum vertical change of the move
      */
     void move(float dX, int maxY, Map &map) {
         // Change the sprite to face the x-axis moving direction.

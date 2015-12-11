@@ -240,6 +240,11 @@ public:
                     if(getCurrentPlayer().getWeapon().punchCollision(player->getCharacter(i))){
                         player->getCharacter(i).reduceHealth(50);
                         std::cout << "Character "<< i <<" got punched for 50 damage!"<< std::endl;
+                        if (getCurrentPlayer().getCharacter().getSprite().getPosition().x >
+                            player->getCharacter(i).getSprite().getPosition().x)
+                            player->getCharacter(i).move(-69,200, _map);
+                        else
+                            player->getCharacter(i).move(70,200, _map);
                     }
                 }
             }
