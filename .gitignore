@@ -2,3 +2,4 @@ kuhat
 *.o
 
 resource/map.png
+settings.ini
