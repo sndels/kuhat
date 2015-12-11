@@ -27,15 +27,19 @@ public:
      * @param team       number of the team
      */
     Player(int characters, int charX = 500, int charY = 75, int team = 0) : _chars(characters) {
+
+        _resolution.x = _settings.getl("", "resolution.x", 1280);
+        _resolution.y = _settings.getl("", "resolution.y", 720);
+
         _team = team;
         _finished = false;
         _allDead = false;
         _aim = 90;
         int spawnX, spawnY;
         for (int i = 0; i < _chars; i++) {
-            spawnX = 20+std::rand()%1260;
+            spawnX = 20+std::rand()%(_resolution.x-20);
             spawnY = 0;
-            _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", spawnX, spawnY, spawnX>640?true:false, team));
+            _chararr.push_back(std::make_shared<Character>("resource/sprites/diykuha.png", spawnX, spawnY, spawnX>(_resolution.x/2)?true:false, team));
         }
         _weaponarr.push_back(std::make_shared<Bazooka>());
         _weaponarr.push_back(std::make_shared<Shotgun>());
@@ -153,6 +157,10 @@ public:
     }
 
 private:
+
+    minIni _settings = minIni("settings.ini");
+    sf::Vector2i _resolution;
+
     std::vector<std::shared_ptr<Character>> _chararr;
     std::vector<std::shared_ptr<Weapon>> _weaponarr;
     //Character _character;
