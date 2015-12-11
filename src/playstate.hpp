@@ -203,7 +203,7 @@ public:
         if (_slug.shot() && !_slug.onScreen()) {
             std::cout << "Ammo is off the screen" << std::endl;
             _slug.destroy();
-            endTurn();
+            endTurn(game);
         }
         handleCollision(game);
         updateHealthBars();
@@ -247,7 +247,7 @@ public:
                         doDamage(20,20);
                         _map.addHole(_slug.getX(), _slug.getY(), 20);
                         _slug.destroy(_particles);
-                        endTurn();
+                        endTurn(game);
                     }
                 }
             }
@@ -256,7 +256,7 @@ public:
                 doDamage(20,20);
                 _map.addHole(_slug.getX(), _slug.getY(), 20);
                 _slug.destroy(_particles);
-                endTurn();
+                endTurn(game);
             }
         }
         if(getCurrentPlayer().getWeapon().punchStatus()){
@@ -268,7 +268,7 @@ public:
                     }
                 }
             }
-            endTurn();
+            endTurn(game);
         }
     }
 
