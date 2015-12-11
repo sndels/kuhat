@@ -50,8 +50,15 @@ public:
         _chargeFX.setBuffer(_chargeBuffer);
         _shotgunBuffer.loadFromFile("resource/audio/shotgun.ogg");
         _shotgunFX.setBuffer(_shotgunBuffer);
+        _punchBuffer.loadFromFile("resource/audio/punch.ogg");
+        _punchFX.setBuffer(_punchBuffer);
+        _explosionBuffer.loadFromFile("resource/audio/explosion.ogg");
+        _explosionFX.setBuffer(_explosionBuffer);
+
         _bazookaFX.setVolume(10);
         _shotgunFX.setVolume(50);
+        _explosionFX.setVolume(10);
+        _punchFX.setVolume(50);
 
     }
 
@@ -139,6 +146,7 @@ public:
                 if (event.type == sf::Event::KeyPressed) {
                         switch (event.key.code) {
                             case sf::Keyboard::LControl:
+                                _punchFX.play();
                                 getCurrentPlayer().getWeapon().punch();
                                 break;
                             default:
@@ -210,6 +218,7 @@ public:
                 for (int i = 0; i < _numChars; i++) {
                     if(_ammo.getAirTime().asMilliseconds() < 5) continue;
                     if(checkCollision(_ammo, player->getCharacter(i)).x){
+                        _explosionFX.play();
                         std::cout<<"Character hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                         player->getCharacter(i).reduceHealth(25);
                         doDamage();
@@ -220,6 +229,7 @@ public:
                 }
             }
             if (checkCollision(_ammo, _map).x) {
+                _explosionFX.play();;
                 std::cout<<"Terrain hit at coordinates X:"<<_ammo.getX()<<" Y:"<<_ammo.getY()<<std::endl;
                 doDamage();
                 _map.addHole(_ammo.getX(), _ammo.getY());
@@ -404,9 +414,13 @@ private:
     sf::Sound _bazookaFX;
     sf::Sound _chargeFX;
     sf::Sound _shotgunFX;
+    sf::Sound _explosionFX;
+    sf::Sound _punchFX;
     sf::SoundBuffer _bazookaBuffer;
     sf::SoundBuffer _chargeBuffer;
     sf::SoundBuffer _shotgunBuffer;
+    sf::SoundBuffer _explosionBuffer;
+    sf::SoundBuffer _punchBuffer;
 };
 
 #endif
