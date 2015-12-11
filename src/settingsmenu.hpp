@@ -27,7 +27,7 @@ public:
 
         // Title
         text.setCharacterSize(_resolution.y * 0.07 );
-        text.setColor(sf::Color::Black);
+        text.setColor(sf::Color::White);
         text.setString("Settings");
         text.setPosition(_resolution.x/2 - text.getGlobalBounds().width/2, _resolution.y * 0.03);
         _options.push_back(std::make_shared<sf::Text>(text));
@@ -114,9 +114,13 @@ public:
                 if (!s.empty()) s.pop_back();
                 _values.at(_selected)->setString(s);
             }
-            // Return
-            // Ascii character?
+            // Ascii character and not Return
             else if (event.text.unicode < 128 && event.text.unicode != 13) {
+                // Clear the string if starting to type
+                if (_clear) {
+                    _values.at(_selected)->setString("");
+                    _clear = false;
+                }
                 _values.at(_selected)->setString(_values.at(_selected)->getString() + event.text.unicode);
             }
         }
@@ -127,16 +131,18 @@ public:
             if (event.key.code == sf::Keyboard::Escape) game.goToPreviousState();
             // Move selection up/down
             if ((event.key.code == sf::Keyboard::Down) && (_selected < (int)_values.size()-1) ) {
-                _values.at(_selected)->setColor(sf::Color::Black);
+                _values.at(_selected)->setColor(sf::Color::White);
                 _values.at(_selected)->setStyle(sf::Text::Regular);
                 ++_selected;
+                _clear = true;
                 _values.at(_selected)->setColor(sf::Color::Red);
                 _values.at(_selected)->setStyle(sf::Text::Bold);
             }
             else if (event.key.code == sf::Keyboard::Up && _selected > 0) {
-                _values.at(_selected)->setColor(sf::Color::Black);
+                _values.at(_selected)->setColor(sf::Color::White);
                 _values.at(_selected)->setStyle(sf::Text::Regular);
                 --_selected;
+                _clear = true;
                 _values.at(_selected)->setColor(sf::Color::Red);
                 _values.at(_selected)->setStyle(sf::Text::Bold);
             }
@@ -157,20 +163,55 @@ public:
      * @param game Reference to game-engine
      */
     void draw(sf::RenderWindow& window) {
-        window.clear(sf::Color::White);
         for (auto o : _options) window.draw(*o);
         for (auto v : _values) window.draw(*v);
     }
 
 private:
 
+    /**
+     * Saves the settings and restarts the game.
+     * The new settings are limited to sensible ranges.
+     * Restarting the game takes care of resolution change etc.
+     * @param game [description]
+     */
     void saveAndRestart(Game& game) {
+        // Helper string and int
+        std::string s;
+        int i;
+        float f;
+
         // Save settings to ini-file
-        _settings.put("", "resolution.x", _values.at(0)->getString());
-        _settings.put("", "resolution.y", _values.at(1)->getString());
-        _settings.put("", "numPlayers", _values.at(2)->getString());
-        _settings.put("", "numChars", _values.at(3)->getString());
-        _settings.put("", "charSpeed", _values.at(4)->getString());
+
+        // Limit x resolution to 800-4069
+        s = _values.at(0)->getString();
+        i = 0;
+        i = std::stoi(s);
+        if (i>=800 && i<=4096) _settings.put("", "resolution.x", s);
+
+        // Limit y resolution to 600-2160
+        s = _values.at(1)->getString();
+        i = 0;
+        i = std::stoi(s);
+        if (i>=600 && i<=2160) _settings.put("", "resolution.y", s);
+
+        // Limit number of players to 2-4
+        s = _values.at(2)->getString();
+        i = 0;
+        i = std::stoi(s);
+        if (i>=2 && i<=4) _settings.put("", "numPlayers", s);
+
+        // Limit number of characters in team to 1-8
+        s = _values.at(3)->getString();
+        i = 0;
+        i = std::stoi(s);
+        if (i>=1 && i<=8) _settings.put("", "numChars", s);
+
+        // Limit speed of characters to 0.1-1
+        s = _values.at(4)->getString();
+        f = 0;
+        f = std::stof(s);
+        if (f>=0.1 && f<=1) _settings.put("", "charSpeed", s);
 
         // Restart the game
         game.restart();
@@ -185,6 +226,7 @@ private:
     sf::Font _aileron_bold_italic;
 
     int _selected = 0;
+    bool _clear = true;
 };
 
 #endif

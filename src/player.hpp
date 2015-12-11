@@ -28,7 +28,9 @@ public:
      */
     Player(int characters, int charX = 500, int charY = 75, int team = 0) : _chars(characters) {
         _team = team;
-        _finished = false, _aim = 90;
+        _finished = false;
+        _allDead = false;
+        _aim = 90;
         int spawnX, spawnY;
         for (int i = 0; i < _chars; i++) {
             spawnX = 20+std::rand()%1260;
@@ -40,18 +42,6 @@ public:
         _weaponarr.push_back(std::make_shared<Punch>());
         _current = 0;
         _weaponnum = 0;
-    }
-
-    /**
-     * Moves the active character
-     * @param x       destination x-coordinate
-     * @param y       destination y-coordinate
-     * @param charnum number of the character
-     */
-    void moveActive(float x, float y, int charnum = -1) {
-        if (charnum < 0) charnum = _current;
-        _chararr[charnum]->move(x,y);
-        _weaponarr[_weaponnum]->updateLocation(getCharacter());
     }
 
     /**
@@ -107,6 +97,14 @@ public:
     }
 
     /**
+     * Checks if all characters are dead
+     * @return all dead or not
+     */
+    bool areAllDead() {
+        return _allDead;
+    }
+
+    /**
      * Checks if the player has ended his turn
      * @return: true if turn has ended, false if not
      */
@@ -121,15 +119,15 @@ public:
         _finished = false;
     }
     /**
-     * Ends the player's turn
+     * Ends the player's turn and flags allDead if so
      */
     void finishTurn() {
         int deadcount = -1;
         do {
             nextCharacter();
             if(deadcount++>=_chars) {
-                std::cout << "all ded" <<std::endl;
-                exit(0);
+                _allDead = true;
+                break;
             }
         } while (!getCharacter().isAlive());
         _finished = true;
@@ -161,6 +159,7 @@ private:
     int _current;
     //Bazooka _weapon;
     bool _finished;
+    bool _allDead;
     float _aim;
     int _chars;
     int _team;

@@ -48,7 +48,7 @@ public:
      * @param Weapon angle
      *
      */
-    void fire(sf::Vector2f location, float angle) {
+    void fireShotty(sf::Vector2f location, float angle) {
         _location = location;
         _angle = angle;
         _airtime.restart();

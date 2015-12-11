@@ -17,6 +17,7 @@ Game::Game() {
     _resolution.x = _settings.getl("", "resolution.x", 1280);
     _resolution.y = _settings.getl("", "resolution.y", 720);
     _window.create(sf::VideoMode(_resolution.x, _resolution.y), "Kuhat");
+    _window.setPosition(sf::Vector2i(100,100));
     _currentResolution = _resolution;
     _window.setVerticalSyncEnabled(true);
     // window.setKeyRepeatEnabled(false);
@@ -125,5 +126,10 @@ void Game::quit() {
  */
 void Game::restart() {
     _states.clear();
+    _resolution.x = _settings.getl("", "resolution.x", 1280);
+    _resolution.y = _settings.getl("", "resolution.y", 720);
+    _window.create(sf::VideoMode(_resolution.x, _resolution.y), "Kuhat");
+    _window.setPosition(sf::Vector2i(100,100));
+    _currentResolution = _resolution;
     moveToState(std::make_shared<Intro>(*this) );
 }

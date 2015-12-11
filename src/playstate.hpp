@@ -11,6 +11,7 @@
 #include "collision.hpp"
 #include "particles.hpp"
 #include "gameover.hpp"
+#include "p_menu.hpp"
 #include <cmath>
 #include <vector>
 #include <iostream>
@@ -41,7 +42,7 @@ public:
         _running = true;
         // Skip to round two to fix first shot problems
         for (int i = 0; i < _numPlayers; ++i) {
-            endTurn();
+            endTurn(game);
         }
         _bazookaBuffer.loadFromFile("resource/audio/bazooka.ogg");
         _bazookaFX.setBuffer(_bazookaBuffer);
@@ -78,7 +79,7 @@ public:
         }
 
         if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::P) game.moveToState(std::make_shared<GameOver>(game, 1));
+            if (event.key.code == sf::Keyboard::P) game.moveToState(std::make_shared<PauseMenu>(game));
         }
 
         if (event.type == sf::Event::KeyPressed) {
@@ -126,8 +127,8 @@ public:
                    if (event.type == sf::Event::KeyPressed) {
                         switch (event.key.code) {
                             case sf::Keyboard::LAlt:
-                                _slug.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
                                 _shotgunFX.play();
+                                _slug.fireShotty(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
                                 break;
                             default:
                                 break;
@@ -159,35 +160,10 @@ public:
         sf::Time currentUpdate = _clock.getElapsedTime();
         int dT = currentUpdate.asMilliseconds() - _prevUpdate.asMilliseconds();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            for (int dX = 0; dX < dT * _charSpeed; ++dX) {
-                //Try moving for every dX
-                if (!checkCollision(currentPlayer.getCharacter(), _map, -1).x)
-                        currentPlayer.moveActive(-1,0);
-                else {//If there is a collision, try climbing
-                    for (int dY = 0; dY > MAXCLIMB; --dY) {
-                        ++dX;//Slow down on steep hills
-                        if (!checkCollision(currentPlayer.getCharacter(), _map, -1, dY).x) {
-                            currentPlayer.moveActive(-1,dY);
-                            break;
-                        }
-                    }
-                }
-            }
+            currentPlayer.getCharacter().move(dT * _charSpeed * (-1), MAXCLIMB, _map);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            for (int dX = 0; dX < dT * _charSpeed; ++dX) {
-                if (!checkCollision(currentPlayer.getCharacter(), _map, 1).x)
-                        currentPlayer.moveActive(1,0);
-                else {//If there is a collision, try climbing
-                    for (int dY = 0; dY > MAXCLIMB; --dY) {
-                        ++dX;//Slow down on steep hills
-                        if (!checkCollision(currentPlayer.getCharacter(), _map, 1, dY).x) {
-                            currentPlayer.moveActive(1,dY);
-                            break;
-                        }
-                    }
-                }
-            }
+            currentPlayer.getCharacter().move(dT * _charSpeed, MAXCLIMB, _map);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             currentPlayer.rotateWeapon(dT * 0.1);
@@ -195,7 +171,7 @@ public:
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
             currentPlayer.rotateWeapon(dT * (-0.1));
         }
-        if (!currentPlayer.getCharacter().isAlive()) endTurn();
+        if (!currentPlayer.getCharacter().isAlive()) endTurn(game);
         checkGravity(dT);
         _ammo.updateLocation();
         _slug.updateLocation();
@@ -212,14 +188,14 @@ public:
         if (_ammo.shot() && !_ammo.onScreen()) {
             std::cout << "Ammo is off the screen" << std::endl;
             _ammo.destroy();
-            endTurn();
+            endTurn(game);
         }
         if (_slug.shot() && !_slug.onScreen()) {
             std::cout << "Ammo is off the screen" << std::endl;
             _slug.destroy();
-            endTurn();
+            endTurn(game);
         }
-        handleCollision();
+        handleCollision(game);
         updateHealthBars();
         _particles.update(currentUpdate - _prevUpdate, _map);
         _prevUpdate = currentUpdate;
@@ -228,7 +204,7 @@ public:
     /**
      * Collision handling
      */
-    void handleCollision(){
+    void handleCollision(Game &game){
         if(_ammo.shot()){
             for (auto player : _players) {
                 for (int i = 0; i < _numChars; i++) {
@@ -239,7 +215,7 @@ public:
                         doDamage();
                         _map.addHole(_ammo.getX(), _ammo.getY());
                         _ammo.destroy(_particles);
-                        endTurn();
+                        endTurn(game);
                     }
                 }
             }
@@ -248,7 +224,7 @@ public:
                 doDamage();
                 _map.addHole(_ammo.getX(), _ammo.getY());
                 _ammo.destroy(_particles);
-                endTurn();
+                endTurn(game);
             }
         }
         if(_slug.shot()){
@@ -261,7 +237,7 @@ public:
                         doDamage(20,20);
                         _map.addHole(_slug.getX(), _slug.getY(), 20);
                         _slug.destroy(_particles);
-                        endTurn();
+                        endTurn(game);
                     }
                 }
             }
@@ -270,7 +246,7 @@ public:
                 doDamage(20,20);
                 _map.addHole(_slug.getX(), _slug.getY(), 20);
                 _slug.destroy(_particles);
-                endTurn();
+                endTurn(game);
             }
         }
         if(getCurrentPlayer().getWeapon().punchStatus()){
@@ -282,7 +258,7 @@ public:
                     }
                 }
             }
-            endTurn();
+            endTurn(game);
         }
     }
 
@@ -328,11 +304,7 @@ public:
         //"Gravity" to keep active character on the ground
         for (auto player : _players) {
             for (int i = 0; i < _numChars; i++) {
-                for (int dY = 0; dY < dT * CHARGRAV; ++dY){
-                    if (!checkCollision(player->getCharacter(i), _map, 0, 1).x) {
-                        player->moveActive(0,1, i);
-                    } else break;
-                }
+                player->getCharacter(i).drop(dT * CHARGRAV, _map);
             }
         }
     }
@@ -348,9 +320,10 @@ private:
     }
     /**
      * Handles all activities needed to finish a turn. Switches players' turn
-     * values, recalculater wind and redraws the wind bar.
+     * values, recalculater wind, redraws the wind bar and ends the game if only
+     * one player remains alive
      */
-    void endTurn() {
+    void endTurn(Game &game) {
         checkBounds();
         for (unsigned int i = 0; i < _players.size(); i++) {
             if (! _players[i]->isFinished()) {
@@ -362,6 +335,16 @@ private:
                 break;
             }
         }
+        int alivePlayers = _players.size();
+        int winner = 0;
+        for (unsigned int i = 0; i < _players.size(); i++) {
+            if (_players[i]->areAllDead())
+                --alivePlayers;
+            else
+                winner = i + 1;
+        }
+        if (alivePlayers < 2)
+            game.moveToState(std::make_shared<GameOver>(game, winner));
         _wind = std::rand() % 200 - 100;
         _hud.setWind(_wind);
         std::cout << "Turn ended, wind has changed to " << _wind << std::endl;
