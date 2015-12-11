@@ -115,7 +115,7 @@ public:
                    if (event.type == sf::Event::KeyPressed) {
                         switch (event.key.code) {
                             case sf::Keyboard::LAlt:
-                                _slug.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
+                                _slug.fireShotty(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
                                 break;
                             default:
                                 break;
@@ -147,35 +147,10 @@ public:
         sf::Time currentUpdate = _clock.getElapsedTime();
         int dT = currentUpdate.asMilliseconds() - _prevUpdate.asMilliseconds();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            for (int dX = 0; dX < dT * _charSpeed; ++dX) {
-                //Try moving for every dX
-                if (!checkCollision(currentPlayer.getCharacter(), _map, -1).x)
-                        currentPlayer.moveActive(-1,0);
-                else {//If there is a collision, try climbing
-                    for (int dY = 0; dY > MAXCLIMB; --dY) {
-                        ++dX;//Slow down on steep hills
-                        if (!checkCollision(currentPlayer.getCharacter(), _map, -1, dY).x) {
-                            currentPlayer.moveActive(-1,dY);
-                            break;
-                        }
-                    }
-                }
-            }
+            currentPlayer.getCharacter().move(dT * _charSpeed * (-1), MAXCLIMB, _map);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            for (int dX = 0; dX < dT * _charSpeed; ++dX) {
-                if (!checkCollision(currentPlayer.getCharacter(), _map, 1).x)
-                        currentPlayer.moveActive(1,0);
-                else {//If there is a collision, try climbing
-                    for (int dY = 0; dY > MAXCLIMB; --dY) {
-                        ++dX;//Slow down on steep hills
-                        if (!checkCollision(currentPlayer.getCharacter(), _map, 1, dY).x) {
-                            currentPlayer.moveActive(1,dY);
-                            break;
-                        }
-                    }
-                }
-            }
+            currentPlayer.getCharacter().move(dT * _charSpeed, MAXCLIMB, _map);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
             currentPlayer.rotateWeapon(dT * 0.1);
@@ -314,11 +289,7 @@ public:
         //"Gravity" to keep active character on the ground
         for (auto player : _players) {
             for (int i = 0; i < _numChars; i++) {
-                for (int dY = 0; dY < dT * CHARGRAV; ++dY){
-                    if (!checkCollision(player->getCharacter(i), _map, 0, 1).x) {
-                        player->moveActive(0,1, i);
-                    } else break;
-                }
+                player->getCharacter(i).drop(dT * CHARGRAV, _map);
             }
         }
     }

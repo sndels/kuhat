@@ -5,11 +5,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "map.hpp"
+#include "collision.hpp"
 
 //The amount of tail to be cut from collisionmask
 #define TAILEND 12
 //How much overlap is allowed for Character sprites
 #define OVERLAP 2
+#define PUSHY 5
 
 /**
  * Class for playable character.
@@ -128,15 +131,49 @@ public:
     }
 
     /**
-     * Moves the character to given coordinates
+     * Moves the character to given coordinates and checks for collisions
      * @param x x-coordinate
      * @param y y-coordinate
      */
-    void move(float x, float y) {
+    void move(float dX, int maxY, Map &map) {
         // Change the sprite to face the x-axis moving direction.
-        if ( x<0 && !_isFlipped ) flip();
-        else if ( x>0 && _isFlipped) flip();
-        _sprite.move(x,y);
+        if (dX <0 && !_isFlipped ) flip();
+        else if (dX >0 && _isFlipped) flip();
+        int d = 1;
+        if (dX < 0) {
+            d = -1;
+            dX *= -1;
+        }
+        for (int x = 0; x < dX; ++x) {
+            //Try moving for every dX
+            if (!checkCollision(*this, map, d).x)
+                    _sprite.move(d,0);
+            else {//If there is a collision, try climbing
+                for (int dY = 0; dY > maxY; --dY) {
+                    ++x;//Slow down on steep hills
+                    if (!checkCollision(*this, map, d, dY).x) {
+                        _sprite.move(d,dY);
+                        break;
+                    }
+                }
+            }
+        }
+        if (!onScreen()) {
+            kill();
+        }
+    }
+
+    /**
+     * Drop the character to the ground
+     * @param dY max amoun to be dropped
+     * @param map the terrain to check collisions
+     */
+    void drop(float dY, Map &map) {
+        for (int y = 0; y < dY; ++y) {
+            if (!checkCollision(*this, map, 0, 1).x) {
+                _sprite.move(0,1);
+            }
+        }
         if (!onScreen()) {
             kill();
         }
