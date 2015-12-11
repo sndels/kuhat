@@ -129,6 +129,7 @@ void Game::restart() {
     _resolution.x = _settings.getl("", "resolution.x", 1280);
     _resolution.y = _settings.getl("", "resolution.y", 720);
     _window.create(sf::VideoMode(_resolution.x, _resolution.y), "Kuhat");
+    _window.setVerticalSyncEnabled(true);
     _window.setPosition(sf::Vector2i(100,100));
     _currentResolution = _resolution;
     moveToState(std::make_shared<Intro>(*this) );
