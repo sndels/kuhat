@@ -32,6 +32,9 @@ public:
      * @param health base health for character
      */
     Character (std::string t, int x, int y, bool turn = false, int team = 0, int health = 100) {
+        _resolution.x = _settings.getl("", "resolution.x", 1280);
+        _resolution.y = _settings.getl("", "resolution.y", 720);
+
         _texture.loadFromFile(t);
         sf::Image temp;
         temp.loadFromFile(t);
@@ -225,9 +228,9 @@ public:
     bool onScreen() const {
         int x = getSprite().getPosition().x,
             y = getSprite().getPosition().y;
-        if (y > 720
+        if (y > _resolution.y
             || y < 0
-            || x > 1280
+            || x > _resolution.x
             || x < 0) return false;
         return true;
     }
@@ -253,6 +256,9 @@ public:
 
 
 private:
+    minIni _settings = minIni("settings.ini");
+    sf::Vector2i _resolution;
+
     sf::Texture _texture;
     sf::Sprite _sprite;
     std::vector<std::vector<bool> > _mask;

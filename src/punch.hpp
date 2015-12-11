@@ -1,7 +1,7 @@
 #ifndef PUNCH_H
 #define PUNCH_H
 
-#define RANGE 20 //Define punch range
+#define RANGE 1 //Define punch range
 #define PI 3.14
 
 #include <SFML/Graphics.hpp>
@@ -24,11 +24,11 @@ public:
      */
     Punch() {
         _texture.loadFromFile("resource/sprites/diynyrkki.png");
-        _muzzleOffset.x = 10;
+        _muzzleOffset.x = 12;
         _muzzleOffset.y = 3;
         _texture.setSmooth(true);
         _sprite.setTexture(_texture);
-        _sprite.setOrigin(-5,0);
+        _sprite.setOrigin(-7,0);
         _sprite.setRotation(0);
         _punched=false;
         _isFlipped = false; // Texture was drawn facing right.
