@@ -50,6 +50,7 @@ public:
             std::cout << "Couldn't load BG music" << std::endl;
         }
         _bgMusic.setLoop(true);
+        _bgMusic.setVolume(70);
         _bgMusic.play();
     }
 

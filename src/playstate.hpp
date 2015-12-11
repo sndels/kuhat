@@ -43,6 +43,15 @@ public:
         for (int i = 0; i < _numPlayers; ++i) {
             endTurn();
         }
+        _bazookaBuffer.loadFromFile("resource/audio/bazooka.ogg");
+        _bazookaFX.setBuffer(_bazookaBuffer);
+        _chargeBuffer.loadFromFile("resource/audio/charging.ogg");
+        _chargeFX.setBuffer(_chargeBuffer);
+        _shotgunBuffer.loadFromFile("resource/audio/shotgun.ogg");
+        _shotgunFX.setBuffer(_shotgunBuffer);
+        _bazookaFX.setVolume(10);
+        _shotgunFX.setVolume(50);
+
     }
 
     void pause() {
@@ -75,7 +84,7 @@ public:
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Num1) getCurrentPlayer().changeWeapon(0);
         }
-        
+
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Num2) getCurrentPlayer().changeWeapon(1);
         }
@@ -94,6 +103,7 @@ public:
                                 if (!_charging) {
                                     _charge.restart();
                                     _charging = true;
+                                    _chargeFX.play();
                                 }
                                 break;
                             default:
@@ -105,6 +115,8 @@ public:
                             _ammo.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim(), getVelocity(), _wind);
                             _charging = false;
                             _charge.restart();
+                            _chargeFX.stop();
+                            _bazookaFX.play();
                         }
                     }
                 }
@@ -115,6 +127,7 @@ public:
                         switch (event.key.code) {
                             case sf::Keyboard::LAlt:
                                 _slug.fire(getCurrentPlayer().getWeapon().getMuzzleLocation(), getCurrentPlayer().getWeapon().getAim());
+                                _shotgunFX.play();
                                 break;
                             default:
                                 break;
@@ -192,6 +205,8 @@ public:
                 _ammo.fire(currentPlayer.getWeapon().getMuzzleLocation(), currentPlayer.getWeapon().getAim(), getVelocity(), _wind);
                 _charging = false;
                 _charge.restart();
+                _chargeFX.stop();
+                _bazookaFX.play();
             }
         }
         if (_ammo.shot() && !_ammo.onScreen()) {
@@ -403,6 +418,12 @@ private:
     sf::Time _prevUpdate;
     bool _charging;
     sf::Clock _charge;
+    sf::Sound _bazookaFX;
+    sf::Sound _chargeFX;
+    sf::Sound _shotgunFX;
+    sf::SoundBuffer _bazookaBuffer;
+    sf::SoundBuffer _chargeBuffer;
+    sf::SoundBuffer _shotgunBuffer;
 };
 
 #endif
