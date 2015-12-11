@@ -34,14 +34,16 @@ public:
         if (!_logoTexture.loadFromFile("resource/sprites/logo.png") ) {
             std::cout << "Logo texture failed to load from file." << std::endl;
         }
+        _logoTexture.setSmooth(true);
         _logoSprite.setTexture(_logoTexture);
-        _logoSprite.setPosition(_resolution.x/2 - _logoSprite.getGlobalBounds().width/2, 100);
+        _logoSprite.setScale((float)_resolution.y/720, (float)_resolution.y/720);
+        _logoSprite.setPosition(_resolution.x/2 - _logoSprite.getGlobalBounds().width/2, _resolution.y * 0.14);
         // Slogan
         if (!_aileron_bold_italic.loadFromFile("resource/fonts/aileron/Aileron-BoldItalic.otf") ) {
             std::cout << "Slogan font failed to load from file." << std::endl;
         }
         _slogan.setFont(_aileron_bold_italic);
-        _slogan.setCharacterSize(50);
+        _slogan.setCharacterSize(_resolution.y * 0.07);
         _slogan.setColor(sf::Color::Black);
         _newSlogan(game);
         if(!_bgMusic.openFromFile("resource/audio/bg.ogg")) {
@@ -134,7 +136,7 @@ private:
         // Update the line to _slogan
         _slogan.setString(string);
         // Update the _slogan position, center and 150px from bottom
-        _slogan.setPosition(_resolution.x/2 - _slogan.getGlobalBounds().width/2, 720 - 150);
+        _slogan.setPosition(_resolution.x/2 - _slogan.getGlobalBounds().width/2, _resolution.y - _resolution.y * 0.21);
         // Update the timestamp
         _lastSloganUpdate = _clock.getElapsedTime();
     }
