@@ -15,18 +15,19 @@ public:
     Hud(std::string s) {
         _gradient.loadFromFile(s);
         _spritePower.setTexture(_gradient);
-        _spritePower.setPosition(480,650);
+        _spritePower.setPosition(480,100);
         _spritePower.setTextureRect(sf::IntRect(0,0,0,100));
         _spritePower.setScale(0.40,0.5);
 
         _spriteWind.setTexture(_gradient);
-        _spriteWind.setPosition(630,600);
+        _spriteWind.setPosition(630,50);
         _spriteWind.setTextureRect(sf::IntRect(0,0,100,100));
         _spriteWind.setScale(0.5,0.5);
         _r.setSize(sf::Vector2f(300, 50));
-        _r.setPosition(480, 600);
+        _r.setPosition(480, 50);
         _r.setOutlineThickness(2);
         _r.setOutlineColor(sf::Color::Black);
+        _r.setFillColor(sf::Color(255,255,255, 50));
 
         _rotated = false;
     }
