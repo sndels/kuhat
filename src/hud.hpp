@@ -13,21 +13,24 @@ public:
      * Constructor sets indicators and their positions
      */
     Hud(std::string s) {
-        _gradient.loadFromFile(s);
-        _spritePower.setTexture(_gradient);
-        _spritePower.setPosition(480,100);
-        _spritePower.setTextureRect(sf::IntRect(0,0,0,100));
-        _spritePower.setScale(0.40,0.5);
+        _resolution.x = _settings.getl("", "resolution.x", 1280);
+        _resolution.y = _settings.getl("", "resolution.y", 720);
 
         _spriteWind.setTexture(_gradient);
-        _spriteWind.setPosition(630,50);
+        _spriteWind.setPosition(_resolution.x/2, _resolution.y*0.07);
         _spriteWind.setTextureRect(sf::IntRect(0,0,100,100));
         _spriteWind.setScale(0.5,0.5);
         _r.setSize(sf::Vector2f(300, 50));
-        _r.setPosition(480, 50);
+        _r.setPosition((_resolution.x-_r.getGlobalBounds().width)/2,_resolution.y*0.07);
         _r.setOutlineThickness(2);
         _r.setOutlineColor(sf::Color::Black);
         _r.setFillColor(sf::Color(255,255,255, 50));
+
+        _gradient.loadFromFile(s);
+        _spritePower.setTexture(_gradient);
+        _spritePower.setPosition(_r.getGlobalBounds().left, _resolution.y*0.16);
+        _spritePower.setTextureRect(sf::IntRect(0,0,0,100));
+        _spritePower.setScale(0.40,0.5);
 
         _rotated = false;
     }
@@ -68,6 +71,9 @@ public:
         window.draw(_spriteWind);
     }
 private:
+    minIni _settings = minIni("settings.ini");
+    sf::Vector2i _resolution;
+
     sf::Texture _gradient;
     sf::Sprite _spritePower;
     sf::Sprite _spriteWind;
