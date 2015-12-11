@@ -45,18 +45,6 @@ public:
     }
 
     /**
-     * Moves the active character
-     * @param x       destination x-coordinate
-     * @param y       destination y-coordinate
-     * @param charnum number of the character
-     */
-    void moveActive(float x, float y, int charnum = -1) {
-        if (charnum < 0) charnum = _current;
-        _chararr[charnum]->move(x,y);
-        _weaponarr[_weaponnum]->updateLocation(getCharacter());
-    }
-
-    /**
      * Rotates the weapon
      * @param deg rotation amount
      */
